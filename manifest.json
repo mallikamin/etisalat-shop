@@ -1,0 +1,21 @@
+{
+  "name": "etisalat.shop - Authorized Etisalat Dealer",
+  "short_name": "etisalat.shop",
+  "description": "Etisalat postpaid plans, VIP numbers, unlimited data & calling. Authorized dealer in UAE.",
+  "start_url": "/etisalat-shop/",
+  "display": "standalone",
+  "background_color": "#0D1117",
+  "theme_color": "#C9A962",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

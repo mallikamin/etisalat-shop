@@ -1,3 +1,35 @@
+# etisalat.shop — Authorized Etisalat Dealer, UAE
+# https://mallikamin.github.io/etisalat-shop/
+
 User-agent: *
 Allow: /
+Disallow: /generate_ads.py
+Disallow: /generate_assets.py
+
+# Sitemap
 Sitemap: https://mallikamin.github.io/etisalat-shop/sitemap.xml
+
+# AI Crawlers — welcome
+User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+# Bing IndexNow
+# Key: etisalat-shop-indexnow-key

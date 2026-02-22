@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+  <!-- Google tag (gtag.js) — GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G34631QW03"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G34631QW03');
+  </script>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>اتصالات | باقات بوست بيد | أرقام VIP | وكيل معتمد الإمارات</title>
@@ -2190,19 +2199,63 @@
           content_category: interest
         });
       }
+      if (typeof gtag === 'function') {
+        gtag('event', 'generate_lead', {
+          event_category: 'whatsapp_form',
+          event_label: interest,
+          value: 1
+        });
+      }
     }
   </script>
 
-  <!-- WhatsApp Click Tracking — fires FB Pixel 'Contact' event on every wa.me click -->
+  <!-- WhatsApp Click Tracking — fires FB Pixel + GA4 events on every wa.me click -->
   <script>
     document.addEventListener('click', function(e) {
       var link = e.target.closest('a[href*="wa.me"]');
-      if (link && typeof fbq === 'function') {
-        fbq('track', 'Contact', {
-          content_name: 'WhatsApp Click',
-          content_category: link.textContent.trim().substring(0, 50)
-        });
+      if (link) {
+        if (typeof fbq === 'function') {
+          fbq('track', 'Contact', {
+            content_name: 'WhatsApp Click',
+            content_category: link.textContent.trim().substring(0, 50)
+          });
+        }
+        if (typeof gtag === 'function') {
+          gtag('event', 'contact', {
+            event_category: 'whatsapp',
+            event_label: link.href
+          });
+        }
       }
+    });
+  </script>
+
+  <!-- GA4: Form submit tracking -->
+  <script>
+    var formEl = document.querySelector('form[action*="formsubmit"]');
+    if (formEl) {
+      formEl.addEventListener('submit', function() {
+        if (typeof gtag === 'function') {
+          gtag('event', 'generate_lead', {
+            event_category: 'email_form',
+            event_label: document.getElementById('interest').value
+          });
+        }
+      });
+    }
+  </script>
+
+  <!-- GA4: Plan tab switch tracking -->
+  <script>
+    document.querySelectorAll('.tab-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        if (typeof gtag === 'function') {
+          gtag('event', 'select_content', {
+            content_type: 'plan_tab',
+            content_id: this.textContent.trim()
+          });
+        }
+      });
     });
   </script>
 

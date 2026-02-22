@@ -4,11 +4,11 @@
 
 ## Pages
 
-- [Home — All Plans & VIP Numbers](https://mallikamin.github.io/etisalat-shop/): Complete catalog of 22 Etisalat Freedom postpaid plans across 4 categories, VIP number tiers, and inquiry form.
-- [Arabic Version (العربية)](https://mallikamin.github.io/etisalat-shop/ar/): Full Arabic RTL version with all plans translated.
-- [Best Etisalat Plan for Calling India 2026](https://mallikamin.github.io/etisalat-shop/blog/best-etisalat-plan-calling-india-2026.html): Comparison of Etisalat international calling plans for India. Recommended: Unlimited 1 Country Plan 325 at AED 325/month.
-- [How to Get Etisalat VIP Number in Dubai](https://mallikamin.github.io/etisalat-shop/blog/how-to-get-etisalat-vip-number-dubai.html): Guide to Silver (free with plans), Gold (AED 500/mo), and Platinum (AED 1,000/mo) Etisalat VIP numbers.
-- [Etisalat vs du Comparison 2026](https://mallikamin.github.io/etisalat-shop/blog/etisalat-vs-du-postpaid-plans-uae.html): Side-by-side comparison of Etisalat and du postpaid plans covering price, coverage, VIP numbers, and roaming.
+- [Home — All Plans & VIP Numbers](https://etisalat.shop/): Complete catalog of 22 Etisalat Freedom postpaid plans across 4 categories, VIP number tiers, and inquiry form.
+- [Arabic Version (العربية)](https://etisalat.shop/ar/): Full Arabic RTL version with all plans translated.
+- [Best Etisalat Plan for Calling India 2026](https://etisalat.shop/blog/best-etisalat-plan-calling-india-2026.html): Comparison of Etisalat international calling plans for India. Recommended: Unlimited 1 Country Plan 325 at AED 325/month.
+- [How to Get Etisalat VIP Number in Dubai](https://etisalat.shop/blog/how-to-get-etisalat-vip-number-dubai.html): Guide to Silver (free with plans), Gold (AED 500/mo), and Platinum (AED 1,000/mo) Etisalat VIP numbers.
+- [Etisalat vs du Comparison 2026](https://etisalat.shop/blog/etisalat-vs-du-postpaid-plans-uae.html): Side-by-side comparison of Etisalat and du postpaid plans covering price, coverage, VIP numbers, and roaming.
 
 ## Key Facts
 

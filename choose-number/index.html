@@ -13,7 +13,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Choose Your Etisalat Number | VIP Silver &amp; Gold Numbers UAE | etisalat.shop</title>
-<meta name="description" content="Browse and choose from 500+ available Etisalat VIP numbers in UAE. Search by digits, pattern, or category. Silver, Silver Plus &amp; Gold numbers. Instant WhatsApp inquiry.">
+<meta name="description" content="Browse and choose from 2500+ available Etisalat VIP numbers in UAE. Search by digits, pattern, or category. Silver, Silver Plus &amp; Gold numbers. Instant WhatsApp inquiry.">
 <meta name="keywords" content="choose Etisalat number, Etisalat VIP number Dubai, pick Etisalat number, select Etisalat number, Etisalat number availability, Etisalat fancy number, Etisalat golden number search, buy Etisalat VIP number online, Etisalat number for sale UAE, Etisalat silver number, Etisalat gold number, search Etisalat VIP number, find Etisalat number, available Etisalat numbers 2026, Etisalat number picker, Etisalat 056 number, choose Etisalat VIP number online UAE">
 <meta name="theme-color" content="#0D1117">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
@@ -25,7 +25,7 @@
 <!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="Choose Your Etisalat Number | VIP Numbers UAE">
-<meta property="og:description" content="Browse 500+ available Etisalat VIP numbers. Search by digits or pattern. Silver &amp; Gold numbers available. Instant WhatsApp inquiry.">
+<meta property="og:description" content="Browse 2500+ available Etisalat VIP numbers. Search by digits or pattern. Silver &amp; Gold numbers available. Instant WhatsApp inquiry.">
 <meta property="og:url" content="https://etisalat.shop/choose-number/">
 <meta property="og:site_name" content="etisalat.shop">
 <meta property="og:locale" content="en_AE">
@@ -36,7 +36,7 @@
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Choose Your Etisalat Number | VIP Numbers UAE">
-<meta name="twitter:description" content="Browse 500+ available Etisalat VIP numbers. Search by digits or pattern. Silver &amp; Gold numbers.">
+<meta name="twitter:description" content="Browse 2500+ available Etisalat VIP numbers. Search by digits or pattern. Silver &amp; Gold numbers.">
 <meta name="twitter:image" content="https://etisalat.shop/og-image.png">
 
 <!-- Geo Targeting -->
@@ -53,7 +53,7 @@
   "name": "Available Etisalat VIP Numbers",
   "description": "Browse available Etisalat VIP numbers including Silver, Silver Plus, and Gold categories in UAE.",
   "url": "https://etisalat.shop/choose-number/",
-  "numberOfItems": "500+",
+  "numberOfItems": "2500+",
   "itemListElement": []
 }
 </script>
@@ -107,7 +107,7 @@
       "name": "How do I choose an Etisalat VIP number online?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Visit etisalat.shop/choose-number to browse 500+ available VIP numbers. Search by entering 3-7 digits, filter by category (Silver, Silver Plus, Gold), and inquire instantly via WhatsApp."
+        "text": "Visit etisalat.shop/choose-number to browse 2500+ available VIP numbers. Search by entering 3-7 digits, filter by category (Silver, Silver Plus, Gold), and inquire instantly via WhatsApp."
       }
     },
     {
@@ -959,7 +959,7 @@ a { color: inherit; }
    CONFIGURATION — Update SHEET_ID here when it changes
    ======================================== */
 var SHEET_ID = '1qAw1YQkKEbq-R3LullCBNr0MweGfC2KEO-rot9ff8dw';
-var CSV_URL = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/gviz/tq?tqx=out:csv';
+var CSV_URL = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/export?format=csv&gid=0';
 var WA_NUMBER = '971566999377';
 
 /* ========================================
@@ -1041,6 +1041,25 @@ function loadNumbers() {
     });
 }
 
+function parseCSVLine(line) {
+  var result = [];
+  var current = '';
+  var inQuotes = false;
+  for (var i = 0; i < line.length; i++) {
+    var ch = line.charAt(i);
+    if (ch === '"') {
+      inQuotes = !inQuotes;
+    } else if (ch === ',' && !inQuotes) {
+      result.push(current);
+      current = '';
+    } else {
+      current += ch;
+    }
+  }
+  result.push(current);
+  return result;
+}
+
 function parseCSV(csv) {
   var lines = csv.split('\n');
   var nums = [];
@@ -1049,12 +1068,7 @@ function parseCSV(csv) {
     var line = lines[i].trim();
     if (!line) continue;
 
-    // Split by "," — CSV is double-quoted
-    var parts = line.split('","');
-    var clean = [];
-    for (var j = 0; j < parts.length; j++) {
-      clean.push(parts[j].replace(/^"|"$/g, ''));
-    }
+    var clean = parseCSVLine(line);
 
     if (clean.length < 7) continue;
 

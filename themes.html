@@ -1,0 +1,1909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>etisalat.shop — Theme Showcase</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ========================================
+   RESET & BASE
+   ======================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.6;
+  color: #1a1a1a;
+  background: #f0f0f0;
+}
+
+img { max-width: 100%; display: block; }
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; border: none; font-family: inherit; }
+input, textarea { font-family: inherit; }
+
+/* ========================================
+   TOP NAVIGATION
+   ======================================== */
+.top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(10, 10, 10, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding: 0 24px;
+}
+
+.top-nav-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+.top-nav-brand {
+  font-weight: 800;
+  font-size: 18px;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+
+.top-nav-brand span {
+  color: #E60000;
+}
+
+.top-nav-links {
+  display: flex;
+  gap: 4px;
+  list-style: none;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.top-nav-links li a {
+  display: block;
+  padding: 8px 14px;
+  color: rgba(255,255,255,0.7);
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.top-nav-links li a:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.08);
+}
+
+/* ========================================
+   INTRO SECTION
+   ======================================== */
+.intro-section {
+  margin-top: 64px;
+  padding: 80px 24px 60px;
+  text-align: center;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
+  color: #fff;
+}
+
+.intro-section h1 {
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 16px;
+}
+
+.intro-section h1 span {
+  background: linear-gradient(135deg, #E60000, #ff4444);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.intro-section p {
+  font-size: 17px;
+  color: rgba(255,255,255,0.6);
+  max-width: 600px;
+  margin: 0 auto 32px;
+  line-height: 1.7;
+}
+
+.intro-section .theme-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: rgba(230, 0, 0, 0.12);
+  border: 1px solid rgba(230, 0, 0, 0.25);
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ff6666;
+}
+
+/* ========================================
+   THEME SECTION WRAPPER
+   ======================================== */
+.theme-section {
+  padding: 0;
+  position: relative;
+}
+
+/* Theme Title Bar */
+.theme-title-bar {
+  padding: 48px 24px 32px;
+  text-align: center;
+  position: relative;
+}
+
+.theme-title-bar .theme-number {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  padding: 6px 16px;
+  border-radius: 100px;
+  margin-bottom: 16px;
+}
+
+.theme-title-bar h2 {
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+.theme-title-bar p {
+  font-size: 15px;
+  opacity: 0.7;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* Theme Content Area */
+.theme-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px 60px;
+}
+
+/* Hero Section within theme */
+.theme-hero {
+  border-radius: 16px;
+  padding: clamp(40px, 6vw, 80px) clamp(24px, 4vw, 48px);
+  text-align: center;
+  margin-bottom: 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-hero .hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 20px;
+}
+
+.theme-hero .hero-title {
+  font-size: clamp(28px, 5vw, 52px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 8px;
+  line-height: 1.1;
+}
+
+.theme-hero .hero-tagline {
+  font-size: clamp(15px, 2vw, 18px);
+  margin-bottom: 28px;
+  opacity: 0.8;
+}
+
+.theme-hero .hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.25s;
+  border: none;
+}
+
+.theme-hero .hero-cta:hover {
+  transform: translateY(-2px);
+}
+
+/* Plan Cards Grid */
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+@media (max-width: 700px) {
+  .plans-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.plan-card {
+  border-radius: 16px;
+  padding: 32px 28px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.25s;
+}
+
+.plan-card:hover {
+  transform: translateY(-4px);
+}
+
+.plan-card .plan-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 4px 12px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+.plan-card .plan-name {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  line-height: 1.3;
+}
+
+.plan-card .plan-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.plan-card .plan-price {
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.plan-card .plan-price-unit {
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.6;
+}
+
+.plan-card .plan-original-price {
+  font-size: 13px;
+  text-decoration: line-through;
+  opacity: 0.45;
+  margin-bottom: 20px;
+}
+
+.plan-card .plan-features {
+  list-style: none;
+  margin-bottom: 24px;
+}
+
+.plan-card .plan-features li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  font-size: 14px;
+  border-bottom: 1px solid rgba(128,128,128,0.12);
+}
+
+.plan-card .plan-features li:last-child {
+  border-bottom: none;
+}
+
+.plan-card .plan-features li .feat-label {
+  opacity: 0.6;
+  min-width: 100px;
+  font-size: 13px;
+}
+
+.plan-card .plan-features li .feat-value {
+  font-weight: 600;
+}
+
+.plan-card .plan-cta {
+  display: block;
+  width: 100%;
+  padding: 13px 0;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  transition: all 0.25s;
+  border: none;
+}
+
+/* Contact Form */
+.theme-form-section {
+  border-radius: 16px;
+  padding: 36px 32px;
+  margin-bottom: 40px;
+}
+
+.theme-form-section h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.theme-form-section .form-subtitle {
+  font-size: 14px;
+  opacity: 0.6;
+  margin-bottom: 24px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 600px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-grid .full-width {
+  grid-column: 1 / -1;
+}
+
+.form-field label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.form-field input,
+.form-field textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  transition: all 0.2s;
+  outline: none;
+}
+
+.form-field textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.form-submit {
+  display: block;
+  width: 100%;
+  padding: 14px 0;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  transition: all 0.25s;
+  border: none;
+  margin-top: 8px;
+}
+
+/* Select Theme Button */
+.select-theme-btn {
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 18px 0;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.02em;
+  transition: all 0.3s;
+  border: 2px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.select-theme-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+}
+
+/* Divider between themes */
+.theme-divider {
+  height: 3px;
+  background: linear-gradient(90deg, transparent, rgba(128,128,128,0.2), transparent);
+  margin: 0;
+}
+
+/* ========================================
+   THEME 1: OBSIDIAN — Dark Premium
+   ======================================== */
+#obsidian {
+  background: #0a0a0a;
+  color: #ffffff;
+}
+
+#obsidian .theme-title-bar .theme-number {
+  background: rgba(230, 0, 0, 0.15);
+  color: #E60000;
+}
+
+#obsidian .theme-hero {
+  background: linear-gradient(135deg, rgba(230, 0, 0, 0.08) 0%, rgba(20, 20, 20, 1) 50%, rgba(230, 0, 0, 0.05) 100%);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+#obsidian .theme-hero .hero-badge {
+  background: rgba(230, 0, 0, 0.15);
+  color: #ff4444;
+  border: 1px solid rgba(230, 0, 0, 0.25);
+}
+
+#obsidian .theme-hero .hero-title span {
+  color: #E60000;
+}
+
+#obsidian .theme-hero .hero-cta {
+  background: #E60000;
+  color: #fff;
+}
+
+#obsidian .theme-hero .hero-cta:hover {
+  background: #ff1a1a;
+  box-shadow: 0 8px 30px rgba(230, 0, 0, 0.35);
+}
+
+#obsidian .plan-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+#obsidian .plan-card:hover {
+  border-color: rgba(230, 0, 0, 0.3);
+  box-shadow: 0 8px 40px rgba(230, 0, 0, 0.1);
+}
+
+#obsidian .plan-card .plan-badge {
+  background: rgba(230, 0, 0, 0.15);
+  color: #ff4444;
+}
+
+#obsidian .plan-card .plan-price {
+  color: #fff;
+}
+
+#obsidian .plan-card .plan-features li {
+  border-bottom-color: rgba(255,255,255,0.06);
+}
+
+#obsidian .plan-card .plan-cta {
+  background: #E60000;
+  color: #fff;
+}
+
+#obsidian .plan-card .plan-cta:hover {
+  background: #ff1a1a;
+  box-shadow: 0 4px 20px rgba(230, 0, 0, 0.3);
+}
+
+#obsidian .theme-form-section {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+#obsidian .form-field label {
+  color: rgba(255,255,255,0.6);
+}
+
+#obsidian .form-field input,
+#obsidian .form-field textarea {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #fff;
+}
+
+#obsidian .form-field input:focus,
+#obsidian .form-field textarea:focus {
+  border-color: #E60000;
+  box-shadow: 0 0 0 3px rgba(230, 0, 0, 0.15);
+}
+
+#obsidian .form-field input::placeholder,
+#obsidian .form-field textarea::placeholder {
+  color: rgba(255,255,255,0.25);
+}
+
+#obsidian .form-submit {
+  background: #E60000;
+  color: #fff;
+}
+
+#obsidian .form-submit:hover {
+  background: #ff1a1a;
+}
+
+#obsidian .select-theme-btn {
+  background: transparent;
+  border-color: #E60000;
+  color: #E60000;
+}
+
+#obsidian .select-theme-btn:hover {
+  background: #E60000;
+  color: #fff;
+}
+
+/* ========================================
+   THEME 2: ARCTIC — Clean White
+   ======================================== */
+#arctic {
+  background: #FFFFFF;
+  color: #1a1a1a;
+}
+
+#arctic .theme-title-bar .theme-number {
+  background: #fce4e4;
+  color: #E60000;
+}
+
+#arctic .theme-hero {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+}
+
+#arctic .theme-hero .hero-badge {
+  background: #fce4e4;
+  color: #E60000;
+}
+
+#arctic .theme-hero .hero-title {
+  color: #1a1a1a;
+}
+
+#arctic .theme-hero .hero-title span {
+  color: #E60000;
+}
+
+#arctic .theme-hero .hero-tagline {
+  color: #666;
+}
+
+#arctic .theme-hero .hero-cta {
+  background: #E60000;
+  color: #fff;
+}
+
+#arctic .theme-hero .hero-cta:hover {
+  background: #cc0000;
+  box-shadow: 0 8px 30px rgba(230, 0, 0, 0.25);
+}
+
+#arctic .plan-card {
+  background: #fff;
+  border: 1px solid #e9ecef;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+
+#arctic .plan-card:hover {
+  box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+  border-color: #dee2e6;
+}
+
+#arctic .plan-card .plan-badge {
+  background: #fce4e4;
+  color: #E60000;
+}
+
+#arctic .plan-card .plan-price {
+  color: #1a1a1a;
+}
+
+#arctic .plan-card .plan-features li {
+  border-bottom-color: #f1f3f5;
+}
+
+#arctic .plan-card .plan-features li .feat-label {
+  color: #888;
+}
+
+#arctic .plan-card .plan-cta {
+  background: #E60000;
+  color: #fff;
+}
+
+#arctic .plan-card .plan-cta:hover {
+  background: #cc0000;
+}
+
+#arctic .theme-form-section {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+}
+
+#arctic .form-field label {
+  color: #555;
+}
+
+#arctic .form-field input,
+#arctic .form-field textarea {
+  background: #fff;
+  border: 1px solid #dee2e6;
+  color: #1a1a1a;
+}
+
+#arctic .form-field input:focus,
+#arctic .form-field textarea:focus {
+  border-color: #E60000;
+  box-shadow: 0 0 0 3px rgba(230, 0, 0, 0.1);
+}
+
+#arctic .form-field input::placeholder,
+#arctic .form-field textarea::placeholder {
+  color: #adb5bd;
+}
+
+#arctic .form-submit {
+  background: #E60000;
+  color: #fff;
+}
+
+#arctic .form-submit:hover {
+  background: #cc0000;
+}
+
+#arctic .select-theme-btn {
+  background: #E60000;
+  color: #fff;
+}
+
+#arctic .select-theme-btn:hover {
+  background: #cc0000;
+}
+
+/* ========================================
+   THEME 3: CRIMSON EDGE — Bold Red
+   ======================================== */
+#crimson {
+  background: #f5f5f5;
+  color: #1a1a1a;
+}
+
+#crimson .theme-title-bar {
+  background: linear-gradient(135deg, #E60000, #8B0000);
+  color: #fff;
+}
+
+#crimson .theme-title-bar .theme-number {
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+}
+
+#crimson .theme-title-bar p {
+  color: rgba(255,255,255,0.85);
+}
+
+#crimson .theme-hero {
+  background: linear-gradient(135deg, #E60000 0%, #b30000 40%, #8B0000 100%);
+  color: #fff;
+  border-radius: 16px;
+  position: relative;
+}
+
+#crimson .theme-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  border-radius: inherit;
+}
+
+#crimson .theme-hero .hero-badge {
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+#crimson .theme-hero .hero-cta {
+  background: #fff;
+  color: #E60000;
+}
+
+#crimson .theme-hero .hero-cta:hover {
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+}
+
+#crimson .plan-card {
+  background: #fff;
+  border: 1px solid #eee;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+
+#crimson .plan-card:hover {
+  box-shadow: 0 12px 40px rgba(230, 0, 0, 0.12);
+}
+
+#crimson .plan-card .plan-badge {
+  background: #E60000;
+  color: #fff;
+}
+
+#crimson .plan-card .plan-price {
+  color: #E60000;
+}
+
+#crimson .plan-card .plan-features li {
+  border-bottom-color: #f0f0f0;
+}
+
+#crimson .plan-card .plan-features li .feat-label {
+  color: #888;
+}
+
+#crimson .plan-card .plan-cta {
+  background: linear-gradient(135deg, #E60000, #8B0000);
+  color: #fff;
+}
+
+#crimson .plan-card .plan-cta:hover {
+  box-shadow: 0 4px 20px rgba(230, 0, 0, 0.3);
+}
+
+#crimson .theme-form-section {
+  background: #fff;
+  border: 1px solid #eee;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+}
+
+#crimson .form-field label {
+  color: #555;
+}
+
+#crimson .form-field input,
+#crimson .form-field textarea {
+  background: #f8f8f8;
+  border: 1px solid #e0e0e0;
+  color: #1a1a1a;
+}
+
+#crimson .form-field input:focus,
+#crimson .form-field textarea:focus {
+  border-color: #E60000;
+  box-shadow: 0 0 0 3px rgba(230, 0, 0, 0.1);
+}
+
+#crimson .form-field input::placeholder,
+#crimson .form-field textarea::placeholder {
+  color: #bbb;
+}
+
+#crimson .form-submit {
+  background: linear-gradient(135deg, #E60000, #8B0000);
+  color: #fff;
+}
+
+#crimson .form-submit:hover {
+  box-shadow: 0 4px 20px rgba(230, 0, 0, 0.3);
+}
+
+#crimson .select-theme-btn {
+  background: linear-gradient(135deg, #E60000, #8B0000);
+  color: #fff;
+}
+
+#crimson .select-theme-btn:hover {
+  box-shadow: 0 8px 30px rgba(230, 0, 0, 0.35);
+}
+
+/* ========================================
+   THEME 4: MIDNIGHT GOLD — Luxury Dark
+   ======================================== */
+#midnight {
+  background: #0D1117;
+  color: #F5F5F0;
+  font-family: 'DM Sans', sans-serif;
+}
+
+#midnight .theme-title-bar .theme-number {
+  background: rgba(201, 169, 98, 0.15);
+  color: #C9A962;
+}
+
+#midnight .theme-title-bar h2 {
+  font-family: 'Playfair Display', serif;
+}
+
+#midnight .theme-hero {
+  background: linear-gradient(135deg, #0D1117 0%, #161b22 50%, #0D1117 100%);
+  border: 1px solid rgba(201, 169, 98, 0.15);
+  position: relative;
+}
+
+#midnight .theme-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+#midnight .theme-hero .hero-badge {
+  background: rgba(201, 169, 98, 0.12);
+  color: #C9A962;
+  border: 1px solid rgba(201, 169, 98, 0.25);
+}
+
+#midnight .theme-hero .hero-title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+}
+
+#midnight .theme-hero .hero-title span {
+  color: #C9A962;
+}
+
+#midnight .theme-hero .hero-tagline {
+  color: rgba(245, 245, 240, 0.6);
+  font-family: 'DM Sans', sans-serif;
+}
+
+#midnight .theme-hero .hero-cta {
+  background: linear-gradient(135deg, #C9A962, #B08D3E);
+  color: #0D1117;
+}
+
+#midnight .theme-hero .hero-cta:hover {
+  box-shadow: 0 8px 30px rgba(201, 169, 98, 0.3);
+}
+
+#midnight .plan-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(201, 169, 98, 0.12);
+  position: relative;
+}
+
+#midnight .plan-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.02;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+#midnight .plan-card:hover {
+  border-color: rgba(201, 169, 98, 0.3);
+  box-shadow: 0 8px 40px rgba(201, 169, 98, 0.08);
+}
+
+#midnight .plan-card .plan-badge {
+  background: rgba(201, 169, 98, 0.12);
+  color: #C9A962;
+}
+
+#midnight .plan-card .plan-name {
+  font-family: 'Playfair Display', serif;
+}
+
+#midnight .plan-card .plan-price {
+  color: #C9A962;
+  font-family: 'DM Sans', sans-serif;
+}
+
+#midnight .plan-card .plan-features li {
+  border-bottom-color: rgba(201, 169, 98, 0.08);
+}
+
+#midnight .plan-card .plan-features li .feat-label {
+  color: rgba(245, 245, 240, 0.4);
+}
+
+#midnight .plan-card .plan-cta {
+  background: linear-gradient(135deg, #C9A962, #B08D3E);
+  color: #0D1117;
+  font-weight: 700;
+}
+
+#midnight .plan-card .plan-cta:hover {
+  box-shadow: 0 4px 20px rgba(201, 169, 98, 0.3);
+}
+
+#midnight .theme-form-section {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(201, 169, 98, 0.1);
+  position: relative;
+}
+
+#midnight .theme-form-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.02;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+#midnight .theme-form-section h3 {
+  font-family: 'Playfair Display', serif;
+}
+
+#midnight .form-field label {
+  color: rgba(245, 245, 240, 0.5);
+}
+
+#midnight .form-field input,
+#midnight .form-field textarea {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(201, 169, 98, 0.15);
+  color: #F5F5F0;
+}
+
+#midnight .form-field input:focus,
+#midnight .form-field textarea:focus {
+  border-color: #C9A962;
+  box-shadow: 0 0 0 3px rgba(201, 169, 98, 0.12);
+}
+
+#midnight .form-field input::placeholder,
+#midnight .form-field textarea::placeholder {
+  color: rgba(245, 245, 240, 0.2);
+}
+
+#midnight .form-submit {
+  background: linear-gradient(135deg, #C9A962, #B08D3E);
+  color: #0D1117;
+  font-weight: 700;
+}
+
+#midnight .form-submit:hover {
+  box-shadow: 0 4px 20px rgba(201, 169, 98, 0.3);
+}
+
+#midnight .select-theme-btn {
+  background: transparent;
+  border-color: #C9A962;
+  color: #C9A962;
+  font-family: 'DM Sans', sans-serif;
+}
+
+#midnight .select-theme-btn:hover {
+  background: linear-gradient(135deg, #C9A962, #B08D3E);
+  color: #0D1117;
+}
+
+/* ========================================
+   THEME 5: NEON PULSE — Modern Gradient
+   ======================================== */
+#neon {
+  background: #0a0a0a;
+  color: #ffffff;
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
+}
+
+#neon .theme-title-bar .theme-number {
+  background: rgba(0, 200, 83, 0.12);
+  color: #00C853;
+}
+
+#neon .theme-title-bar h2 {
+  background: linear-gradient(135deg, #00C853, #00BFA5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+#neon .theme-hero {
+  background: linear-gradient(135deg, #0a0a0a 0%, #0d1a0f 50%, #0a0a0a 100%);
+  border: 1px solid rgba(0, 200, 83, 0.12);
+  position: relative;
+}
+
+#neon .theme-hero::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #00C853, transparent);
+}
+
+#neon .theme-hero .hero-badge {
+  background: rgba(0, 200, 83, 0.1);
+  color: #00C853;
+  border: 1px solid rgba(0, 200, 83, 0.2);
+}
+
+#neon .theme-hero .hero-title {
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+#neon .theme-hero .hero-title span {
+  background: linear-gradient(135deg, #00C853, #00BFA5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+#neon .theme-hero .hero-tagline {
+  color: rgba(255,255,255,0.55);
+}
+
+#neon .theme-hero .hero-cta {
+  background: linear-gradient(135deg, #00C853, #00BFA5);
+  color: #0a0a0a;
+  font-weight: 700;
+}
+
+#neon .theme-hero .hero-cta:hover {
+  box-shadow: 0 8px 30px rgba(0, 200, 83, 0.3);
+}
+
+#neon .plan-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(0, 200, 83, 0.1);
+  position: relative;
+}
+
+#neon .plan-card::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(0, 200, 83, 0.0), rgba(0, 200, 83, 0.2), rgba(0, 191, 165, 0.0));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+#neon .plan-card:hover::after {
+  opacity: 1;
+}
+
+#neon .plan-card:hover {
+  box-shadow: 0 8px 40px rgba(0, 200, 83, 0.08);
+}
+
+#neon .plan-card .plan-badge {
+  background: rgba(0, 200, 83, 0.1);
+  color: #00C853;
+}
+
+#neon .plan-card .plan-price {
+  background: linear-gradient(135deg, #00C853, #00BFA5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+#neon .plan-card .plan-features li {
+  border-bottom-color: rgba(0, 200, 83, 0.06);
+}
+
+#neon .plan-card .plan-features li .feat-label {
+  color: rgba(255,255,255,0.35);
+}
+
+#neon .plan-card .plan-cta {
+  background: linear-gradient(135deg, #00C853, #00BFA5);
+  color: #0a0a0a;
+  font-weight: 700;
+}
+
+#neon .plan-card .plan-cta:hover {
+  box-shadow: 0 4px 20px rgba(0, 200, 83, 0.3);
+}
+
+#neon .theme-form-section {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(0, 200, 83, 0.1);
+}
+
+#neon .theme-form-section h3 {
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+#neon .form-field label {
+  color: rgba(255,255,255,0.5);
+}
+
+#neon .form-field input,
+#neon .form-field textarea {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(0, 200, 83, 0.12);
+  color: #fff;
+}
+
+#neon .form-field input:focus,
+#neon .form-field textarea:focus {
+  border-color: #00C853;
+  box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.12);
+}
+
+#neon .form-field input::placeholder,
+#neon .form-field textarea::placeholder {
+  color: rgba(255,255,255,0.2);
+}
+
+#neon .form-submit {
+  background: linear-gradient(135deg, #00C853, #00BFA5);
+  color: #0a0a0a;
+  font-weight: 700;
+}
+
+#neon .form-submit:hover {
+  box-shadow: 0 4px 20px rgba(0, 200, 83, 0.3);
+}
+
+#neon .select-theme-btn {
+  background: transparent;
+  border-color: #00C853;
+  color: #00C853;
+}
+
+#neon .select-theme-btn:hover {
+  background: linear-gradient(135deg, #00C853, #00BFA5);
+  color: #0a0a0a;
+}
+
+/* ========================================
+   FOOTER
+   ======================================== */
+.showcase-footer {
+  background: #0a0a0a;
+  color: rgba(255,255,255,0.4);
+  text-align: center;
+  padding: 40px 24px;
+  font-size: 13px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.showcase-footer strong {
+  color: rgba(255,255,255,0.7);
+}
+
+/* ========================================
+   RESPONSIVE TWEAKS
+   ======================================== */
+@media (max-width: 768px) {
+  .top-nav-inner {
+    flex-direction: column;
+    height: auto;
+    padding: 12px 0;
+    gap: 8px;
+  }
+
+  .top-nav-links {
+    gap: 2px;
+  }
+
+  .top-nav-links li a {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .intro-section {
+    margin-top: 100px;
+    padding: 48px 20px 40px;
+  }
+
+  .theme-content {
+    padding: 0 16px 48px;
+  }
+
+  .theme-hero {
+    border-radius: 12px;
+  }
+
+  .plan-card {
+    padding: 24px 20px;
+  }
+
+  .theme-form-section {
+    padding: 28px 20px;
+  }
+
+  .select-theme-btn {
+    max-width: 100%;
+  }
+}
+
+/* ========================================
+   SELECTION INTERACTION
+   ======================================== */
+.select-theme-btn.selected {
+  pointer-events: none;
+}
+
+.select-theme-btn .check-icon {
+  display: none;
+  margin-right: 6px;
+}
+
+.select-theme-btn.selected .check-icon {
+  display: inline;
+}
+
+/* Smooth reveal animation */
+.theme-section {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.theme-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     TOP NAVIGATION
+     ============================================================ -->
+<nav class="top-nav">
+  <div class="top-nav-inner">
+    <div class="top-nav-brand">etisalat<span>.shop</span> Themes</div>
+    <ul class="top-nav-links">
+      <li><a href="#obsidian">Obsidian</a></li>
+      <li><a href="#arctic">Arctic</a></li>
+      <li><a href="#crimson">Crimson Edge</a></li>
+      <li><a href="#midnight">Midnight Gold</a></li>
+      <li><a href="#neon">Neon Pulse</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ============================================================
+     INTRO SECTION
+     ============================================================ -->
+<section class="intro-section">
+  <h1>Theme Showcase for <span>etisalat.shop</span></h1>
+  <p>Five premium theme options for your Etisalat mobile plans and VIP numbers storefront. Scroll through each design to see the hero section, plan cards, and contact form in action.</p>
+  <div class="theme-count">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    5 Themes Below
+  </div>
+</section>
+
+
+<!-- ============================================================
+     THEME 1: OBSIDIAN — Dark Premium
+     ============================================================ -->
+<section id="obsidian" class="theme-section">
+  <div class="theme-title-bar">
+    <span class="theme-number">Theme 1</span>
+    <h2>Obsidian — Dark Premium</h2>
+    <p>Black canvas with glass-morphism cards, Etisalat red accents, and clean typography. Sleek and modern.</p>
+  </div>
+  <div class="theme-content">
+
+    <!-- Hero -->
+    <div class="theme-hero">
+      <div class="hero-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        UAE's Premium Telecom Store
+      </div>
+      <h2 class="hero-title"><span>etisalat</span>.shop</h2>
+      <p class="hero-tagline">Premium Mobile Plans & VIP Numbers in UAE</p>
+      <button class="hero-cta">
+        Explore Plans
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+
+    <!-- Plan Cards -->
+    <div class="plans-grid">
+      <div class="plan-card">
+        <span class="plan-badge">Popular</span>
+        <h3 class="plan-name">New Freedom Non-Stop Data Plan 250 Local</h3>
+        <div class="plan-price-row">
+          <span class="plan-price">AED 188</span>
+          <span class="plan-price-unit">/month</span>
+        </div>
+        <p class="plan-original-price">Was AED 250/month</p>
+        <ul class="plan-features">
+          <li><span class="feat-label">Speed</span><span class="feat-value">Up to 3 Mbps</span></li>
+          <li><span class="feat-label">Local Data</span><span class="feat-value">Non-Stop</span></li>
+          <li><span class="feat-label">Local Minutes</span><span class="feat-value">1,000</span></li>
+          <li><span class="feat-label">Roaming</span><span class="feat-value">200 MB</span></li>
+        </ul>
+        <button class="plan-cta">Get This Plan</button>
+      </div>
+      <div class="plan-card">
+        <span class="plan-badge">Best Value</span>
+        <h3 class="plan-name">New Freedom Non-Stop Data Plan 325 Flexi</h3>
+        <div class="plan-price-row">
+          <span class="plan-price">AED 228</span>
+          <span class="plan-price-unit">/month</span>
+        </div>
+        <p class="plan-original-price">Was AED 325/month</p>
+        <ul class="plan-features">
+          <li><span class="feat-label">Speed</span><span class="feat-value">Up to 10 Mbps</span></li>
+          <li><span class="feat-label">Local Data</span><span class="feat-value">Non-Stop</span></li>
+          <li><span class="feat-label">Flexi Minutes</span><span class="feat-value">900</span></li>
+          <li><span class="feat-label">Roaming</span><span class="feat-value">1 GB</span></li>
+        </ul>
+        <button class="plan-cta">Get This Plan</button>
+      </div>
+    </div>
+
+    <!-- Contact Form -->
+    <div class="theme-form-section">
+      <h3>Interested? Get in Touch</h3>
+      <p class="form-subtitle">Fill out the form and we'll reach out within 24 hours.</p>
+      <div class="form-grid">
+        <div class="form-field">
+          <label>Full Name</label>
+          <input type="text" placeholder="Your name">
+        </div>
+        <div class="form-field">
+          <label>Phone Number</label>
+          <input type="tel" placeholder="+971 XX XXX XXXX">
+        </div>
+        <div class="form-field">
+          <label>Email Address</label>
+          <input type="email" placeholder="you@example.com">
+        </div>
+        <div class="form-field">
+          <label>Preferred Plan</label>
+          <input type="text" placeholder="e.g., Freedom 250 Local">
+        </div>
+        <div class="form-field full-width">
+          <label>Message</label>
+          <textarea placeholder="Any special requirements or VIP number preferences..."></textarea>
+        </div>
+      </div>
+      <button class="form-submit">Send Inquiry</button>
+    </div>
+
+    <!-- Select Button -->
+    <button class="select-theme-btn" onclick="selectTheme(this, 'Obsidian')">
+      <span class="check-icon">&#10003;</span>
+      Select This Theme
+    </button>
+  </div>
+</section>
+
+<div class="theme-divider"></div>
+
+
+<!-- ============================================================
+     THEME 2: ARCTIC — Clean White
+     ============================================================ -->
+<section id="arctic" class="theme-section">
+  <div class="theme-title-bar">
+    <span class="theme-number">Theme 2</span>
+    <h2>Arctic — Clean White</h2>
+    <p>Pure white canvas with crisp shadows, generous whitespace, and red call-to-action accents. Professional and trustworthy.</p>
+  </div>
+  <div class="theme-content">
+
+    <div class="theme-hero">
+      <div class="hero-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        UAE's Premium Telecom Store
+      </div>
+      <h2 class="hero-title"><span>etisalat</span>.shop</h2>
+      <p class="hero-tagline">Premium Mobile Plans & VIP Numbers in UAE</p>
+      <button class="hero-cta">
+        Explore Plans
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+
+    <div class="plans-grid">
+      <div class="plan-card">
+        <span class="plan-badge">Popular</span>
+        <h3 class="plan-name">New Freedom Non-Stop Data Plan 250 Local</h3>
+        <div class="plan-price-row">
+          <span class="plan-price">AED 188</span>
+          <span class="plan-price-unit">/month</span>
+        </div>
+        <p class="plan-original-price">Was AED 250/month</p>
+        <ul class="plan-features">
+          <li><span class="feat-label">Speed</span><span class="feat-value">Up to 3 Mbps</span></li>
+          <li><span class="feat-label">Local Data</span><span class="feat-value">Non-Stop</span></li>
+          <li><span class="feat-label">Local Minutes</span><span class="feat-value">1,000</span></li>
+          <li><span class="feat-label">Roaming</span><span class="feat-value">200 MB</span></li>
+        </ul>
+        <button class="plan-cta">Get This Plan</button>
+      </div>
+      <div class="plan-card">
+        <span class="plan-badge">Best Value</span>
+        <h3 class="plan-name">New Freedom Non-Stop Data Plan 325 Flexi</h3>
+        <div class="plan-price-row">
+          <span class="plan-price">AED 228</span>
+          <span class="plan-price-unit">/month</span>
+        </div>
+        <p class="plan-original-price">Was AED 325/month</p>
+        <ul class="plan-features">
+          <li><span class="feat-label">Speed</span><span class="feat-value">Up to 10 Mbps</span></li>
+          <li><span class="feat-label">Local Data</span><span class="feat-value">Non-Stop</span></li>
+          <li><span class="feat-label">Flexi Minutes</span><span class="feat-value">900</span></li>
+          <li><span class="feat-label">Roaming</span><span class="feat-value">1 GB</span></li>
+        </ul>
+        <button class="plan-cta">Get This Plan</button>
+      </div>
+    </div>
+
+    <div class="theme-form-section">
+      <h3>Interested? Get in Touch</h3>
+      <p class="form-subtitle">Fill out the form and we'll reach out within 24 hours.</p>
+      <div class="form-grid">
+        <div class="form-field">
+          <label>Full Name</label>
+          <input type="text" placeholder="Your name">
+        </div>
+        <div class="form-field">
+          <label>Phone Number</label>
+          <input type="tel" placeholder="+971 XX XXX XXXX">
+        </div>
+        <div class="form-field">
+          <label>Email Address</label>
+          <input type="email" placeholder="you@example.com">
+        </div>
+        <div class="form-field">
+          <label>Preferred Plan</label>
+          <input type="text" placeholder="e.g., Freedom 250 Local">
+        </div>
+        <div class="form-field full-width">
+          <label>Message</label>
+          <textarea placeholder="Any special requirements or VIP number preferences..."></textarea>
+        </div>
+      </div>
+      <button class="form-submit">Send Inquiry</button>
+    </div>
+
+    <button class="select-theme-btn" onclick="selectTheme(this, 'Arctic')">
+      <span class="check-icon">&#10003;</span>
+      Select This Theme
+    </button>
+  </div>
+</section>
+
+<div class="theme-divider"></div>
+
+
+<!-- ============================================================
+     THEME 3: CRIMSON EDGE — Bold Red
+     ============================================================ -->
+<section id="crimson" class="theme-section">
+  <div class="theme-title-bar">
+    <span class="theme-number">Theme 3</span>
+    <h2>Crimson Edge — Bold Red</h2>
+    <p>Aggressive red gradient hero that commands attention, paired with clean white cards. High-energy sales feel.</p>
+  </div>
+  <div class="theme-content">
+
+    <div class="theme-hero">
+      <div class="hero-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        UAE's Premium Telecom Store
+      </div>
+      <h2 class="hero-title">etisalat.shop</h2>
+      <p class="hero-tagline">Premium Mobile Plans & VIP Numbers in UAE</p>
+      <button class="hero-cta">
+        Explore Plans
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+
+    <div class="plans-grid">
+      <div class="plan-card">
+        <span class="plan-badge">Popular</span>
+        <h3 class="plan-name">New Freedom Non-Stop Data Plan 250 Local</h3>
+        <div class="plan-price-row">
+          <span class="plan-price">AED 188</span>
+          <span class="plan-price-unit">/month</span>
+        </div>
+        <p class="plan-original-price">Was AED 250/month</p>
+        <ul class="plan-features">
+          <li><span class="feat-label">Speed</span><span class="feat-value">Up to 3 Mbps</span></li>
+          <li><span class="feat-label">Local Data</span><span class="feat-value">Non-Stop</span></li>
+          <li><span class="feat-label">Local Minutes</span><span class="feat-value">1,000</span></li>
+          <li><span class="feat-label">Roaming</span><span class="feat-value">200 MB</span></li>
+        </ul>
+        <button class="plan-cta">Get This Plan</button>
+      </div>
+      <div class="plan-card">
+        <span class="plan-badge">Best Value</span>
+        <h3 class="plan-name">New Freedom Non-Stop Data Plan 325 Flexi</h3>
+        <div class="plan-price-row">
+          <span class="plan-price">AED 228</span>
+          <span class="plan-price-unit">/month</span>
+        </div>
+        <p class="plan-original-price">Was AED 325/month</p>
+        <ul class="plan-features">
+          <li><span class="feat-label">Speed</span><span class="feat-value">Up to 10 Mbps</span></li>
+          <li><span class="feat-label">Local Data</span><span class="feat-value">Non-Stop</span></li>
+          <li><span class="feat-label">Flexi Minutes</span><span class="feat-value">900</span></li>
+          <li><span class="feat-label">Roaming</span><span class="feat-value">1 GB</span></li>
+        </ul>
+        <button class="plan-cta">Get This Plan</button>
+      </div>
+    </div>
+
+    <div class="theme-form-section">
+      <h3>Interested? Get in Touch</h3>
+      <p class="form-subtitle">Fill out the form and we'll reach out within 24 hours.</p>
+      <div class="form-grid">
+        <div class="form-field">
+          <label>Full Name</label>
+          <input type="text" placeholder="Your name">
+        </div>
+        <div class="form-field">
+          <label>Phone Number</label>
+          <input type="tel" placeholder="+971 XX XXX XXXX">
+        </div>
+        <div class="form-field">
+          <label>Email Address</label>
+          <input type="email" placeholder="you@example.com">
+        </div>
+        <div class="form-field">
+          <label>Preferred Plan</label>
+          <input type="text" placeholder="e.g., Freedom 250 Local">
+        </div>
+        <div class="form-field full-width">
+          <label>Message</label>
+          <textarea placeholder="Any special requirements or VIP number preferences..."></textarea>
+        </div>
+      </div>
+      <button class="form-submit">Send Inquiry</button>
+    </div>
+
+    <button class="select-theme-btn" onclick="selectTheme(this, 'Crimson Edge')">
+      <span class="check-icon">&#10003;</span>
+      Select This Theme
+    </button>
+  </div>
+</section>
+
+<div class="theme-divider"></div>
+
+
+<!-- ============================================================
+     THEME 4: MIDNIGHT GOLD — Luxury Dark
+     ============================================================ -->
+<section id="midnight" class="theme-section">
+  <div class="theme-title-bar">
+    <span class="theme-number">Theme 4</span>
+    <h2>Midnight Gold — Luxury Dark</h2>
+    <p>Dark navy canvas with gold accents and serif headings. Noise texture overlay for depth. Premium feel for VIP number sales.</p>
+  </div>
+  <div class="theme-content">
+
+    <div class="theme-hero">
+      <div class="hero-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        UAE's Premium Telecom Store
+      </div>
+      <h2 class="hero-title"><span>etisalat</span>.shop</h2>
+      <p class="hero-tagline">Premium Mobile Plans & VIP Numbers in UAE</p>
+      <button class="hero-cta">
+        Explore Plans
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+
+    <div class="plans-grid">
+      <div class="plan-card">
+        <span class="plan-badge">Popular</span>
+        <h3 class="plan-name">New Freedom Non-Stop Data Plan 250 Local</h3>
+        <div class="plan-price-row">
+          <span class="plan-price">AED 188</span>
+          <span class="plan-price-unit">/month</span>
+        </div>
+        <p class="plan-original-price">Was AED 250/month</p>
+        <ul class="plan-features">
+          <li><span class="feat-label">Speed</span><span class="feat-value">Up to 3 Mbps</span></li>
+          <li><span class="feat-label">Local Data</span><span class="feat-value">Non-Stop</span></li>
+          <li><span class="feat-label">Local Minutes</span><span class="feat-value">1,000</span></li>
+          <li><span class="feat-label">Roaming</span><span class="feat-value">200 MB</span></li>
+        </ul>
+        <button class="plan-cta">Get This Plan</button>
+      </div>
+      <div class="plan-card">
+        <span class="plan-badge">Best Value</span>
+        <h3 class="plan-name">New Freedom Non-Stop Data Plan 325 Flexi</h3>
+        <div class="plan-price-row">
+          <span class="plan-price">AED 228</span>
+          <span class="plan-price-unit">/month</span>
+        </div>
+        <p class="plan-original-price">Was AED 325/month</p>
+        <ul class="plan-features">
+          <li><span class="feat-label">Speed</span><span class="feat-value">Up to 10 Mbps</span></li>
+          <li><span class="feat-label">Local Data</span><span class="feat-value">Non-Stop</span></li>
+          <li><span class="feat-label">Flexi Minutes</span><span class="feat-value">900</span></li>
+          <li><span class="feat-label">Roaming</span><span class="feat-value">1 GB</span></li>
+        </ul>
+        <button class="plan-cta">Get This Plan</button>
+      </div>
+    </div>
+
+    <div class="theme-form-section">
+      <h3>Interested? Get in Touch</h3>
+      <p class="form-subtitle">Fill out the form and we'll reach out within 24 hours.</p>
+      <div class="form-grid">
+        <div class="form-field">
+          <label>Full Name</label>
+          <input type="text" placeholder="Your name">
+        </div>
+        <div class="form-field">
+          <label>Phone Number</label>
+          <input type="tel" placeholder="+971 XX XXX XXXX">
+        </div>
+        <div class="form-field">
+          <label>Email Address</label>
+          <input type="email" placeholder="you@example.com">
+        </div>
+        <div class="form-field">
+          <label>Preferred Plan</label>
+          <input type="text" placeholder="e.g., Freedom 250 Local">
+        </div>
+        <div class="form-field full-width">
+          <label>Message</label>
+          <textarea placeholder="Any special requirements or VIP number preferences..."></textarea>
+        </div>
+      </div>
+      <button class="form-submit">Send Inquiry</button>
+    </div>
+
+    <button class="select-theme-btn" onclick="selectTheme(this, 'Midnight Gold')">
+      <span class="check-icon">&#10003;</span>
+      Select This Theme
+    </button>
+  </div>
+</section>
+
+<div class="theme-divider"></div>
+
+
+<!-- ============================================================
+     THEME 5: NEON PULSE — Modern Gradient
+     ============================================================ -->
+<section id="neon" class="theme-section">
+  <div class="theme-title-bar">
+    <span class="theme-number">Theme 5</span>
+    <h2>Neon Pulse — Modern Gradient</h2>
+    <p>Dark base with neon green-teal gradient accents and glowing card borders. Modern fintech/startup energy.</p>
+  </div>
+  <div class="theme-content">
+
+    <div class="theme-hero">
+      <div class="hero-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        UAE's Premium Telecom Store
+      </div>
+      <h2 class="hero-title"><span>etisalat</span>.shop</h2>
+      <p class="hero-tagline">Premium Mobile Plans & VIP Numbers in UAE</p>
+      <button class="hero-cta">
+        Explore Plans
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+
+    <div class="plans-grid">
+      <div class="plan-card">
+        <span class="plan-badge">Popular</span>
+        <h3 class="plan-name">New Freedom Non-Stop Data Plan 250 Local</h3>
+        <div class="plan-price-row">
+          <span class="plan-price">AED 188</span>
+          <span class="plan-price-unit">/month</span>
+        </div>
+        <p class="plan-original-price">Was AED 250/month</p>
+        <ul class="plan-features">
+          <li><span class="feat-label">Speed</span><span class="feat-value">Up to 3 Mbps</span></li>
+          <li><span class="feat-label">Local Data</span><span class="feat-value">Non-Stop</span></li>
+          <li><span class="feat-label">Local Minutes</span><span class="feat-value">1,000</span></li>
+          <li><span class="feat-label">Roaming</span><span class="feat-value">200 MB</span></li>
+        </ul>
+        <button class="plan-cta">Get This Plan</button>
+      </div>
+      <div class="plan-card">
+        <span class="plan-badge">Best Value</span>
+        <h3 class="plan-name">New Freedom Non-Stop Data Plan 325 Flexi</h3>
+        <div class="plan-price-row">
+          <span class="plan-price">AED 228</span>
+          <span class="plan-price-unit">/month</span>
+        </div>
+        <p class="plan-original-price">Was AED 325/month</p>
+        <ul class="plan-features">
+          <li><span class="feat-label">Speed</span><span class="feat-value">Up to 10 Mbps</span></li>
+          <li><span class="feat-label">Local Data</span><span class="feat-value">Non-Stop</span></li>
+          <li><span class="feat-label">Flexi Minutes</span><span class="feat-value">900</span></li>
+          <li><span class="feat-label">Roaming</span><span class="feat-value">1 GB</span></li>
+        </ul>
+        <button class="plan-cta">Get This Plan</button>
+      </div>
+    </div>
+
+    <div class="theme-form-section">
+      <h3>Interested? Get in Touch</h3>
+      <p class="form-subtitle">Fill out the form and we'll reach out within 24 hours.</p>
+      <div class="form-grid">
+        <div class="form-field">
+          <label>Full Name</label>
+          <input type="text" placeholder="Your name">
+        </div>
+        <div class="form-field">
+          <label>Phone Number</label>
+          <input type="tel" placeholder="+971 XX XXX XXXX">
+        </div>
+        <div class="form-field">
+          <label>Email Address</label>
+          <input type="email" placeholder="you@example.com">
+        </div>
+        <div class="form-field">
+          <label>Preferred Plan</label>
+          <input type="text" placeholder="e.g., Freedom 250 Local">
+        </div>
+        <div class="form-field full-width">
+          <label>Message</label>
+          <textarea placeholder="Any special requirements or VIP number preferences..."></textarea>
+        </div>
+      </div>
+      <button class="form-submit">Send Inquiry</button>
+    </div>
+
+    <button class="select-theme-btn" onclick="selectTheme(this, 'Neon Pulse')">
+      <span class="check-icon">&#10003;</span>
+      Select This Theme
+    </button>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="showcase-footer">
+  <p>Theme showcase prepared for <strong>etisalat.shop</strong> &mdash; Select a theme above to proceed with development.</p>
+</footer>
+
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+// Intersection Observer for scroll-reveal animation
+document.addEventListener('DOMContentLoaded', function() {
+  const sections = document.querySelectorAll('.theme-section');
+
+  const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, {
+    threshold: 0.08,
+    rootMargin: '0px 0px -40px 0px'
+  });
+
+  sections.forEach(function(section) {
+    observer.observe(section);
+  });
+
+  // Make first theme visible immediately
+  if (sections.length > 0) {
+    setTimeout(function() {
+      sections[0].classList.add('visible');
+    }, 200);
+  }
+});
+
+// Theme selection handler
+function selectTheme(button, themeName) {
+  // Reset all buttons
+  document.querySelectorAll('.select-theme-btn').forEach(function(btn) {
+    btn.classList.remove('selected');
+    btn.innerHTML = '<span class="check-icon">&#10003;</span> Select This Theme';
+  });
+
+  // Mark this one as selected
+  button.classList.add('selected');
+  button.innerHTML = '<span class="check-icon" style="display:inline">&#10003;</span> ' + themeName + ' Selected';
+
+  // Scroll to top smoothly with a brief delay
+  setTimeout(function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, 300);
+
+  // Show a subtle toast notification
+  showToast('Theme "' + themeName + '" has been selected. We\'ll build your site with this design.');
+}
+
+// Toast notification
+function showToast(message) {
+  // Remove existing toast
+  var existing = document.querySelector('.toast-notification');
+  if (existing) existing.remove();
+
+  var toast = document.createElement('div');
+  toast.className = 'toast-notification';
+  toast.style.cssText = 'position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(10,10,10,0.95);color:#fff;padding:16px 28px;border-radius:12px;font-size:14px;font-weight:500;z-index:9999;opacity:0;transition:all 0.4s cubic-bezier(0.16,1,0.3,1);max-width:90vw;text-align:center;backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.1);box-shadow:0 16px 48px rgba(0,0,0,0.4);';
+  toast.textContent = message;
+  document.body.appendChild(toast);
+
+  // Animate in
+  requestAnimationFrame(function() {
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateX(-50%) translateY(0)';
+  });
+
+  // Animate out
+  setTimeout(function() {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateX(-50%) translateY(20px)';
+    setTimeout(function() { toast.remove(); }, 400);
+  }, 4000);
+}
+
+// Smooth scroll offset for fixed nav
+document.querySelectorAll('.top-nav-links a').forEach(function(link) {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    var targetId = this.getAttribute('href').substring(1);
+    var target = document.getElementById(targetId);
+    if (target) {
+      var navHeight = document.querySelector('.top-nav').offsetHeight;
+      var top = target.getBoundingClientRect().top + window.pageYOffset - navHeight - 12;
+      window.scrollTo({ top: top, behavior: 'smooth' });
+    }
+  });
+});
+</script>
+
+</body>
+</html>

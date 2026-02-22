@@ -354,6 +354,26 @@
       width: 100%;
     }
 
+    /* Highlighted nav CTA */
+    .navbar-links a.nav-cta {
+      background: var(--gold-gradient);
+      color: #0D1117;
+      font-weight: 700;
+      padding: 0.45rem 1rem;
+      border-radius: 6px;
+      letter-spacing: 0;
+    }
+
+    .navbar-links a.nav-cta::after {
+      display: none;
+    }
+
+    .navbar-links a.nav-cta:hover {
+      color: #0D1117;
+      box-shadow: 0 4px 15px rgba(201, 169, 98, 0.35);
+      transform: translateY(-1px);
+    }
+
     /* Mobile menu toggle */
     .menu-toggle {
       display: none;
@@ -1297,7 +1317,7 @@
       <ul class="navbar-links" id="navLinks">
         <li><a href="#plans" onclick="closeNav()">الباقات</a></li>
         <li><a href="#vip" onclick="closeNav()">أرقام VIP</a></li>
-        <li><a href="../choose-number/" onclick="closeNav()">اختر رقمك</a></li>
+        <li><a href="../choose-number/" onclick="closeNav()" class="nav-cta">اختر رقمك</a></li>
         <li><a href="#contact" onclick="closeNav()">تواصل معنا</a></li>
         <li><a href="../index.html" onclick="closeNav()" class="en-text">English</a></li>
       </ul>

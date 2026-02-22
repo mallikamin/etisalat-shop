@@ -360,6 +360,26 @@
       width: 100%;
     }
 
+    /* Highlighted nav CTA */
+    .navbar-links a.nav-cta {
+      background: var(--gold-gradient);
+      color: #0D1117;
+      font-weight: 700;
+      padding: 0.45rem 1rem;
+      border-radius: 6px;
+      letter-spacing: 0;
+    }
+
+    .navbar-links a.nav-cta::after {
+      display: none;
+    }
+
+    .navbar-links a.nav-cta:hover {
+      color: #0D1117;
+      box-shadow: 0 4px 15px rgba(201, 169, 98, 0.35);
+      transform: translateY(-1px);
+    }
+
     /* Mobile menu toggle */
     .menu-toggle {
       display: none;
@@ -1199,7 +1219,7 @@
       <ul class="navbar-links" id="navLinks">
         <li><a href="#plans" onclick="closeNav()">Plans</a></li>
         <li><a href="#vip" onclick="closeNav()">VIP Numbers</a></li>
-        <li><a href="choose-number/" onclick="closeNav()">Choose Number</a></li>
+        <li><a href="choose-number/" onclick="closeNav()" class="nav-cta">Choose Your Number</a></li>
         <li><a href="#contact" onclick="closeNav()">Contact</a></li>
         <li><a href="blog/best-etisalat-plan-calling-india-2026.html" onclick="closeNav()">Blog</a></li>
         <li><a href="ar/" onclick="closeNav()">العربية</a></li>

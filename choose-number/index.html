@@ -959,7 +959,7 @@ a { color: inherit; }
    CONFIGURATION — Update SHEET_ID here when it changes
    ======================================== */
 var SHEET_ID = '1qAw1YQkKEbq-R3LullCBNr0MweGfC2KEO-rot9ff8dw';
-var CSV_URL = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/export?format=csv&gid=0';
+var CSV_URL = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/gviz/tq?tqx=out:csv&headers=1';
 var WA_NUMBER = '971566999377';
 
 /* ========================================
@@ -1070,12 +1070,12 @@ function parseCSV(csv) {
 
     var clean = parseCSVLine(line);
 
-    if (clean.length < 7) continue;
+    if (clean.length < 6) continue;
 
-    var category = clean[2];
-    var msisdn = clean[3];
-    var formatted = clean[4];
-    var status = clean[6];
+    var category = clean[1];
+    var msisdn = clean[2];
+    var formatted = clean[3];
+    var status = clean[5];
 
     // Skip non-available, skip header rows
     if (status !== 'Available') continue;

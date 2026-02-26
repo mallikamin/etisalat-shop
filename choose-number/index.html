@@ -1290,7 +1290,7 @@ Tawk_API.onLoad = function(){
 // WhatsApp handoff after chat ends
 Tawk_API.onChatEnded = function(){
   var wa = document.createElement('div');
-  wa.innerHTML = '<a href="https://wa.me/97156699377?text=Hi%2C%20I%20was%20chatting%20on%20your%20website" target="_blank" style="position:fixed;bottom:80px;right:20px;background:#25D366;color:#fff;padding:12px 20px;border-radius:25px;text-decoration:none;font-weight:bold;z-index:99999;box-shadow:0 2px 8px rgba(0,0,0,0.3)">Continue on WhatsApp</a>';
+  wa.innerHTML = '<a href="https://wa.me/971566999377?text=Hi%2C%20I%20was%20chatting%20on%20your%20website" target="_blank" style="position:fixed;bottom:80px;right:20px;background:#25D366;color:#fff;padding:12px 20px;border-radius:25px;text-decoration:none;font-weight:bold;z-index:99999;box-shadow:0 2px 8px rgba(0,0,0,0.3)">Continue on WhatsApp</a>';
   document.body.appendChild(wa);
   setTimeout(function(){ wa.remove(); }, 30000);
 };

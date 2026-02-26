@@ -281,7 +281,7 @@
     </p>
 
     <div class="buttons">
-      <a href="/etisalat-shop/" class="btn btn-primary">
+      <a href="/" class="btn btn-primary">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="19" y1="12" x2="5" y2="12"></line>
           <polyline points="12 19 5 12 12 5"></polyline>
@@ -327,6 +327,44 @@
   </div>
 
   <div class="bottom-line"></div>
+
+  <script>
+    (function () {
+      var path = window.location.pathname.toLowerCase();
+      var redirects = {
+        '/etisalat-shop': '/',
+        '/etisalat-shop/': '/',
+        '/home': '/',
+        '/home/': '/',
+        '/index.php': '/',
+        '/index.htm': '/',
+        '/choose-number': '/choose-number/',
+        '/choose-number.html': '/choose-number/',
+        '/emirati': '/emirati/',
+        '/emirati.html': '/emirati/',
+        '/ar': '/ar/',
+        '/ar.html': '/ar/',
+        '/blog/how-to-get-etisalat-vip-number-dubai': '/blog/how-to-get-etisalat-vip-number-dubai.html',
+        '/blog/etisalat-vs-du-postpaid-plans-uae': '/blog/etisalat-vs-du-postpaid-plans-uae.html',
+        '/blog/best-etisalat-plan-calling-india-2026': '/blog/best-etisalat-plan-calling-india-2026.html',
+        '/ar/blog/how-to-get-etisalat-vip-number-dubai': '/ar/blog/how-to-get-etisalat-vip-number-dubai.html',
+        '/ar/blog/etisalat-vs-du-postpaid-plans-uae': '/ar/blog/etisalat-vs-du-postpaid-plans-uae.html'
+      };
+
+      if (redirects[path]) {
+        window.location.replace(redirects[path] + window.location.search + window.location.hash);
+        return;
+      }
+
+      if (typeof gtag === 'function') {
+        gtag('event', 'page_not_found', {
+          page_path: window.location.pathname,
+          page_location: window.location.href,
+          page_referrer: document.referrer || '(direct)'
+        });
+      }
+    })();
+  </script>
 
 </body>
 </html>

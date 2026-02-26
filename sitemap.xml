@@ -30,6 +30,20 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://etisalat.shop/blog/</loc>
+    <lastmod>2026-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://etisalat.shop/ar/blog/</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://etisalat.shop/ar/blog/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://etisalat.shop/blog/"/>
+    <lastmod>2026-02-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://etisalat.shop/ar/blog/how-to-get-etisalat-vip-number-dubai.html</loc>
     <xhtml:link rel="alternate" hreflang="ar" href="https://etisalat.shop/ar/blog/how-to-get-etisalat-vip-number-dubai.html"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://etisalat.shop/blog/how-to-get-etisalat-vip-number-dubai.html"/>

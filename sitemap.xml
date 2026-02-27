@@ -78,6 +78,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://etisalat.shop/privacy/</loc>
+    <lastmod>2026-02-27</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  <url>
     <loc>https://etisalat.shop/thank-you.html</loc>
     <lastmod>2026-02-22</lastmod>
     <changefreq>yearly</changefreq>

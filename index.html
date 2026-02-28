@@ -1928,9 +1928,10 @@
         <form action="https://formsubmit.co/mallikamiin@gmail.com" method="POST">
           <!-- FormSubmit hidden fields -->
           <input type="hidden" name="_subject" value="New Inquiry from etisalat.shop">
-          <input type="hidden" name="_captcha" value="false">
           <input type="hidden" name="_next" value="https://etisalat.shop/thank-you.html">
           <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_autoresponse" value="Thank you for contacting etisalat.shop! We received your inquiry and will get back to you within 30 minutes during business hours (9 AM - 9 PM UAE time). For instant help, WhatsApp us at +971 56 699 9377.">
+          <input type="hidden" name="_blacklist" value="viagra, casino, crypto, lottery, SEO services, link building, web traffic, cheap followers">
           <!-- Honeypot -->
           <input type="text" name="_honey" style="display:none">
 
@@ -2149,6 +2150,11 @@
     });
   </script>
 
+  <!-- Event ID helper for CAPI deduplication -->
+  <script>
+    function genEventId(){ return Date.now().toString(36) + Math.random().toString(36).substr(2, 9); }
+  </script>
+
   <!-- Send via WhatsApp — builds pre-filled message from form fields -->
   <script>
     function sendViaWhatsApp() {
@@ -2176,17 +2182,19 @@
       var url = 'https://wa.me/971566999377?text=' + encodeURIComponent(text);
       window.open(url, '_blank');
 
+      var eid = genEventId();
       if (typeof fbq === 'function') {
         fbq('track', 'Contact', {
           content_name: 'WhatsApp Form Send',
           content_category: interest
-        });
+        }, {eventID: eid});
       }
       if (typeof gtag === 'function') {
         gtag('event', 'generate_lead', {
           event_category: 'whatsapp_form',
           event_label: interest,
-          value: 1
+          value: 1,
+          event_id: eid
         });
       }
     }
@@ -2218,11 +2226,19 @@
     var formEl = document.querySelector('form[action*="formsubmit"]');
     if (formEl) {
       formEl.addEventListener('submit', function() {
+        var eid = genEventId();
         if (typeof gtag === 'function') {
           gtag('event', 'generate_lead', {
             event_category: 'email_form',
-            event_label: document.getElementById('interest').value
+            event_label: document.getElementById('interest').value,
+            event_id: eid
           });
+        }
+        if (typeof fbq === 'function') {
+          fbq('track', 'Lead', {
+            content_name: 'Form Submit',
+            content_category: document.getElementById('interest').value
+          }, {eventID: eid});
         }
       });
     }
@@ -2240,6 +2256,58 @@
         }
       });
     });
+  </script>
+
+  <!-- GA4: Form field interaction tracking -->
+  <script>
+  (function(){
+    var fields = ['name','phone','email','interest','message'];
+    fields.forEach(function(id){
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener('focus', function(){
+        if (typeof gtag === 'function') {
+          gtag('event', 'form_field_focus', {
+            event_category: 'form_interaction',
+            event_label: id
+          });
+        }
+      });
+      el.addEventListener('blur', function(){
+        if (typeof gtag === 'function') {
+          gtag('event', 'form_field_blur', {
+            event_category: 'form_interaction',
+            event_label: id,
+            value: this.value ? 1 : 0
+          });
+        }
+      });
+    });
+  })();
+  </script>
+
+<!-- GA4: Scroll depth tracking -->
+  <script>
+  (function(){
+    var fired = {};
+    var thresholds = [25, 50, 75, 100];
+    window.addEventListener('scroll', function(){
+      var h = document.documentElement;
+      var pct = Math.round((window.scrollY / (h.scrollHeight - h.clientHeight)) * 100);
+      thresholds.forEach(function(t){
+        if (pct >= t && !fired[t]) {
+          fired[t] = true;
+          if (typeof gtag === 'function') {
+            gtag('event', 'scroll_depth', {
+              event_category: 'engagement',
+              event_label: t + '%',
+              value: t
+            });
+          }
+        }
+      });
+    });
+  })();
   </script>
 
 <!--Start of Tawk.to Script-->

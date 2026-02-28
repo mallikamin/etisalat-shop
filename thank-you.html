@@ -8,7 +8,8 @@
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-G34631QW03');
-    gtag('event', 'generate_lead', { event_category: 'form', event_label: 'inquiry_form' });
+    var _eid = Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
+    gtag('event', 'generate_lead', { event_category: 'form', event_label: 'inquiry_form', event_id: _eid });
   </script>
 
   <meta charset="UTF-8">
@@ -28,7 +29,7 @@
     document,'script','https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '1456083435966506');
     fbq('track', 'PageView');
-    fbq('track', 'Lead');
+    fbq('track', 'Lead', {}, {eventID: _eid});
   </script>
   <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1456083435966506&ev=PageView&noscript=1"/></noscript>
   <!-- End Facebook Pixel -->
@@ -162,15 +163,23 @@
     <p class="footer-note">etisalat.shop — Authorized Etisalat Dealer, UAE</p>
   </div>
 
-  <!-- WhatsApp Click Tracking — fires FB Pixel 'Contact' event on every wa.me click -->
+  <!-- WhatsApp Click Tracking — fires FB Pixel + GA4 events on every wa.me click -->
   <script>
     document.addEventListener('click', function(e) {
       var link = e.target.closest('a[href*="wa.me"]');
-      if (link && typeof fbq === 'function') {
-        fbq('track', 'Contact', {
-          content_name: 'WhatsApp Click',
-          content_category: 'Thank You Page'
-        });
+      if (link) {
+        if (typeof fbq === 'function') {
+          fbq('track', 'Contact', {
+            content_name: 'WhatsApp Click',
+            content_category: 'Thank You Page'
+          });
+        }
+        if (typeof gtag === 'function') {
+          gtag('event', 'contact', {
+            event_category: 'whatsapp',
+            event_label: 'thank_you_page'
+          });
+        }
       }
     });
   </script>

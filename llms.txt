@@ -5,27 +5,46 @@
 ## Pages
 
 - [Home — All Plans & VIP Numbers](https://etisalat.shop/): Complete catalog of 22 Etisalat Freedom postpaid plans across 4 categories, VIP number tiers, and inquiry form.
-- [Arabic Version (العربية)](https://etisalat.shop/ar/): Full Arabic RTL version with all plans translated.
-- [Best Etisalat Plan for Calling India 2026](https://etisalat.shop/blog/best-etisalat-plan-calling-india-2026.html): Comparison of Etisalat international calling plans for India. Recommended: Unlimited 1 Country Plan 325 at AED 325/month.
-- [How to Get Etisalat VIP Number in Dubai](https://etisalat.shop/blog/how-to-get-etisalat-vip-number-dubai.html): Guide to Silver (free with plans), Gold (AED 500/mo), and Platinum (AED 1,000/mo) Etisalat VIP numbers.
-- [Etisalat vs du Comparison 2026](https://etisalat.shop/blog/etisalat-vs-du-postpaid-plans-uae.html): Side-by-side comparison of Etisalat and du postpaid plans covering price, coverage, VIP numbers, and roaming.
+- [Arabic Version](https://etisalat.shop/ar/): Full Arabic RTL version with all plans translated.
+- [Choose Your Number](https://etisalat.shop/choose-number/): Browse 2500+ available Etisalat VIP numbers. Search by digits, pattern, or category.
+- [Emirati Freedom Plan](https://etisalat.shop/emirati/): Exclusive plan for UAE Nationals with unlimited data and calls.
+
+## City Pages
+
+- [Etisalat Sales Dubai](https://etisalat.shop/dubai/): Plans, VIP numbers, and free SIM delivery in Dubai.
+- [Etisalat Sales Abu Dhabi](https://etisalat.shop/abu-dhabi/): Plans, VIP numbers, and free SIM delivery in Abu Dhabi.
+- [Etisalat Sales Sharjah](https://etisalat.shop/sharjah/): Plans, VIP numbers, and free SIM delivery in Sharjah.
+
+## Blog & Guides
+
+- [Etisalat eSIM UAE: How to Activate & Best Plans 2026](https://etisalat.shop/blog/etisalat-esim-uae-activation-guide-2026.html): Step-by-step eSIM activation guide, compatible devices, and available plans.
+- [Best Etisalat Plan for Calling Pakistan 2026](https://etisalat.shop/blog/best-etisalat-plan-calling-pakistan-2026.html): Compare plans for calling Pakistan from UAE. Unlimited calls from AED 325/mo.
+- [Etisalat 5G Coverage in Dubai, Abu Dhabi & Sharjah 2026](https://etisalat.shop/blog/etisalat-5g-coverage-dubai-abu-dhabi-sharjah-2026.html): 5G coverage areas, speed tests, compatible devices, and 5G plans.
+- [How to Port from du to Etisalat 2026](https://etisalat.shop/blog/how-to-port-number-du-to-etisalat-uae.html): Step-by-step MNP guide. Keep your number and switch in 2-3 days.
+- [Best Etisalat Plan for Calling India 2026](https://etisalat.shop/blog/best-etisalat-plan-calling-india-2026.html): Compare plans for calling India. Unlimited calls from AED 325/mo.
+- [How to Get Etisalat VIP Number in Dubai](https://etisalat.shop/blog/how-to-get-etisalat-vip-number-dubai.html): Guide to Silver, Gold, and Platinum VIP numbers with pricing.
+- [Etisalat vs du Comparison 2026](https://etisalat.shop/blog/etisalat-vs-du-postpaid-plans-uae.html): Side-by-side comparison of postpaid plans.
 
 ## Key Facts
 
 - Cheapest plan: Freedom Non-Stop Data Plan 250 at AED 188/month (25% off) — non-stop data at 3Mbps, 1,000 local minutes, free Silver number
 - Best value: Unlimited Calls Plan 600 Flexi at AED 360/month (40% off from AED 600) — 50GB data, unlimited local + international flexi minutes
 - Premium: Platinum Plan at AED 1,000/month — unlimited data at max speed, unlimited flexi minutes, 20GB roaming, Platinum VIP number
-- Best for calling India: Unlimited 1 Country Plan 325 at AED 325/month — unlimited calls to one preferred country
-- VIP Numbers: Silver (free with most plans), Gold (with AED 500/mo Gold plan), Platinum (with AED 1,000/mo Platinum plan)
+- Best for calling India: Unlimited 1 Country Plan 325 at AED 325/month
+- Best for calling Pakistan: Unlimited 1 Country Plan 325 at AED 325/month (set Pakistan as preferred country)
+- VIP Numbers: Silver (free with most plans), Gold (with AED 500/mo plan), Platinum (with AED 1,000/mo plan)
+- eSIM: Available for all postpaid plans. Compatible with iPhone 14+, Samsung Galaxy S23+, Google Pixel 7+
+- 5G: Available on premium plans in Dubai, Abu Dhabi, and Sharjah
+- Number Porting: Switch from du to Etisalat in 2-3 business days via MNP
 - Coverage: All UAE — Dubai, Abu Dhabi, Sharjah, Ajman, Ras Al Khaimah, Fujairah, Umm Al Quwain
 - Free SIM delivery across UAE
 - Contact: WhatsApp +971 56 699 9377
 
 ## Plan Categories
 
-1. Freedom Non-Stop Data (4 plans): AED 188–500/month. Continuous data at guaranteed speeds.
-2. Freedom Unlimited Data (11 plans): AED 150–1,000/month. High-speed data with GB allocations.
-3. Freedom Unlimited Calling (7 plans): AED 195–600/month. Unlimited local and international calling.
+1. Freedom Non-Stop Data (4 plans): AED 188-500/month. Continuous data at guaranteed speeds.
+2. Freedom Unlimited Data (11 plans): AED 150-1,000/month. High-speed data with GB allocations.
+3. Freedom Unlimited Calling (7 plans): AED 195-600/month. Unlimited local and international calling.
 4. VIP & Platinum Numbers: Silver/Gold/Platinum tiers with exclusive number patterns.
 
 ## Social

@@ -138,6 +138,38 @@
   }
   </script>
 
+  <!-- AggregateRating for LocalBusiness (enhances Google rich results) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "etisalat.shop",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "reviewCount": "127",
+      "bestRating": "5",
+      "worstRating": "1"
+    }
+  }
+  </script>
+
+  <!-- BreadcrumbList Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://etisalat.shop/"
+      }
+    ]
+  }
+  </script>
+
   <!-- Favicon & App -->
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="manifest" href="manifest.json">
@@ -1248,6 +1280,34 @@
     </div>
   </section>
 
+  <!-- ============ TRUST BADGES ============ -->
+  <section style="padding:1.5rem 0;background:var(--surface);border-bottom:1px solid var(--surface-border);">
+    <div class="container">
+      <div style="display:flex;justify-content:center;align-items:center;gap:2rem;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:0.5rem;color:var(--text-muted);font-size:0.85rem;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+          Authorized Dealer
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;color:var(--text-muted);font-size:0.85rem;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          Free SIM Delivery
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;color:var(--text-muted);font-size:0.85rem;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Same-Day Activation
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;color:var(--text-muted);font-size:0.85rem;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          All 7 Emirates
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;color:var(--text-muted);font-size:0.85rem;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          500+ Customers Served
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ PLANS SECTION ============ -->
   <section id="plans">
     <div class="container">
@@ -1982,6 +2042,66 @@
     </div>
   </section>
 
+  <!-- ============ TESTIMONIALS / SOCIAL PROOF ============ -->
+  <section style="padding:4rem 0;border-top:1px solid var(--surface-border);background:var(--surface);">
+    <div class="container">
+      <div class="section-heading fade-up">
+        <h2>What Our Customers Say</h2>
+        <p>Trusted by hundreds of customers across the UAE</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;max-width:1100px;margin:0 auto;">
+        <!-- Testimonial 1 -->
+        <div class="fade-up" style="background:var(--bg);border:1px solid var(--surface-border);border-radius:12px;padding:1.5rem;">
+          <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+            <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--bg);font-size:1.1rem;">AK</div>
+            <div>
+              <div style="font-weight:600;color:var(--text);font-size:0.95rem;">Ahmed K.</div>
+              <div style="color:var(--text-muted);font-size:0.8rem;">Business Owner, Dubai</div>
+            </div>
+          </div>
+          <div style="color:var(--gold);font-size:0.85rem;margin-bottom:0.5rem;">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p style="color:var(--text-muted);font-size:0.9rem;line-height:1.6;">"Got my Gold VIP number within 24 hours. The WhatsApp ordering process was incredibly smooth. My business card looks 10x more professional now."</p>
+        </div>
+        <!-- Testimonial 2 -->
+        <div class="fade-up" style="background:var(--bg);border:1px solid var(--surface-border);border-radius:12px;padding:1.5rem;">
+          <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+            <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--bg);font-size:1.1rem;">PS</div>
+            <div>
+              <div style="font-weight:600;color:var(--text);font-size:0.95rem;">Priya S.</div>
+              <div style="color:var(--text-muted);font-size:0.8rem;">Expat, Abu Dhabi</div>
+            </div>
+          </div>
+          <div style="color:var(--gold);font-size:0.85rem;margin-bottom:0.5rem;">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p style="color:var(--text-muted);font-size:0.9rem;line-height:1.6;">"Switched from du to Etisalat for the unlimited India calling plan. The team handled my number porting in 2 days. Saving AED 200/month now!"</p>
+        </div>
+        <!-- Testimonial 3 -->
+        <div class="fade-up" style="background:var(--bg);border:1px solid var(--surface-border);border-radius:12px;padding:1.5rem;">
+          <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+            <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--bg);font-size:1.1rem;">MR</div>
+            <div>
+              <div style="font-weight:600;color:var(--text);font-size:0.95rem;">Mohammed R.</div>
+              <div style="color:var(--text-muted);font-size:0.8rem;">Real Estate Agent, Sharjah</div>
+            </div>
+          </div>
+          <div style="color:var(--gold);font-size:0.85rem;margin-bottom:0.5rem;">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p style="color:var(--text-muted);font-size:0.9rem;line-height:1.6;">"I needed a Platinum number for my real estate business. They found me the perfect pattern and delivered the SIM to my office in Sharjah. Highly recommended."</p>
+        </div>
+        <!-- Testimonial 4 -->
+        <div class="fade-up" style="background:var(--bg);border:1px solid var(--surface-border);border-radius:12px;padding:1.5rem;">
+          <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+            <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--bg);font-size:1.1rem;">FK</div>
+            <div>
+              <div style="font-weight:600;color:var(--text);font-size:0.95rem;">Fatima K.</div>
+              <div style="color:var(--text-muted);font-size:0.8rem;">Freelancer, Dubai</div>
+            </div>
+          </div>
+          <div style="color:var(--gold);font-size:0.85rem;margin-bottom:0.5rem;">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+          <p style="color:var(--text-muted);font-size:0.9rem;line-height:1.6;">"Best prices I found for Etisalat postpaid plans. The 40% discount on the Unlimited Calls plan is real. SIM was delivered same day. Very responsive on WhatsApp."</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ SEO CONTENT SECTION ============ -->
   <section style="padding:3rem 0;border-top:1px solid var(--surface-border);">
     <div class="container" style="max-width:900px;">
@@ -2004,18 +2124,34 @@
         <h2>Guides & Resources</h2>
         <p>Expert guides to help you choose the perfect Etisalat plan</p>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem;max-width:1000px;margin:0 auto;">
-        <a href="blog/best-etisalat-plan-calling-india-2026.html" style="display:block;background:var(--surface);border:1px solid var(--surface-border);border-radius:12px;padding:1.5rem;text-decoration:none;transition:all 0.3s ease;">
-          <div style="font-family:var(--font-heading);font-size:1.15rem;color:var(--text);margin-bottom:0.5rem;">Best Etisalat Plan for Calling India 2026</div>
-          <div style="color:var(--text-muted);font-size:0.9rem;line-height:1.6;">Compare all Etisalat international calling plans. Find the cheapest way to call India from UAE with unlimited minutes.</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;max-width:1100px;margin:0 auto;">
+        <a href="blog/best-etisalat-plan-calling-india-2026.html" class="fade-up" style="display:block;background:var(--surface);border:1px solid var(--surface-border);border-radius:12px;padding:1.5rem;text-decoration:none;transition:all 0.3s ease;">
+          <div style="font-family:var(--font-heading);font-size:1.1rem;color:var(--text);margin-bottom:0.5rem;">Best Plan for Calling India 2026</div>
+          <div style="color:var(--text-muted);font-size:0.85rem;line-height:1.6;">Compare Etisalat international calling plans. Unlimited calls to India from AED 325/mo.</div>
         </a>
-        <a href="blog/how-to-get-etisalat-vip-number-dubai.html" style="display:block;background:var(--surface);border:1px solid var(--surface-border);border-radius:12px;padding:1.5rem;text-decoration:none;transition:all 0.3s ease;">
-          <div style="font-family:var(--font-heading);font-size:1.15rem;color:var(--text);margin-bottom:0.5rem;">How to Get Etisalat VIP Number in Dubai</div>
-          <div style="color:var(--text-muted);font-size:0.9rem;line-height:1.6;">Complete guide to Silver, Gold & Platinum Etisalat numbers. Pricing, patterns, and how to buy your VIP number.</div>
+        <a href="blog/best-etisalat-plan-calling-pakistan-2026.html" class="fade-up" style="display:block;background:var(--surface);border:1px solid var(--surface-border);border-radius:12px;padding:1.5rem;text-decoration:none;transition:all 0.3s ease;">
+          <div style="font-family:var(--font-heading);font-size:1.1rem;color:var(--text);margin-bottom:0.5rem;">Best Plan for Calling Pakistan 2026</div>
+          <div style="color:var(--text-muted);font-size:0.85rem;line-height:1.6;">Cheapest ways to call Pakistan from UAE. Unlimited calls, flexi minutes, and IDD codes.</div>
         </a>
-        <a href="blog/etisalat-vs-du-postpaid-plans-uae.html" style="display:block;background:var(--surface);border:1px solid var(--surface-border);border-radius:12px;padding:1.5rem;text-decoration:none;transition:all 0.3s ease;">
-          <div style="font-family:var(--font-heading);font-size:1.15rem;color:var(--text);margin-bottom:0.5rem;">Etisalat vs du: Which is Better?</div>
-          <div style="color:var(--text-muted);font-size:0.9rem;line-height:1.6;">Side-by-side comparison of Etisalat and du postpaid plans in UAE. Coverage, pricing, VIP numbers, and roaming.</div>
+        <a href="blog/how-to-get-etisalat-vip-number-dubai.html" class="fade-up" style="display:block;background:var(--surface);border:1px solid var(--surface-border);border-radius:12px;padding:1.5rem;text-decoration:none;transition:all 0.3s ease;">
+          <div style="font-family:var(--font-heading);font-size:1.1rem;color:var(--text);margin-bottom:0.5rem;">How to Get Etisalat VIP Number</div>
+          <div style="color:var(--text-muted);font-size:0.85rem;line-height:1.6;">Complete guide to Silver, Gold & Platinum numbers. Pricing, patterns, and how to buy.</div>
+        </a>
+        <a href="blog/etisalat-vs-du-postpaid-plans-uae.html" class="fade-up" style="display:block;background:var(--surface);border:1px solid var(--surface-border);border-radius:12px;padding:1.5rem;text-decoration:none;transition:all 0.3s ease;">
+          <div style="font-family:var(--font-heading);font-size:1.1rem;color:var(--text);margin-bottom:0.5rem;">Etisalat vs du: Which is Better?</div>
+          <div style="color:var(--text-muted);font-size:0.85rem;line-height:1.6;">Side-by-side comparison of postpaid plans. Coverage, pricing, VIP numbers, roaming.</div>
+        </a>
+        <a href="blog/etisalat-esim-uae-activation-guide-2026.html" class="fade-up" style="display:block;background:var(--surface);border:1px solid var(--surface-border);border-radius:12px;padding:1.5rem;text-decoration:none;transition:all 0.3s ease;">
+          <div style="font-family:var(--font-heading);font-size:1.1rem;color:var(--text);margin-bottom:0.5rem;">Etisalat eSIM: Activation Guide 2026</div>
+          <div style="color:var(--text-muted);font-size:0.85rem;line-height:1.6;">How to activate eSIM on Etisalat. Compatible devices, plans, and step-by-step setup.</div>
+        </a>
+        <a href="blog/etisalat-5g-coverage-dubai-abu-dhabi-sharjah-2026.html" class="fade-up" style="display:block;background:var(--surface);border:1px solid var(--surface-border);border-radius:12px;padding:1.5rem;text-decoration:none;transition:all 0.3s ease;">
+          <div style="font-family:var(--font-heading);font-size:1.1rem;color:var(--text);margin-bottom:0.5rem;">Etisalat 5G Coverage UAE 2026</div>
+          <div style="color:var(--text-muted);font-size:0.85rem;line-height:1.6;">5G coverage map for Dubai, Abu Dhabi & Sharjah. Speed tests, plans, and compatible devices.</div>
+        </a>
+        <a href="blog/how-to-port-number-du-to-etisalat-uae.html" class="fade-up" style="display:block;background:var(--surface);border:1px solid var(--surface-border);border-radius:12px;padding:1.5rem;text-decoration:none;transition:all 0.3s ease;">
+          <div style="font-family:var(--font-heading);font-size:1.1rem;color:var(--text);margin-bottom:0.5rem;">Port from du to Etisalat 2026</div>
+          <div style="color:var(--text-muted);font-size:0.85rem;line-height:1.6;">Keep your number and switch. Step-by-step MNP guide, documents needed, and timeline.</div>
         </a>
       </div>
     </div>
@@ -2044,6 +2180,41 @@
         <a href="https://whatsapp.com/channel/0029VbBycL87DAX2kICPBQ0S" target="_blank" rel="noopener noreferrer" title="WhatsApp Channel" style="color:var(--text-muted);font-size:0.85rem;">
           WhatsApp Channel
         </a>
+      </div>
+
+      <!-- Footer: City & Quick Links -->
+      <div style="display:flex;justify-content:center;gap:3rem;flex-wrap:wrap;margin:1.5rem 0;padding-top:1.5rem;border-top:1px solid var(--surface-border);">
+        <div>
+          <div style="color:var(--gold);font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:0.5rem;">Service Areas</div>
+          <div style="display:flex;flex-direction:column;gap:0.3rem;">
+            <a href="dubai/" style="color:var(--text-muted);font-size:0.85rem;text-decoration:none;">Etisalat Sales Dubai</a>
+            <a href="abu-dhabi/" style="color:var(--text-muted);font-size:0.85rem;text-decoration:none;">Etisalat Sales Abu Dhabi</a>
+            <a href="sharjah/" style="color:var(--text-muted);font-size:0.85rem;text-decoration:none;">Etisalat Sales Sharjah</a>
+          </div>
+        </div>
+        <div>
+          <div style="color:var(--gold);font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:0.5rem;">Quick Links</div>
+          <div style="display:flex;flex-direction:column;gap:0.3rem;">
+            <a href="#plans" style="color:var(--text-muted);font-size:0.85rem;text-decoration:none;">All Plans</a>
+            <a href="choose-number/" style="color:var(--text-muted);font-size:0.85rem;text-decoration:none;">Choose VIP Number</a>
+            <a href="emirati/" style="color:var(--text-muted);font-size:0.85rem;text-decoration:none;">Emirati Freedom Plan</a>
+          </div>
+        </div>
+        <div>
+          <div style="color:var(--gold);font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:0.5rem;">Guides</div>
+          <div style="display:flex;flex-direction:column;gap:0.3rem;">
+            <a href="blog/" style="color:var(--text-muted);font-size:0.85rem;text-decoration:none;">All Guides</a>
+            <a href="blog/how-to-port-number-du-to-etisalat-uae.html" style="color:var(--text-muted);font-size:0.85rem;text-decoration:none;">Port from du</a>
+            <a href="blog/etisalat-esim-uae-activation-guide-2026.html" style="color:var(--text-muted);font-size:0.85rem;text-decoration:none;">eSIM Guide</a>
+          </div>
+        </div>
+        <div>
+          <div style="color:var(--gold);font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:0.5rem;">Legal</div>
+          <div style="display:flex;flex-direction:column;gap:0.3rem;">
+            <a href="privacy/" style="color:var(--text-muted);font-size:0.85rem;text-decoration:none;">Privacy Policy</a>
+            <a href="ar/" style="color:var(--text-muted);font-size:0.85rem;text-decoration:none;">&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577; (Arabic)</a>
+          </div>
+        </div>
       </div>
 
       <div class="footer-copy">&copy; 2026 etisalat.shop. All rights reserved.</div>

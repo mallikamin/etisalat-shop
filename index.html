@@ -1270,12 +1270,13 @@
   <section class="hero" id="hero">
     <div class="hero-content">
       <div class="hero-badge">Authorized Etisalat Sales Representative</div>
-      <h1>Etisalat Sales<br>& <span>VIP Numbers</span></h1>
-      <p class="hero-sub">Your authorized Etisalat sales department for postpaid plans, calling numbers, silver numbers, golden numbers, and platinum VIP numbers in UAE</p>
+      <h1>Get Your Etisalat Plan<br><span>Today in 5 Minutes</span></h1>
+      <p class="hero-sub">Postpaid plans from AED 188/month, VIP numbers, and same-day SIM delivery across UAE. Instant support on WhatsApp.</p>
       <div class="hero-buttons">
-        <a href="#plans" class="btn btn-gold">Browse Plans</a>
+        <a href="https://wa.me/971566999377?text=Hi%2C%20I%20want%20the%20best%20Etisalat%20plan%20for%20my%20usage" class="btn btn-gold" target="_blank" rel="noopener noreferrer">Get Best Plan on WhatsApp</a>
         <a href="choose-number/" class="btn btn-outline">Get VIP Number</a>
       </div>
+      <div style="display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-top:1rem;color:var(--text-muted);font-size:0.85rem;"><span>500+ customers served</span><span>Same-day activation</span><span>Dubai, Abu Dhabi, Sharjah</span></div>
       <div class="gold-line"></div>
     </div>
   </section>
@@ -1308,6 +1309,20 @@
     </div>
   </section>
 
+  <section style="padding:2rem 0;background:var(--bg);border-bottom:1px solid var(--surface-border);">
+    <div class="container">
+      <div style="max-width:900px;margin:0 auto;text-align:center;">
+        <h2 style="font-size:clamp(1.4rem,2.4vw,2rem);margin-bottom:0.6rem;">Find Your Best Plan Fast</h2>
+        <p style="color:var(--text-muted);margin-bottom:1.2rem;">Tap your goal. We will prefill your inquiry and open the right plan options.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0.8rem;">
+          <button class="intent-btn" data-intent="VIP Number" data-tab="vip" style="padding:0.9rem 1rem;border:1px solid var(--surface-border);border-radius:10px;background:var(--surface);color:var(--text);cursor:pointer;font-weight:600;">I want VIP Number</button>
+          <button class="intent-btn" data-intent="Freedom Unlimited Calling" data-tab="calling" style="padding:0.9rem 1rem;border:1px solid var(--surface-border);border-radius:10px;background:var(--surface);color:var(--text);cursor:pointer;font-weight:600;">Unlimited Calling</button>
+          <button class="intent-btn" data-intent="Freedom Unlimited Data" data-tab="unlimited" style="padding:0.9rem 1rem;border:1px solid var(--surface-border);border-radius:10px;background:var(--surface);color:var(--text);cursor:pointer;font-weight:600;">Unlimited Data</button>
+          <button class="intent-btn" data-intent="Freedom Non-Stop Data" data-tab="nonstop" style="padding:0.9rem 1rem;border:1px solid var(--surface-border);border-radius:10px;background:var(--surface);color:var(--text);cursor:pointer;font-weight:600;">Cheapest Plan</button>
+        </div>
+      </div>
+    </div>
+  </section>
   <!-- ============ PLANS SECTION ============ -->
   <section id="plans">
     <div class="container">
@@ -1982,7 +1997,7 @@
     <div class="container">
       <div class="section-heading fade-up">
         <h2>Get in Touch</h2>
-        <p>Interested in a plan or VIP number? Send us your inquiry and we'll get back to you within 24 hours.</p>
+        <p>Interested in a plan or VIP number? Share your number and goal. We usually respond on WhatsApp within 5-30 minutes during business hours.</p>
       </div>
 
       <div class="form-wrapper fade-up">
@@ -2009,7 +2024,7 @@
 
             <div class="form-group">
               <label for="email">Email Address</label>
-              <input type="email" id="email" name="email" placeholder="you@example.com" required>
+              <input type="email" id="email" name="email" placeholder="you@example.com (optional)">
             </div>
 
             <div class="form-group">
@@ -2306,6 +2321,42 @@
 
     triggerFadeUp();
 
+    /* ---- Intent shortcuts for faster conversion ---- */
+    (function(){
+      document.querySelectorAll('.intent-btn').forEach(function(btn){
+        btn.addEventListener('click', function(){
+          var tab = this.getAttribute('data-tab');
+          var intent = this.getAttribute('data-intent');
+
+          var tabBtn = document.querySelector('.tab-btn[data-tab="' + tab + '"]');
+          if (tabBtn) tabBtn.click();
+
+          var interestEl = document.getElementById('interest');
+          if (interestEl) {
+            interestEl.value = intent;
+          }
+
+          var messageEl = document.getElementById('message');
+          if (messageEl && !messageEl.value.trim()) {
+            messageEl.value = 'Please recommend the best option for ' + intent + '.';
+          }
+
+          var contact = document.getElementById('contact');
+          if (contact) {
+            var navHeight = document.getElementById('navbar').offsetHeight;
+            var targetPos = contact.getBoundingClientRect().top + window.pageYOffset - navHeight - 20;
+            window.scrollTo({ top: targetPos, behavior: 'smooth' });
+          }
+
+          if (typeof gtag === 'function') {
+            gtag('event', 'select_content', {
+              content_type: 'intent_shortcut',
+              content_id: intent
+            });
+          }
+        });
+      });
+    })();
     /* ---- Smooth scroll with navbar offset ---- */
     document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
       anchor.addEventListener('click', function(e) {
@@ -2333,19 +2384,22 @@
       var name = document.getElementById('name').value.trim();
       var phone = document.getElementById('phone').value.trim();
       var email = document.getElementById('email').value.trim();
-      var interest = document.getElementById('interest').value;
+      var interest = document.getElementById('interest').value || 'Not selected';
       var message = document.getElementById('message').value.trim();
 
-      if (!name || !phone || !email || !interest) {
-        alert('Please fill in Name, Phone, Email, and Interest before sending.');
+      if (!name || !phone) {
+        alert('Please fill in Name and Phone before sending.');
         return;
       }
 
-      var text = 'Hi, I\'m interested in Etisalat plans.\n\n'
+      var text = 'Hi, I want help choosing the best Etisalat plan.\n\n'
         + '*Name:* ' + name + '\n'
         + '*Phone:* ' + phone + '\n'
-        + '*Email:* ' + email + '\n'
         + '*Interested In:* ' + interest;
+
+      if (email) {
+        text += '\n*Email:* ' + email;
+      }
 
       if (message) {
         text += '\n*Message:* ' + message;
@@ -2486,13 +2540,9 @@
 <script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
 
-// Proactive trigger: open chat after 30s on page
+// Keep chat passive to reduce interruption on landing page
 Tawk_API.onLoad = function(){
-  setTimeout(function(){
-    if(!Tawk_API.isChatOngoing()){
-      Tawk_API.maximize();
-    }
-  }, 30000);
+  return;
 };
 
 // WhatsApp handoff after chat ends

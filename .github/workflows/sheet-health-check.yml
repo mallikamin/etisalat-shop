@@ -15,9 +15,19 @@ jobs:
         id: fetch
         run: |
           SHEET_ID="1qAw1YQkKEbq-R3LullCBNr0MweGfC2KEO-rot9ff8dw"
-          URL="https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&headers=1"
+          GID="0"
+          URL_1="https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&headers=1&gid=${GID}"
+          URL_2="https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${GID}"
+          URL_3="https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&headers=1"
 
-          HTTP_CODE=$(curl -sL -o /tmp/sheet.csv -w "%{http_code}" "$URL")
+          HTTP_CODE=$(curl -sL -o /tmp/sheet.csv -w "%{http_code}" "$URL_1")
+          if [ "$HTTP_CODE" != "200" ] || [ ! -s /tmp/sheet.csv ]; then
+            HTTP_CODE=$(curl -sL -o /tmp/sheet.csv -w "%{http_code}" "$URL_2")
+          fi
+          if [ "$HTTP_CODE" != "200" ] || [ ! -s /tmp/sheet.csv ]; then
+            HTTP_CODE=$(curl -sL -o /tmp/sheet.csv -w "%{http_code}" "$URL_3")
+          fi
+
           TOTAL_ROWS=$(wc -l < /tmp/sheet.csv)
           AVAILABLE=$(grep -c "Available" /tmp/sheet.csv || true)
 

@@ -974,7 +974,12 @@ a { color: inherit; }
    CONFIGURATION — Update SHEET_ID here when it changes
    ======================================== */
 var SHEET_ID = '1qAw1YQkKEbq-R3LullCBNr0MweGfC2KEO-rot9ff8dw';
-var CSV_URL = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/gviz/tq?tqx=out:csv&headers=1';
+var SHEET_GID = '0';
+var CSV_URLS = [
+  'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/gviz/tq?tqx=out:csv&headers=1&gid=' + SHEET_GID,
+  'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/export?format=csv&gid=' + SHEET_GID,
+  'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/gviz/tq?tqx=out:csv&headers=1'
+];
 var WA_NUMBER = '971566999377';
 
 /* ========================================
@@ -1024,11 +1029,7 @@ function loadNumbers() {
   numbersGrid.innerHTML = '';
   resultsHeader.style.display = 'none';
 
-  fetch(CSV_URL)
-    .then(function(res) {
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      return res.text();
-    })
+  fetchFirstAvailableCsv(CSV_URLS)
     .then(function(csv) {
       allNumbers = parseCSV(csv);
       if (allNumbers.length === 0) throw new Error('No numbers parsed');
@@ -1056,6 +1057,38 @@ function loadNumbers() {
     });
 }
 
+function fetchFirstAvailableCsv(urls) {
+  var idx = 0;
+
+  function tryNext() {
+    if (idx >= urls.length) {
+      return Promise.reject(new Error('All Google Sheet CSV endpoints failed'));
+    }
+
+    var url = urls[idx++];
+    return fetch(url)
+      .then(function(res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.text();
+      })
+      .then(function(text) {
+        var cleaned = (text || '').trim();
+        if (!cleaned) throw new Error('Empty response');
+
+        // If Google returns an HTML auth/error page, this isn't usable CSV.
+        if (cleaned.indexOf('<!DOCTYPE html') === 0 || cleaned.indexOf('<html') === 0) {
+          throw new Error('Non-CSV response');
+        }
+        return cleaned;
+      })
+      .catch(function() {
+        return tryNext();
+      });
+  }
+
+  return tryNext();
+}
+
 function parseCSVLine(line) {
   var result = [];
   var current = '';
@@ -1076,8 +1109,23 @@ function parseCSVLine(line) {
 }
 
 function parseCSV(csv) {
-  var lines = csv.split('\n');
+  var lines = csv.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
   var nums = [];
+  if (lines.length < 2) return nums;
+
+  var header = parseCSVLine(lines[0]).map(function(h) {
+    return String(h || '').trim().toLowerCase();
+  });
+
+  function col(name, fallbackIndex) {
+    var idx = header.indexOf(name);
+    return idx !== -1 ? idx : fallbackIndex;
+  }
+
+  var idxCategory = col('category', 1);
+  var idxMsisdn = col('msisdn', 2);
+  var idxWithZero = col('with zero', 3);
+  var idxStatus = col('status', 5);
 
   for (var i = 1; i < lines.length; i++) {
     var line = lines[i].trim();
@@ -1085,15 +1133,15 @@ function parseCSV(csv) {
 
     var clean = parseCSVLine(line);
 
-    if (clean.length < 6) continue;
+    if (clean.length < 4) continue;
 
-    var category = clean[1];
-    var msisdn = clean[2];
-    var formatted = clean[3];
-    var status = clean[5];
+    var category = String(clean[idxCategory] || '').trim();
+    var msisdn = String(clean[idxMsisdn] || '').trim();
+    var formatted = String(clean[idxWithZero] || '').trim();
+    var status = String(clean[idxStatus] || '').trim();
 
     // Skip non-available, skip header rows
-    if (status !== 'Available') continue;
+    if (status.toLowerCase() !== 'available') continue;
     if (!msisdn || msisdn === 'MSISDN') continue;
 
     // Normalize category (handle case variations)

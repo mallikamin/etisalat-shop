@@ -85,11 +85,32 @@ function doGet(e) {
       var sheet = ss.getSheets()[0];
       var data = sheet.getDataRange().getValues();
       for (var i = 1; i < data.length; i++) {
-        if (String(data[i][3]).toLowerCase() === ref) {
+        if (String(data[i][5]).toLowerCase() === ref) {
           return jsonResponse({ exists: true });
         }
       }
       return jsonResponse({ exists: false });
+    }
+
+    // List partners (for print batch page)
+    if (action === 'list') {
+      var ss = SpreadsheetApp.getActiveSpreadsheet();
+      var sheet = ss.getSheets()[0];
+      var data = sheet.getDataRange().getValues();
+      var partners = [];
+      for (var i = 1; i < data.length; i++) {
+        partners.push({
+          name: String(data[i][0]),
+          mobile: String(data[i][1]),
+          address: String(data[i][2]),
+          area: String(data[i][3]),
+          gps: String(data[i][4]),
+          ref_code: String(data[i][5]),
+          date: String(data[i][6]),
+          status: String(data[i][7])
+        });
+      }
+      return jsonResponse({ success: true, partners: partners });
     }
 
     return jsonResponse({ status: 'ok', message: 'Partner Registration API' });

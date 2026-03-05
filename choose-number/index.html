@@ -981,7 +981,6 @@ var CSV_URLS = [
   'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/gviz/tq?tqx=out:csv&headers=1'
 ];
 var WA_NUMBER = '971566999377';
-var API_BASE = resolveApiBase();
 var ATTR_STORAGE_KEY = 'es_partner_ref';
 var ATTR_DAYS = 90;
 
@@ -995,18 +994,6 @@ var searchQuery = '';
 var searchPosition = 'anywhere';
 var searchTimer = null;
 var trackingContext = initTrackingContext();
-
-function resolveApiBase() {
-  try {
-    if (window.PARTNER_API_BASE && typeof window.PARTNER_API_BASE === 'string') {
-      return window.PARTNER_API_BASE.replace(/\/$/, '') + '/api';
-    }
-    var p = new URLSearchParams(window.location.search || '');
-    var fromQuery = (p.get('api_base') || '').trim();
-    if (fromQuery) return fromQuery.replace(/\/$/, '') + '/api';
-  } catch (e) {}
-  return 'https://pos-demo.duckdns.org/etisalat-api/api';
-}
 
 /* ========================================
    DOM REFS
@@ -1113,24 +1100,12 @@ function trackScanOnce(refCode) {
     if (sessionStorage.getItem(key) === '1') return;
     sessionStorage.setItem(key, '1');
   } catch (e) {}
-  postTrackEvent('scan', { ref_code: refCode });
-}
-
-function postTrackEvent(eventType, extra) {
-  var payload = {
-    event_type: eventType,
-    ref_code: (extra && extra.ref_code) || trackingContext.refCode || '',
-    lead_token: (extra && extra.lead_token) || null,
-    number: (extra && extra.number) || null,
-    category: (extra && extra.category) || null,
-    page: '/choose-number/'
-  };
-  if (!payload.ref_code) return;
-  fetch(API_BASE + '/events/track', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  }).catch(function() {});
+  if (typeof gtag === 'function') {
+    gtag('event', 'partner_scan', {
+      ref_code: refCode,
+      page: '/choose-number/'
+    });
+  }
 }
 
 /* ========================================
@@ -1450,24 +1425,21 @@ document.addEventListener('click', function(e) {
   var trackedHref = buildWhatsAppHref(baseMsg, leadToken);
   link.setAttribute('href', trackedHref);
 
-  postTrackEvent('whatsapp_click', {
-    lead_token: leadToken,
-    number: num,
-    category: cat
-  });
-
   if (typeof gtag === 'function') {
     gtag('event', 'number_inquiry', {
       event_category: 'choose_number',
       event_label: num,
-      value: cat
+      value: cat,
+      ref_code: trackingContext.refCode || '',
+      lead_token: leadToken
     });
   }
 
   if (typeof fbq === 'function') {
     fbq('track', 'Contact', {
       content_name: 'Number Inquiry',
-      content_category: cat
+      content_category: cat,
+      content_ids: [trackingContext.refCode || 'direct']
     });
   }
 });

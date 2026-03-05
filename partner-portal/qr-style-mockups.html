@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Style Mockups | etisalat.shop</title>
+  <style>
+    body { margin: 0; padding: 20px; font-family: Arial, sans-serif; background: #f6f2ea; color: #1f2328; }
+    .grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .card { background: #fff; border: 1px solid #d9cfbf; border-radius: 14px; padding: 14px; }
+    .title { margin: 0 0 8px 0; }
+    .qrbox { width: 180px; height: 180px; margin: 8px auto; border: 1px solid #d7c9ac; border-radius: 10px; display: grid; place-items: center; background: #fff; }
+    .qrbox img { max-width: 94%; max-height: 94%; }
+    .pill { display: inline-block; font-size: 12px; border: 1px solid #d8c9ab; background: #faf3e2; border-radius: 999px; padding: 3px 8px; }
+    .muted { color: #5f6772; font-size: 13px; }
+    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <h1>QR Style Mockups</h1>
+  <p class="muted">Use this page to decide plain vs branded print style before bulk rollout.</p>
+  <div class="grid">
+    <section class="card">
+      <h3 class="title">Style A: Clean Utility</h3>
+      <span class="pill">Best scan reliability</span>
+      <div class="qrbox"><img src="../qr-choose-number.png" alt="QR mockup"></div>
+      <p class="muted">Minimal elements, highest legibility for counters and storefront glass.</p>
+    </section>
+    <section class="card">
+      <h3 class="title">Style B: Premium Gold Frame</h3>
+      <span class="pill">Brand-heavy</span>
+      <div class="qrbox" style="background:#fffaf0;border:2px solid #b9984e;"><img src="../qr-choose-number.png" alt="QR mockup"></div>
+      <p class="muted">Visual consistency with etisalat.shop gold accents and luxury tone.</p>
+    </section>
+    <section class="card">
+      <h3 class="title">Style C: Sticker Compact</h3>
+      <span class="pill">Small-size print</span>
+      <div class="qrbox" style="width:150px;height:150px;"><img src="../qr-choose-number.png" alt="QR mockup"></div>
+      <p class="muted">Optimized for small sticker placements and quick scan-first use.</p>
+    </section>
+  </div>
+</body>
+</html>

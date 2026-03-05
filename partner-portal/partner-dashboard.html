@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Partner Dashboard | etisalat.shop</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 16px; background: #f6f2ea; color: #1f2328; }
+    .box { max-width: 960px; margin: 0 auto 14px auto; background: #fff; border: 1px solid #ddd2c1; border-radius: 12px; padding: 14px; }
+    input, button { width: 100%; padding: 9px; margin: 5px 0; }
+    button { cursor: pointer; font-weight: 700; }
+    .row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .stat { background: #fffaf0; border: 1px solid #e2d2b1; border-radius: 10px; padding: 10px; text-align: center; }
+    .hidden { display: none; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid #e4d9c8; padding: 6px; font-size: 12px; text-align: left; }
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 900px) { .row, .split { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <section class="box" id="loginBox">
+    <h2>Partner Login</h2>
+    <label>API Base URL</label>
+    <input id="apiBase" value="https://pos-demo.duckdns.org/etisalat-api">
+    <label>Mobile</label>
+    <input id="mobile" placeholder="9715xxxxxxx">
+    <label>PIN (default last 4 digits)</label>
+    <input id="pin" placeholder="1234">
+    <button id="loginBtn">Login</button>
+    <div id="status"></div>
+  </section>
+
+  <section class="box hidden" id="dashBox">
+    <h2 id="title">Partner Stats</h2>
+    <div class="row">
+      <div class="stat">Scans<br><strong id="scans">0</strong></div>
+      <div class="stat">WA Clicks<br><strong id="wa">0</strong></div>
+      <div class="stat">Won Sales<br><strong id="won">0</strong></div>
+      <div class="stat">Scan->WA %<br><strong id="rate">0</strong></div>
+    </div>
+    <button id="refreshBtn">Refresh</button>
+  </section>
+
+  <section class="box hidden" id="pinBox">
+    <h3>Change PIN</h3>
+    <div class="split">
+      <div>
+        <label>Current PIN</label>
+        <input id="currentPin" type="password">
+      </div>
+      <div>
+        <label>New PIN</label>
+        <input id="newPin" type="password">
+      </div>
+    </div>
+    <button id="pinBtn">Update PIN</button>
+  </section>
+
+  <section class="box hidden" id="leadsBox">
+    <h3>My Leads</h3>
+    <table>
+      <thead><tr><th>Lead Token</th><th>Status</th><th>Sale Amount</th><th>Created</th><th>Updated</th></tr></thead>
+      <tbody id="leadsTable"></tbody>
+    </table>
+  </section>
+
+  <script>
+    var token = '';
+    function base() { return document.getElementById('apiBase').value.replace(/\/$/, ''); }
+    function handle(res) { return res.json().then(function(d){ return {ok:res.ok, data:d}; }); }
+
+    function loadStats() {
+      return fetch(base() + '/api/partners/me/stats', { headers: { 'Authorization': 'Bearer ' + token } })
+      .then(handle)
+      .then(function(x){
+        if (!x.ok) throw new Error(x.data.detail || 'Failed to load stats');
+        document.getElementById('title').textContent = x.data.partner.name + ' (' + x.data.partner.ref_code + ')';
+        document.getElementById('scans').textContent = x.data.stats.scans;
+        document.getElementById('wa').textContent = x.data.stats.whatsapp_clicks;
+        document.getElementById('won').textContent = x.data.stats.won_sales;
+        document.getElementById('rate').textContent = x.data.stats.scan_to_whatsapp_rate;
+      });
+    }
+
+    function loadLeads() {
+      return fetch(base() + '/api/partners/me/leads?limit=200', { headers: { 'Authorization': 'Bearer ' + token } })
+      .then(handle)
+      .then(function(x){
+        if (!x.ok) throw new Error(x.data.detail || 'Failed to load leads');
+        var rows = '';
+        x.data.leads.forEach(function(l){
+          rows += '<tr><td>' + l.lead_token + '</td><td>' + l.status + '</td><td>' + (l.sale_amount || '-') + '</td><td>' + l.created_at + '</td><td>' + l.updated_at + '</td></tr>';
+        });
+        document.getElementById('leadsTable').innerHTML = rows || '<tr><td colspan="5">No leads yet</td></tr>';
+      });
+    }
+
+    function refreshAll() {
+      Promise.all([loadStats(), loadLeads()]).catch(function(err){
+        document.getElementById('status').textContent = err.message;
+      });
+    }
+
+    document.getElementById('loginBtn').addEventListener('click', function() {
+      fetch(base() + '/api/auth/partner-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          mobile: document.getElementById('mobile').value.trim(),
+          pin: document.getElementById('pin').value.trim()
+        })
+      })
+      .then(handle)
+      .then(function(x){
+        if (!x.ok) throw new Error(x.data.detail || 'Login failed');
+        token = x.data.token;
+        document.getElementById('loginBox').classList.add('hidden');
+        document.getElementById('dashBox').classList.remove('hidden');
+        document.getElementById('pinBox').classList.remove('hidden');
+        document.getElementById('leadsBox').classList.remove('hidden');
+        refreshAll();
+      })
+      .catch(function(err){
+        document.getElementById('status').textContent = err.message;
+      });
+    });
+
+    document.getElementById('refreshBtn').addEventListener('click', refreshAll);
+    document.getElementById('pinBtn').addEventListener('click', function() {
+      fetch(base() + '/api/partners/me/change-pin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify({
+          current_pin: document.getElementById('currentPin').value.trim(),
+          new_pin: document.getElementById('newPin').value.trim()
+        })
+      }).then(handle).then(function(x){
+        if (!x.ok) throw new Error(x.data.detail || 'PIN update failed');
+        alert('PIN updated successfully');
+        document.getElementById('currentPin').value = '';
+        document.getElementById('newPin').value = '';
+      }).catch(function(err){
+        alert(err.message);
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Partner Onboarding | etisalat.shop</title>
+  <style>
+    :root {
+      --bg: #f8f4ec;
+      --card: #ffffff;
+      --line: #ddd2c1;
+      --ink: #1f2328;
+      --muted: #5f6772;
+      --gold: #b9984e;
+      --ok: #1f8f4f;
+      --err: #b3261e;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--ink);
+      background: linear-gradient(130deg, #fcf9f3, var(--bg));
+      padding: 20px;
+    }
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+    }
+    h1, h2 { margin-top: 0; }
+    label {
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 5px;
+      margin-top: 10px;
+    }
+    input, select, textarea, button {
+      width: 100%;
+      font: inherit;
+      padding: 10px 12px;
+      border: 1px solid #d5cab8;
+      border-radius: 10px;
+      background: #fffdf9;
+    }
+    button {
+      cursor: pointer;
+      background: var(--gold);
+      color: #fff;
+      border-color: #a98943;
+      font-weight: 700;
+      margin-top: 12px;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .mini-btn {
+      background: #f3efe6;
+      color: #3d444d;
+      border: 1px solid #d7ccba;
+      margin-top: 8px;
+    }
+    .status { margin-top: 10px; font-size: 14px; }
+    .ok { color: var(--ok); }
+    .err { color: var(--err); }
+    .assets a {
+      display: block;
+      margin-top: 8px;
+      color: #1451b1;
+      text-decoration: none;
+    }
+    .qr {
+      margin-top: 12px;
+      max-width: 210px;
+      border: 1px solid #d5cab8;
+      border-radius: 8px;
+      padding: 6px;
+      background: #fff;
+    }
+    .hint {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 8px;
+    }
+    .api-row {
+      margin-bottom: 10px;
+      padding: 10px;
+      background: #f7f2e8;
+      border: 1px dashed #d8c9ab;
+      border-radius: 10px;
+    }
+    @media (max-width: 900px) {
+      .wrap { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="card">
+      <h1>Partner Onboarding</h1>
+      <div class="api-row">
+        <label for="apiBase">API Base URL</label>
+        <input id="apiBase" value="https://pos-demo.duckdns.org/etisalat-api" />
+      </div>
+      <form id="onboardForm">
+        <label for="partnerType">Partner Type</label>
+        <select id="partnerType" required>
+          <option value="retail">Retail Outlet</option>
+          <option value="field">Field Agent</option>
+          <option value="reseller">Reseller</option>
+        </select>
+
+        <label for="name">Name</label>
+        <input id="name" required placeholder="Agent full name" />
+
+        <label for="mobile">Mobile Number</label>
+        <input id="mobile" required placeholder="+971566999377" />
+
+        <label for="address">Address</label>
+        <textarea id="address" required rows="3" placeholder="Outlet address / location details"></textarea>
+
+        <div class="row">
+          <div>
+            <label for="latitude">Latitude</label>
+            <input id="latitude" required type="number" step="any" placeholder="25.2048" />
+          </div>
+          <div>
+            <label for="longitude">Longitude</label>
+            <input id="longitude" required type="number" step="any" placeholder="55.2708" />
+          </div>
+        </div>
+
+        <button type="button" id="geoBtn" class="mini-btn">Use Current GPS</button>
+        <button type="submit">Create Partner + Generate QR Assets</button>
+      </form>
+      <div id="status" class="status"></div>
+    </section>
+
+    <section class="card">
+      <h2>Generated Assets</h2>
+      <div id="resultHint" class="hint">Submit onboarding to generate tracked URL, QR PNG, and three PDF sizes.</div>
+      <div id="assets" class="assets"></div>
+      <img id="qrPreview" class="qr" alt="QR preview" style="display:none;" />
+    </section>
+  </div>
+
+  <script>
+    var form = document.getElementById('onboardForm');
+    var statusEl = document.getElementById('status');
+    var assetsEl = document.getElementById('assets');
+    var qrPreview = document.getElementById('qrPreview');
+    var resultHint = document.getElementById('resultHint');
+    var apiBaseEl = document.getElementById('apiBase');
+    var geoBtn = document.getElementById('geoBtn');
+
+    function apiBase() {
+      return apiBaseEl.value.replace(/\/$/, '');
+    }
+
+    function setStatus(msg, cls) {
+      statusEl.className = 'status ' + cls;
+      statusEl.textContent = msg;
+    }
+
+    geoBtn.addEventListener('click', function() {
+      if (!navigator.geolocation) {
+        setStatus('Geolocation is not supported in this browser.', 'err');
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(function(pos) {
+        document.getElementById('latitude').value = pos.coords.latitude.toFixed(6);
+        document.getElementById('longitude').value = pos.coords.longitude.toFixed(6);
+        setStatus('GPS coordinates captured.', 'ok');
+      }, function(err) {
+        setStatus('Unable to get GPS: ' + err.message, 'err');
+      });
+    });
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      setStatus('Creating partner and generating assets...', '');
+      assetsEl.innerHTML = '';
+      qrPreview.style.display = 'none';
+
+      var payload = {
+        partner_type: document.getElementById('partnerType').value,
+        name: document.getElementById('name').value.trim(),
+        mobile: document.getElementById('mobile').value.trim(),
+        address: document.getElementById('address').value.trim(),
+        latitude: Number(document.getElementById('latitude').value),
+        longitude: Number(document.getElementById('longitude').value)
+      };
+
+      fetch(apiBase() + '/api/partners/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(function(res) {
+        return res.json().then(function(data) { return { ok: res.ok, data: data }; });
+      })
+      .then(function(result) {
+        if (!result.ok) throw new Error(result.data.detail || 'Failed to create partner');
+        var data = result.data;
+        setStatus('Partner created. Default PIN: ' + data.partner.default_pin, 'ok');
+        resultHint.textContent = 'Share default PIN securely with partner.';
+
+        assetsEl.innerHTML =
+          '<strong>Ref Code:</strong> ' + data.partner.ref_code + '<br>' +
+          '<strong>Tracked URL:</strong> <a target=\"_blank\" href=\"' + data.assets.tracked_url + '\">' + data.assets.tracked_url + '</a>' +
+          '<a target=\"_blank\" href=\"' + apiBase() + data.assets.pdfs['4x6'] + '\">Download PDF 4x6</a>' +
+          '<a target=\"_blank\" href=\"' + apiBase() + data.assets.pdfs['a4'] + '\">Download PDF A4</a>' +
+          '<a target=\"_blank\" href=\"' + apiBase() + data.assets.pdfs['square'] + '\">Download PDF Square</a>';
+
+        qrPreview.src = apiBase() + data.assets.qr_png;
+        qrPreview.style.display = 'block';
+      })
+      .catch(function(err) {
+        setStatus(err.message, 'err');
+      });
+    });
+  </script>
+</body>
+</html>

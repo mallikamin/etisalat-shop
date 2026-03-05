@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Partner QR Banners | etisalat.shop</title>
+  <link rel="icon" href="../favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <style>
+    :root {
+      --bg: #0D1117;
+      --surface: #161B22;
+      --border: #30363D;
+      --gold: #C9A962;
+      --gold-light: #E8D5A3;
+      --text: #E6EDF3;
+      --text-muted: #8B949E;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 24px;
+    }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      color: var(--gold);
+      text-align: center;
+      margin-bottom: 8px;
+      font-size: 1.4rem;
+    }
+    .hint {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 24px;
+    }
+    .cards {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      flex-wrap: wrap;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      width: 320px;
+    }
+    .brand {
+      font-family: 'Playfair Display', serif;
+      color: var(--gold);
+      font-size: 1.1rem;
+      margin-bottom: 4px;
+    }
+    .tagline {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      margin-bottom: 16px;
+    }
+    .qr-wrap {
+      background: #fff;
+      display: inline-block;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+    }
+    .company-name {
+      font-family: 'Playfair Display', serif;
+      color: var(--gold);
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .area {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      margin-bottom: 8px;
+    }
+    .cta {
+      color: var(--gold-light);
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .url {
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      margin-bottom: 12px;
+    }
+    .ref {
+      font-family: monospace;
+      color: var(--gold);
+      font-size: 0.8rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 3px 10px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 12px;
+    }
+    .btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: var(--gold);
+      color: var(--bg);
+      margin: 4px;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn-outline {
+      background: transparent;
+      color: var(--gold);
+      border: 1px solid var(--gold);
+    }
+    .print-btn-row {
+      text-align: center;
+      margin-top: 24px;
+    }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .no-print { display: none !important; }
+      .cards { gap: 0; }
+      @page { size: 105mm 148mm; margin: 0; }
+      .card {
+        page-break-after: always;
+        border: none;
+        background: #0D1117;
+        width: 105mm;
+        height: 148mm;
+        border-radius: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 8mm;
+      }
+      .card:last-child { page-break-after: auto; }
+      .brand { font-size: 5mm; color: #C9A962; margin-bottom: 1mm; }
+      .tagline { font-size: 2.5mm; color: #8B949E; margin-bottom: 4mm; }
+      .company-name { font-size: 5mm; color: #C9A962; margin-bottom: 1mm; }
+      .area { font-size: 2.5mm; color: #8B949E; }
+      .cta { font-size: 2.8mm; color: #E8D5A3; }
+      .url { font-size: 2mm; color: #8B949E; }
+      .qr-wrap { padding: 3mm; border-radius: 2mm; }
+      .ref { font-size: 2.5mm; }
+    }
+  </style>
+</head>
+<body>
+
+<h1 class="no-print">Partner QR Banners</h1>
+<p class="hint no-print">Print this page or Save as PDF (Ctrl+P)</p>
+
+<div class="cards">
+
+  <div class="card">
+    <div class="brand">etisalat.shop</div>
+    <div class="tagline">Authorized Etisalat Sales Representative</div>
+    <div class="company-name">Al Garah Mobile Shop</div>
+    <div class="cta">Scan to choose your VIP number</div>
+    <div class="qr-wrap" id="qr1"></div>
+    <div class="no-print">
+      <button class="btn" onclick="download('qr1','Al-Garah-Mobile-Shop')">Download PNG</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="brand">etisalat.shop</div>
+    <div class="tagline">Authorized Etisalat Sales Representative</div>
+    <div class="company-name">Alqasar Alhandasi</div>
+    <div class="cta">Scan to choose your VIP number</div>
+    <div class="qr-wrap" id="qr2"></div>
+    <div class="no-print">
+      <button class="btn" onclick="download('qr2','Alqasar-Alhandasi')">Download PNG</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="print-btn-row no-print">
+  <button class="btn" onclick="window.print()">Print / Save PDF</button>
+  <a href="./index.html" class="btn btn-outline" style="text-decoration:none;display:inline-block">Back to Registration</a>
+</div>
+
+<script>
+new QRCode(document.getElementById('qr1'), {
+  text: 'https://etisalat.shop/choose-number/?ref=ggu8ey5h',
+  width: 240, height: 240,
+  colorDark: '#0D1117', colorLight: '#FFFFFF',
+  correctLevel: QRCode.CorrectLevel.M
+});
+
+new QRCode(document.getElementById('qr2'), {
+  text: 'https://etisalat.shop/choose-number/?ref=fjxkwhy9',
+  width: 240, height: 240,
+  colorDark: '#0D1117', colorLight: '#FFFFFF',
+  correctLevel: QRCode.CorrectLevel.M
+});
+
+function download(qrId, name) {
+  var container = document.getElementById(qrId);
+  var img = container.querySelector('img') || container.querySelector('canvas');
+  if (!img) return;
+  var link = document.createElement('a');
+  link.download = 'qr-' + name + '.png';
+  link.href = img.src || img.toDataURL('image/png');
+  link.click();
+}
+</script>
+</body>
+</html>

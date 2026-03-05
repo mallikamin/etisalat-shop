@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Project Timeline — etisalat.shop</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=Bebas+Neue&family=Cormorant+Garamond:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* ── CSS Variables: Midnight Gold ── */
+        :root {
+            --bg:             #0D1117;
+            --surface:        #161B22;
+            --surface-alt:    #1C2129;
+            --border:         #30363D;
+            --border-light:   #21262D;
+            --gold:           #C9A962;
+            --gold-light:     #E8D5A3;
+            --gold-dark:      #8B7355;
+            --gold-glow:      rgba(201, 169, 98, 0.15);
+            --text:           #E6EDF3;
+            --text-muted:     #8B949E;
+            --text-dim:       rgba(230, 237, 243, 0.5);
+            --green:          #3FB950;
+            --green-dark:     #238636;
+            --green-glow:     rgba(63, 185, 80, 0.12);
+            --blue:           #58A6FF;
+            --blue-glow:      rgba(88, 166, 255, 0.12);
+            --amber:          #D29922;
+            --red:            #F85149;
+            --font-display:   'Playfair Display', Georgia, serif;
+            --font-body:      'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-number:    'Bebas Neue', Impact, sans-serif;
+            --font-label:     'Cormorant Garamond', Georgia, serif;
+            --max-width:      1100px;
+            --timeline-line:  2px;
+            --node-size:      16px;
+            --phase-node:     28px;
+        }
+
+        /* ── Reset ── */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.65;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* ── Noise Overlay ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.025;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+
+        /* ── Animations ── */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes growHeight {
+            from { height: 0; }
+            to   { height: 100%; }
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 var(--gold-glow); }
+            50%      { box-shadow: 0 0 0 8px transparent; }
+        }
+        @keyframes countUp {
+            from { opacity: 0; transform: scale(0.8); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+
+        .fade-in { animation: fadeIn 0.7s ease-out both; }
+        .slide-up { animation: slideUp 0.6s ease-out both; }
+
+        /* ── Page Container ── */
+        .page {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 60px 40px 80px;
+        }
+
+        /* ── Header ── */
+        .header {
+            text-align: center;
+            margin-bottom: 70px;
+            animation: fadeInDown 0.8s ease-out both;
+        }
+
+        .header-eyebrow {
+            font-family: var(--font-label);
+            font-size: 0.75rem;
+            font-weight: 400;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .header-title {
+            font-family: var(--font-display);
+            font-size: 2.8rem;
+            font-weight: 400;
+            letter-spacing: 1px;
+            line-height: 1.2;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .header-title span {
+            background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 50%, var(--gold-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-subtitle {
+            font-family: var(--font-label);
+            font-size: 1.1rem;
+            font-weight: 300;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+            margin-bottom: 32px;
+        }
+
+        .header-domain {
+            font-family: var(--font-body);
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-dim);
+            letter-spacing: 1px;
+            margin-bottom: 40px;
+        }
+
+        /* ── Hero Stats ── */
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 0;
+            margin: 0 auto 20px;
+            max-width: 720px;
+            animation: slideUp 0.7s ease-out 0.3s both;
+        }
+
+        .hero-stat {
+            flex: 1;
+            text-align: center;
+            padding: 28px 20px 24px;
+            position: relative;
+        }
+
+        .hero-stat:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 40px;
+            width: 1px;
+            background: var(--border);
+        }
+
+        .hero-stat-value {
+            font-family: var(--font-number);
+            font-size: 2.8rem;
+            font-weight: 400;
+            letter-spacing: 1px;
+            color: var(--gold-light);
+            line-height: 1;
+            margin-bottom: 6px;
+            animation: countUp 0.5s ease-out 0.6s both;
+        }
+
+        .hero-stat-label {
+            font-family: var(--font-label);
+            font-size: 0.7rem;
+            font-weight: 400;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .hero-border {
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, var(--gold) 50%, transparent 100%);
+            max-width: 500px;
+            margin: 0 auto;
+            opacity: 0.5;
+        }
+
+        /* ── Date Range Badge ── */
+        .date-range {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            padding: 10px 28px;
+            margin-top: 28px;
+            animation: slideUp 0.6s ease-out 0.5s both;
+        }
+
+        .date-range-text {
+            font-family: var(--font-body);
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            letter-spacing: 0.3px;
+        }
+
+        .date-range-arrow {
+            color: var(--gold);
+            font-size: 0.7rem;
+        }
+
+        .date-range-highlight {
+            color: var(--gold-light);
+            font-weight: 600;
+        }
+
+        /* ── Timeline ── */
+        .timeline {
+            position: relative;
+            padding: 0;
+        }
+
+        /* Vertical line */
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 140px;
+            top: 0;
+            bottom: 0;
+            width: var(--timeline-line);
+            background: linear-gradient(180deg,
+                transparent 0%,
+                var(--border) 3%,
+                var(--gold-dark) 20%,
+                var(--gold) 50%,
+                var(--gold-dark) 80%,
+                var(--border) 97%,
+                transparent 100%
+            );
+        }
+
+        /* ── Phase Block ── */
+        .phase {
+            position: relative;
+            margin-bottom: 60px;
+            animation: slideUp 0.6s ease-out both;
+        }
+
+        .phase:nth-child(1) { animation-delay: 0.1s; }
+        .phase:nth-child(2) { animation-delay: 0.15s; }
+        .phase:nth-child(3) { animation-delay: 0.2s; }
+        .phase:nth-child(4) { animation-delay: 0.25s; }
+        .phase:nth-child(5) { animation-delay: 0.3s; }
+        .phase:nth-child(6) { animation-delay: 0.35s; }
+        .phase:nth-child(7) { animation-delay: 0.4s; }
+        .phase:nth-child(8) { animation-delay: 0.45s; }
+        .phase:nth-child(9) { animation-delay: 0.5s; }
+
+        .phase:last-child { margin-bottom: 0; }
+
+        /* Phase node on the timeline */
+        .phase-node {
+            position: absolute;
+            left: 140px;
+            top: 0;
+            width: var(--phase-node);
+            height: var(--phase-node);
+            border-radius: 50%;
+            background: var(--bg);
+            border: 2px solid var(--gold);
+            transform: translateX(-50%);
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .phase-node-inner {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--gold);
+        }
+
+        .phase:last-child .phase-node {
+            border-color: var(--green);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .phase:last-child .phase-node-inner {
+            background: var(--green);
+        }
+
+        /* Date column */
+        .phase-date {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 110px;
+            text-align: right;
+            padding-top: 2px;
+        }
+
+        .phase-date-text {
+            font-family: var(--font-body);
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--gold);
+            letter-spacing: 0.5px;
+            line-height: 1.4;
+        }
+
+        .phase-date-sub {
+            font-family: var(--font-body);
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* Phase content card */
+        .phase-content {
+            margin-left: 175px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px 32px;
+            position: relative;
+            transition: border-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .phase-content:hover {
+            border-color: rgba(201, 169, 98, 0.35);
+            transform: translateX(4px);
+        }
+
+        /* Connector line from node to card */
+        .phase-content::before {
+            content: '';
+            position: absolute;
+            left: -22px;
+            top: 13px;
+            width: 20px;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .phase-number {
+            font-family: var(--font-number);
+            font-size: 1.3rem;
+            letter-spacing: 1px;
+            color: var(--gold);
+            background: var(--gold-glow);
+            border: 1px solid rgba(201, 169, 98, 0.2);
+            border-radius: 6px;
+            padding: 2px 10px 0;
+            line-height: 1.4;
+            flex-shrink: 0;
+        }
+
+        .phase-title {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: var(--text);
+            letter-spacing: 0.5px;
+        }
+
+        .phase-icon {
+            font-size: 1rem;
+            opacity: 0.8;
+            flex-shrink: 0;
+            color: var(--gold);
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Milestones list */
+        .milestones {
+            list-style: none;
+            padding: 0;
+        }
+
+        .milestone {
+            position: relative;
+            padding: 6px 0 6px 24px;
+            font-family: var(--font-body);
+            font-size: 0.82rem;
+            color: rgba(230, 237, 243, 0.85);
+            line-height: 1.6;
+            letter-spacing: 0.2px;
+        }
+
+        .milestone::before {
+            content: '';
+            position: absolute;
+            left: 4px;
+            top: 14px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--gold-dark);
+            opacity: 0.7;
+        }
+
+        .milestone:hover::before {
+            background: var(--gold);
+            opacity: 1;
+        }
+
+        .milestone strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .milestone .tag {
+            display: inline-block;
+            font-family: var(--font-body);
+            font-size: 0.62rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            padding: 1px 7px;
+            border-radius: 3px;
+            margin-left: 6px;
+            vertical-align: middle;
+            position: relative;
+            top: -1px;
+        }
+
+        .tag-green {
+            background: var(--green-glow);
+            color: var(--green);
+            border: 1px solid rgba(63, 185, 80, 0.2);
+        }
+
+        .tag-blue {
+            background: var(--blue-glow);
+            color: var(--blue);
+            border: 1px solid rgba(88, 166, 255, 0.2);
+        }
+
+        .tag-gold {
+            background: var(--gold-glow);
+            color: var(--gold);
+            border: 1px solid rgba(201, 169, 98, 0.2);
+        }
+
+        /* ── Separator ── */
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, var(--gold) 50%, transparent 100%);
+            max-width: 400px;
+            margin: 80px auto 60px;
+            opacity: 0.3;
+        }
+
+        /* ── Tech Stack Section ── */
+        .tech-stack {
+            margin-top: 80px;
+            animation: slideUp 0.7s ease-out 0.6s both;
+        }
+
+        .tech-stack-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .tech-stack-eyebrow {
+            font-family: var(--font-label);
+            font-size: 0.7rem;
+            font-weight: 400;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .tech-stack-title {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: var(--text);
+            letter-spacing: 0.5px;
+        }
+
+        .stack-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            max-width: 880px;
+            margin: 0 auto;
+        }
+
+        .stack-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            transition: border-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .stack-item:hover {
+            border-color: rgba(201, 169, 98, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .stack-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: var(--gold-glow);
+            border: 1px solid rgba(201, 169, 98, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: var(--gold);
+            font-size: 0.85rem;
+        }
+
+        .stack-label {
+            font-family: var(--font-label);
+            font-size: 0.65rem;
+            font-weight: 400;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 3px;
+        }
+
+        .stack-value {
+            font-family: var(--font-body);
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--text);
+            letter-spacing: 0.2px;
+        }
+
+        /* ── Footer ── */
+        .footer {
+            text-align: center;
+            margin-top: 80px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-text {
+            font-family: var(--font-label);
+            font-size: 0.7rem;
+            font-weight: 400;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            opacity: 0.6;
+        }
+
+        .footer-domain {
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--gold-dark);
+            margin-top: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 900px) {
+            .page { padding: 40px 24px 60px; }
+            .header-title { font-size: 2rem; }
+            .hero-stat-value { font-size: 2.2rem; }
+            .hero-stats { flex-direction: column; gap: 0; align-items: center; }
+            .hero-stat { padding: 16px 20px; }
+            .hero-stat:not(:last-child)::after { display: none; }
+            .stack-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .page { padding: 30px 16px 50px; }
+            .header-title { font-size: 1.7rem; }
+            .header-subtitle { font-size: 0.95rem; }
+            .hero-stats { max-width: 100%; }
+            .hero-stat-value { font-size: 2rem; }
+            .hero-stat-label { font-size: 0.6rem; }
+
+            /* Timeline mobile: remove left column */
+            .timeline::before {
+                left: 16px;
+            }
+
+            .phase-node {
+                left: 16px;
+                width: 22px;
+                height: 22px;
+            }
+
+            .phase-node-inner {
+                width: 8px;
+                height: 8px;
+            }
+
+            .phase-date {
+                position: relative;
+                left: 0;
+                width: auto;
+                text-align: left;
+                margin-left: 44px;
+                margin-bottom: 8px;
+                padding-top: 0;
+            }
+
+            .phase-content {
+                margin-left: 44px;
+            }
+
+            .phase-content::before {
+                display: none;
+            }
+
+            .phase-content { padding: 20px; }
+            .phase-title { font-size: 1.05rem; }
+            .milestone { font-size: 0.78rem; padding-left: 20px; }
+            .milestone::before { left: 2px; top: 12px; width: 5px; height: 5px; }
+
+            .stack-grid { grid-template-columns: 1fr; }
+            .stack-item { padding: 16px 18px; }
+
+            .date-range { padding: 8px 20px; }
+            .date-range-text { font-size: 0.72rem; }
+        }
+
+        /* ── Print Styles ── */
+        @media print {
+            body {
+                background: #FFFFFF !important;
+                color: #1A1A1A !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            body::before { display: none; }
+
+            .page { padding: 20px 30px; max-width: 100%; }
+
+            .header-title,
+            .header-title span {
+                color: #1A1A1A !important;
+                -webkit-text-fill-color: #1A1A1A !important;
+                background: none !important;
+            }
+
+            .header-eyebrow,
+            .phase-date-text,
+            .phase-number,
+            .tech-stack-eyebrow,
+            .header-subtitle,
+            .hero-stat-label,
+            .stack-label {
+                color: #666 !important;
+            }
+
+            .hero-stat-value {
+                color: #333 !important;
+            }
+
+            .phase-content,
+            .stack-item {
+                background: #FAFAFA !important;
+                border-color: #DDD !important;
+                box-shadow: none !important;
+                transform: none !important;
+            }
+
+            .phase-content:hover {
+                transform: none !important;
+            }
+
+            .phase-title,
+            .stack-value {
+                color: #1A1A1A !important;
+            }
+
+            .milestone {
+                color: #333 !important;
+            }
+
+            .milestone strong {
+                color: #1A1A1A !important;
+            }
+
+            .milestone::before {
+                background: #999 !important;
+            }
+
+            .timeline::before {
+                background: #CCC !important;
+            }
+
+            .phase-node {
+                border-color: #999 !important;
+                background: #FFF !important;
+            }
+
+            .phase-node-inner {
+                background: #999 !important;
+            }
+
+            .phase-content::before {
+                background: #CCC !important;
+            }
+
+            .tag {
+                border-color: #CCC !important;
+                background: #F0F0F0 !important;
+                color: #555 !important;
+            }
+
+            .hero-border,
+            .section-divider {
+                background: #DDD !important;
+                opacity: 1 !important;
+            }
+
+            .hero-stat:not(:last-child)::after {
+                background: #DDD !important;
+            }
+
+            .footer { border-top-color: #DDD !important; }
+            .footer-text, .footer-domain { color: #999 !important; }
+
+            .date-range {
+                background: #F5F5F5 !important;
+                border-color: #DDD !important;
+            }
+
+            .date-range-text { color: #666 !important; }
+            .date-range-highlight { color: #333 !important; }
+            .date-range-arrow { color: #999 !important; }
+
+            .phase { break-inside: avoid; }
+            .stack-item { break-inside: avoid; }
+
+            /* Disable animations for print */
+            * {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+
+        <!-- ── Header ── -->
+        <header class="header">
+            <span class="header-eyebrow">Project Chronicle</span>
+            <h1 class="header-title"><span>etisalat.shop</span></h1>
+            <p class="header-subtitle">From first commit to full sales platform</p>
+            <p class="header-domain">etisalat.shop &mdash; UAE Premium Number &amp; SIM Marketplace</p>
+
+            <!-- Hero Stats -->
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="hero-stat-value">12</div>
+                    <div class="hero-stat-label">Days to Launch</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-value">9</div>
+                    <div class="hero-stat-label">Build Phases</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-value">2,700+</div>
+                    <div class="hero-stat-label">Numbers Listed</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-value">0</div>
+                    <div class="hero-stat-label">Server Cost</div>
+                </div>
+            </div>
+            <div class="hero-border"></div>
+
+            <div class="date-range">
+                <span class="date-range-text">
+                    <span class="date-range-highlight">Feb 22, 2026</span>
+                    <span class="date-range-arrow">&mdash;&mdash;</span>
+                    <span class="date-range-highlight">Mar 5, 2026</span>
+                </span>
+            </div>
+        </header>
+
+        <!-- ── Timeline ── -->
+        <section class="timeline">
+
+            <!-- Phase 1 -->
+            <div class="phase">
+                <div class="phase-date">
+                    <div class="phase-date-text">Feb 22</div>
+                    <div class="phase-date-sub">Saturday</div>
+                </div>
+                <div class="phase-node"><div class="phase-node-inner"></div></div>
+                <div class="phase-content">
+                    <div class="phase-header">
+                        <span class="phase-number">01</span>
+                        <span class="phase-icon">&#9670;</span>
+                        <h2 class="phase-title">Foundation</h2>
+                    </div>
+                    <ul class="milestones">
+                        <li class="milestone"><strong>Initial site launch</strong> on GitHub Pages &mdash; static HTML/CSS/JS, zero dependencies <span class="tag tag-green">launch</span></li>
+                        <li class="milestone"><strong>Midnight Gold theme</strong> designed &mdash; dark canvas (#0D1117), gold accents (#C9A962), Playfair Display + DM Sans</li>
+                        <li class="milestone">All Etisalat plans displayed with <strong>inquiry form</strong> (FormSubmit.co)</li>
+                        <li class="milestone"><strong>Custom domain</strong> etisalat.shop via GoDaddy DNS + GitHub Pages CNAME</li>
+                        <li class="milestone"><strong>WhatsApp as primary CTA</strong> &mdash; +971 56 699 9377 across all pages</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Phase 2 -->
+            <div class="phase">
+                <div class="phase-date">
+                    <div class="phase-date-text">Feb 22</div>
+                    <div class="phase-date-sub">Saturday</div>
+                </div>
+                <div class="phase-node"><div class="phase-node-inner"></div></div>
+                <div class="phase-content">
+                    <div class="phase-header">
+                        <span class="phase-number">02</span>
+                        <span class="phase-icon">&#9733;</span>
+                        <h2 class="phase-title">SEO &amp; Discovery</h2>
+                    </div>
+                    <ul class="milestones">
+                        <li class="milestone"><strong>Full SEO overhaul</strong> &mdash; meta tags, Open Graph, JSON-LD schema, FAQ rich results</li>
+                        <li class="milestone"><strong>Google Search Console</strong> verification &amp; sitemap submission</li>
+                        <li class="milestone">Keyword targeting: VIP numbers, postpaid SIM, international calling, eSIM, city-based terms</li>
+                        <li class="milestone"><strong>3 English blog posts</strong> published for long-tail SEO coverage</li>
+                        <li class="milestone"><strong>Arabic (RTL) site</strong> launched &mdash; full mirror at /ar/ <span class="tag tag-blue">bilingual</span></li>
+                        <li class="milestone">SEO infrastructure: 404 page, OG image, favicon, manifest, llms.txt, IndexNow, sitemap, robots.txt</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Phase 3 -->
+            <div class="phase">
+                <div class="phase-date">
+                    <div class="phase-date-text">Feb 22</div>
+                    <div class="phase-date-sub">Saturday</div>
+                </div>
+                <div class="phase-node"><div class="phase-node-inner"></div></div>
+                <div class="phase-content">
+                    <div class="phase-header">
+                        <span class="phase-number">03</span>
+                        <span class="phase-icon">&#9673;</span>
+                        <h2 class="phase-title">Tracking &amp; Analytics</h2>
+                    </div>
+                    <ul class="milestones">
+                        <li class="milestone"><strong>GA4 tracking</strong> (G-G34631QW03) deployed with custom event tracking</li>
+                        <li class="milestone"><strong>Facebook Pixel</strong> integrated + WhatsApp click tracking across all pages</li>
+                        <li class="milestone">Google Ads <strong>thank-you page</strong> for conversion attribution</li>
+                        <li class="milestone"><strong>FormSubmit.co</strong> integration routing to mallikamiin@gmail.com</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Phase 4 -->
+            <div class="phase">
+                <div class="phase-date">
+                    <div class="phase-date-text">Feb 22 &ndash; 23</div>
+                    <div class="phase-date-sub">Sat &ndash; Sun</div>
+                </div>
+                <div class="phase-node"><div class="phase-node-inner"></div></div>
+                <div class="phase-content">
+                    <div class="phase-header">
+                        <span class="phase-number">04</span>
+                        <span class="phase-icon">&#9783;</span>
+                        <h2 class="phase-title">Choose Your Number</h2>
+                    </div>
+                    <ul class="milestones">
+                        <li class="milestone"><strong>Live number picker</strong> page &mdash; Google Sheets CSV integration with 2,700+ numbers <span class="tag tag-gold">flagship</span></li>
+                        <li class="milestone"><strong>Silver &amp; Gold categories</strong> with real-time search, filter, and sort</li>
+                        <li class="milestone">Fixed <strong>CORS and CSV export</strong> issues for reliable full data load</li>
+                        <li class="milestone"><strong>90-minute health check</strong> with auto-refresh + WhatsApp fallback on failure</li>
+                        <li class="milestone">Arabic blog posts and <strong>internal cross-linking</strong> strategy to boost traffic</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Phase 5 -->
+            <div class="phase">
+                <div class="phase-date">
+                    <div class="phase-date-text">Feb 23</div>
+                    <div class="phase-date-sub">Sunday</div>
+                </div>
+                <div class="phase-node"><div class="phase-node-inner"></div></div>
+                <div class="phase-content">
+                    <div class="phase-header">
+                        <span class="phase-number">05</span>
+                        <span class="phase-icon">&#9653;</span>
+                        <h2 class="phase-title">Product Expansion</h2>
+                    </div>
+                    <ul class="milestones">
+                        <li class="milestone"><strong>Emirati Freedom Plan</strong> landing page with dedicated WhatsApp CTA</li>
+                        <li class="milestone">Removed <strong>Silver Plus category</strong> (business decision &mdash; streamlined catalog)</li>
+                        <li class="milestone"><strong>Cloudflare + SSL</strong> setup for custom domain security</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Phase 6 -->
+            <div class="phase">
+                <div class="phase-date">
+                    <div class="phase-date-text">Feb 25 &ndash; 26</div>
+                    <div class="phase-date-sub">Tue &ndash; Wed</div>
+                </div>
+                <div class="phase-node"><div class="phase-node-inner"></div></div>
+                <div class="phase-content">
+                    <div class="phase-header">
+                        <span class="phase-number">06</span>
+                        <span class="phase-icon">&#9993;</span>
+                        <h2 class="phase-title">Engagement &amp; Chat</h2>
+                    </div>
+                    <ul class="milestones">
+                        <li class="milestone"><strong>Tawk.to live chat</strong> widget deployed on all pages</li>
+                        <li class="milestone"><strong>Proactive chat triggers</strong> + cart abandonment detection logic</li>
+                        <li class="milestone"><strong>WhatsApp handoff</strong> from chat &mdash; seamless agent transfer</li>
+                        <li class="milestone">GA4 + Meta <strong>lead tracking</strong> on Emirati Freedom page</li>
+                        <li class="milestone">Fixed <strong>404 routing</strong> and WhatsApp deep link redirect</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Phase 7 -->
+            <div class="phase">
+                <div class="phase-date">
+                    <div class="phase-date-text">Feb 28</div>
+                    <div class="phase-date-sub">Friday</div>
+                </div>
+                <div class="phase-node"><div class="phase-node-inner"></div></div>
+                <div class="phase-content">
+                    <div class="phase-header">
+                        <span class="phase-number">07</span>
+                        <span class="phase-icon">&#9745;</span>
+                        <h2 class="phase-title">Trust &amp; Compliance</h2>
+                    </div>
+                    <ul class="milestones">
+                        <li class="milestone"><strong>Privacy policy page</strong> created (required for Meta app review)</li>
+                        <li class="milestone">Playbook gap fixes: <strong>autoresponse, scroll tracking, event dedup, field analytics</strong></li>
+                        <li class="milestone"><strong>support@etisalat.shop</strong> email added across all site pages</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Phase 8 -->
+            <div class="phase">
+                <div class="phase-date">
+                    <div class="phase-date-text">Mar 2 &ndash; 3</div>
+                    <div class="phase-date-sub">Mon &ndash; Tue</div>
+                </div>
+                <div class="phase-node"><div class="phase-node-inner"></div></div>
+                <div class="phase-content">
+                    <div class="phase-header">
+                        <span class="phase-number">08</span>
+                        <span class="phase-icon">&#9650;</span>
+                        <h2 class="phase-title">Content &amp; CRO</h2>
+                    </div>
+                    <ul class="milestones">
+                        <li class="milestone"><strong>City pages</strong> launched (Dubai, Abu Dhabi, Sharjah) for local SEO</li>
+                        <li class="milestone"><strong>4 new blog posts</strong> published &mdash; broadening content funnel</li>
+                        <li class="milestone"><strong>Testimonials and trust badges</strong> added to build credibility</li>
+                        <li class="milestone"><strong>Pricing displayed</strong> on number picker &mdash; Silver AED 188/mo, Gold AED 500/mo</li>
+                        <li class="milestone">Hardened sheet loading with <strong>fallback parsing</strong> for reliability</li>
+                        <li class="milestone"><strong>CRO Phase 1</strong> &mdash; optimized hero section, intent shortcuts, reduced lead friction <span class="tag tag-green">conversion</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Phase 9 -->
+            <div class="phase">
+                <div class="phase-date">
+                    <div class="phase-date-text">Mar 5</div>
+                    <div class="phase-date-sub">Wednesday</div>
+                </div>
+                <div class="phase-node"><div class="phase-node-inner"></div></div>
+                <div class="phase-content">
+                    <div class="phase-header">
+                        <span class="phase-number">09</span>
+                        <span class="phase-icon">&#9830;</span>
+                        <h2 class="phase-title">Partner Channel</h2>
+                    </div>
+                    <ul class="milestones">
+                        <li class="milestone"><strong>Partner referral tracking portal</strong> with QR code generation <span class="tag tag-gold">new channel</span></li>
+                        <li class="milestone"><strong>Google Apps Script</strong> backend writing partner data to Google Sheets</li>
+                        <li class="milestone"><strong>Serverless GA4 attribution</strong> &mdash; ref codes in localStorage with 90-day TTL</li>
+                        <li class="milestone"><strong>Print batch page</strong> for QR banners &mdash; A4, A5, square, and custom formats</li>
+                        <li class="milestone">Partner onboarding form: <strong>Owner Name + Company Name</strong>, GPS location, area dropdown</li>
+                        <li class="milestone"><strong>Company name</strong> prominently displayed on QR template for brand co-marketing</li>
+                    </ul>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ── Divider ── -->
+        <div class="section-divider"></div>
+
+        <!-- ── Tech Stack ── -->
+        <section class="tech-stack">
+            <div class="tech-stack-header">
+                <span class="tech-stack-eyebrow">Infrastructure</span>
+                <h2 class="tech-stack-title">Technology Stack</h2>
+            </div>
+            <div class="stack-grid">
+                <div class="stack-item">
+                    <div class="stack-icon">&#9634;</div>
+                    <div>
+                        <div class="stack-label">Hosting</div>
+                        <div class="stack-value">GitHub Pages</div>
+                    </div>
+                </div>
+                <div class="stack-item">
+                    <div class="stack-icon">&#9672;</div>
+                    <div>
+                        <div class="stack-label">Domain</div>
+                        <div class="stack-value">GoDaddy DNS</div>
+                    </div>
+                </div>
+                <div class="stack-item">
+                    <div class="stack-icon">&#9683;</div>
+                    <div>
+                        <div class="stack-label">Analytics</div>
+                        <div class="stack-value">GA4 + Facebook Pixel</div>
+                    </div>
+                </div>
+                <div class="stack-item">
+                    <div class="stack-icon">&#9993;</div>
+                    <div>
+                        <div class="stack-label">Forms</div>
+                        <div class="stack-value">FormSubmit.co</div>
+                    </div>
+                </div>
+                <div class="stack-item">
+                    <div class="stack-icon">&#9738;</div>
+                    <div>
+                        <div class="stack-label">Live Chat</div>
+                        <div class="stack-value">Tawk.to</div>
+                    </div>
+                </div>
+                <div class="stack-item">
+                    <div class="stack-icon">&#9783;</div>
+                    <div>
+                        <div class="stack-label">Number DB</div>
+                        <div class="stack-value">Google Sheets (CSV)</div>
+                    </div>
+                </div>
+                <div class="stack-item">
+                    <div class="stack-icon">&#9881;</div>
+                    <div>
+                        <div class="stack-label">Partner Backend</div>
+                        <div class="stack-value">Google Apps Script</div>
+                    </div>
+                </div>
+                <div class="stack-item">
+                    <div class="stack-icon">&#9733;</div>
+                    <div>
+                        <div class="stack-label">Payments</div>
+                        <div class="stack-value">WhatsApp-based (Manual)</div>
+                    </div>
+                </div>
+                <div class="stack-item">
+                    <div class="stack-icon">&#9741;</div>
+                    <div>
+                        <div class="stack-label">CDN / SSL</div>
+                        <div class="stack-value">Cloudflare</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── Footer ── -->
+        <footer class="footer">
+            <div class="footer-text">Internal Document &mdash; Generated March 5, 2026</div>
+            <div class="footer-domain">etisalat.shop</div>
+        </footer>
+
+    </div>
+</body>
+</html>

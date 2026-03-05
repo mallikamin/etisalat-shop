@@ -101,10 +101,16 @@
       padding: 16px;
       text-align: center;
     }
-    .preview-card .p-name {
-      font-weight: 600;
-      color: var(--gold-light);
-      font-size: 0.95rem;
+    .preview-card .p-company {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      color: var(--gold);
+      font-size: 1rem;
+      margin-bottom: 1px;
+    }
+    .preview-card .p-owner {
+      color: var(--text-muted);
+      font-size: 0.8rem;
       margin-bottom: 2px;
     }
     .preview-card .p-area {
@@ -189,12 +195,13 @@
         display: inline-block;
         margin-bottom: 4mm;
       }
-      .print-page .partner-name {
-        font-family: 'DM Sans', sans-serif;
-        color: #E8D5A3;
-        font-size: 5mm;
-        font-weight: 600;
+      .print-page .partner-company {
+        font-family: 'Playfair Display', serif;
+        color: #C9A962;
+        font-size: 7mm;
+        font-weight: 700;
         margin-bottom: 1.5mm;
+        letter-spacing: 0.3px;
       }
       .print-page .partner-area {
         font-family: 'DM Sans', sans-serif;
@@ -335,7 +342,8 @@ function renderPreview(partners) {
 
     var qrId = 'prev-qr-' + idx;
     card.innerHTML =
-      '<div class="p-name">' + escapeHtml(p.name) + '</div>' +
+      '<div class="p-company">' + escapeHtml(p.company_name || p.name) + '</div>' +
+      '<div class="p-owner">' + escapeHtml(p.owner_name || '') + '</div>' +
       '<div class="p-area">' + escapeHtml(p.area || '') + (p.address ? ' — ' + escapeHtml(p.address) : '') + '</div>' +
       '<div class="p-qr" id="' + qrId + '"></div>' +
       '<div class="p-ref">' + escapeHtml(p.ref_code) + '</div>' +
@@ -419,7 +427,7 @@ function printSelected() {
       '<div class="brand">etisalat.shop</div>' +
       '<div class="tagline">Authorized Etisalat Sales Representative</div>' +
       '<div class="qr-wrap" id="' + qrId + '"></div>' +
-      '<div class="partner-name">' + escapeHtml(partner.name) + '</div>' +
+      '<div class="partner-company">' + escapeHtml(partner.company_name || partner.name) + '</div>' +
       (partner.area ? '<div class="partner-area">' + escapeHtml(partner.area) + '</div>' : '') +
       '<div class="scan-cta">Scan to choose your VIP number</div>' +
       '<div class="url-label">etisalat.shop/choose-number</div>';

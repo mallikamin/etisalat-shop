@@ -15,7 +15,7 @@
 // - Create a Google Sheet (or use existing)
 // - First sheet (tab) will be used
 // - Row 1 headers (script auto-creates if sheet is empty):
-//   Name | Mobile | Location | Ref Code | Date | Status
+//   Owner Name | Company Name | Mobile | Address | Area | GPS | Ref Code | Date | Status
 // ============================================================
 
 function doPost(e) {
@@ -23,12 +23,13 @@ function doPost(e) {
     var data = JSON.parse(e.postData.contents);
 
     // Validate required fields
-    if (!data.name || !data.mobile || !data.ref_code) {
+    if (!data.owner_name || !data.company_name || !data.mobile || !data.ref_code) {
       return jsonResponse({ success: false, error: 'Missing required fields' });
     }
 
     // Sanitize inputs
-    var name = String(data.name).substring(0, 100).trim();
+    var ownerName = String(data.owner_name).substring(0, 100).trim();
+    var companyName = String(data.company_name).substring(0, 100).trim();
     var mobile = String(data.mobile).replace(/[^0-9+\- ]/g, '').substring(0, 20).trim();
     var address = String(data.address || '').substring(0, 200).trim();
     var location = String(data.location || '').substring(0, 100).trim();
@@ -44,28 +45,28 @@ function doPost(e) {
 
     // Auto-create headers if sheet is empty
     if (sheet.getLastRow() === 0) {
-      sheet.appendRow(['Name', 'Mobile', 'Address', 'Area', 'GPS', 'Ref Code', 'Date', 'Status']);
+      sheet.appendRow(['Owner Name', 'Company Name', 'Mobile', 'Address', 'Area', 'GPS', 'Ref Code', 'Date', 'Status']);
     }
 
-    // Check for duplicate ref code
+    // Check for duplicate ref code (column index 6)
     var existingData = sheet.getDataRange().getValues();
     for (var i = 1; i < existingData.length; i++) {
-      if (String(existingData[i][5]).toLowerCase() === refCode) {
+      if (String(existingData[i][6]).toLowerCase() === refCode) {
         return jsonResponse({ success: false, error: 'Ref code already exists' });
       }
     }
 
-    // Check for duplicate mobile
+    // Check for duplicate mobile (column index 2)
     for (var i = 1; i < existingData.length; i++) {
-      if (String(existingData[i][1]).replace(/\D/g, '') === mobile.replace(/\D/g, '')) {
-        return jsonResponse({ success: false, error: 'Mobile already registered', existing_ref: String(existingData[i][5]) });
+      if (String(existingData[i][2]).replace(/\D/g, '') === mobile.replace(/\D/g, '')) {
+        return jsonResponse({ success: false, error: 'Mobile already registered', existing_ref: String(existingData[i][6]) });
       }
     }
 
     // Append row
     var now = new Date();
     var dateStr = Utilities.formatDate(now, Session.getScriptTimeZone(), 'yyyy-MM-dd HH:mm');
-    sheet.appendRow([name, mobile, address, location, geo, refCode, dateStr, 'Active']);
+    sheet.appendRow([ownerName, companyName, mobile, address, location, geo, refCode, dateStr, 'Active']);
 
     return jsonResponse({ success: true, ref_code: refCode });
 
@@ -78,14 +79,14 @@ function doGet(e) {
   try {
     var action = (e.parameter.action || '').trim();
 
-    // Check if ref code exists
+    // Check if ref code exists (column index 6)
     if (action === 'check' && e.parameter.ref) {
       var ref = String(e.parameter.ref).toLowerCase();
       var ss = SpreadsheetApp.getActiveSpreadsheet();
       var sheet = ss.getSheets()[0];
       var data = sheet.getDataRange().getValues();
       for (var i = 1; i < data.length; i++) {
-        if (String(data[i][5]).toLowerCase() === ref) {
+        if (String(data[i][6]).toLowerCase() === ref) {
           return jsonResponse({ exists: true });
         }
       }
@@ -100,14 +101,16 @@ function doGet(e) {
       var partners = [];
       for (var i = 1; i < data.length; i++) {
         partners.push({
-          name: String(data[i][0]),
-          mobile: String(data[i][1]),
-          address: String(data[i][2]),
-          area: String(data[i][3]),
-          gps: String(data[i][4]),
-          ref_code: String(data[i][5]),
-          date: String(data[i][6]),
-          status: String(data[i][7])
+          owner_name: String(data[i][0]),
+          company_name: String(data[i][1]),
+          name: String(data[i][1]),
+          mobile: String(data[i][2]),
+          address: String(data[i][3]),
+          area: String(data[i][4]),
+          gps: String(data[i][5]),
+          ref_code: String(data[i][6]),
+          date: String(data[i][7]),
+          status: String(data[i][8])
         });
       }
       return jsonResponse({ success: true, partners: partners });

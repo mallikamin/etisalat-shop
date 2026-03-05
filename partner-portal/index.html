@@ -121,11 +121,12 @@
       font-weight: 600;
       margin-bottom: 8px;
     }
-    .qr-partner-name {
-      font-size: 1rem;
-      color: var(--gold-light);
-      margin-bottom: 4px;
-      font-weight: 600;
+    .qr-company-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--gold);
+      margin-bottom: 2px;
+      font-weight: 700;
     }
     .qr-ref-badge {
       display: inline-block;
@@ -239,8 +240,13 @@
 
   <form id="partnerForm" onsubmit="return handleSubmit(event)">
     <div class="field">
-      <label for="partnerName">Partner / Shop Name *</label>
-      <input type="text" id="partnerName" placeholder="e.g. Ali's Mobile Shop" required>
+      <label for="ownerName">Owner Name *</label>
+      <input type="text" id="ownerName" placeholder="e.g. Ali Ahmed" required>
+    </div>
+
+    <div class="field">
+      <label for="companyName">Company / Shop Name *</label>
+      <input type="text" id="companyName" placeholder="e.g. Ali's Mobile Shop" required>
     </div>
 
     <div class="field">
@@ -262,6 +268,7 @@
         <option value="Dubai - Marina">Dubai - Marina</option>
         <option value="Dubai - JBR">Dubai - JBR</option>
         <option value="Dubai - Downtown">Dubai - Downtown</option>
+        <option value="Dubai - Hor Al Anz">Dubai - Hor Al Anz</option>
         <option value="Dubai - Business Bay">Dubai - Business Bay</option>
         <option value="Dubai - Al Barsha">Dubai - Al Barsha</option>
         <option value="Dubai - Karama">Dubai - Karama</option>
@@ -291,11 +298,11 @@
 
   <div class="qr-output" id="qrOutput">
     <div class="qr-success-label">Partner registered successfully</div>
-    <div class="qr-partner-name" id="qrPartnerLabel"></div>
-    <div class="qr-ref-badge" id="qrRefBadge"></div>
     <div class="qr-canvas-wrap">
       <div id="qrCanvas"></div>
     </div>
+    <div class="qr-company-name" id="qrCompanyLabel"></div>
+    <div class="qr-ref-badge" id="qrRefBadge"></div>
     <div class="qr-url" id="qrUrlLabel"></div>
     <div class="btn-row">
       <button class="btn btn-gold" onclick="downloadQR()">Download PNG</button>
@@ -372,13 +379,15 @@ function handleSubmit(e) {
   e.preventDefault();
   hideAlerts();
 
-  var name = document.getElementById('partnerName').value.trim();
+  var ownerName = document.getElementById('ownerName').value.trim();
+  var companyName = document.getElementById('companyName').value.trim();
   var mobile = document.getElementById('partnerMobile').value.trim().replace(/\s+/g, '');
   var address = document.getElementById('partnerAddress').value.trim();
   var location = document.getElementById('partnerLocation').value;
   var geo = document.getElementById('partnerGeo').value.trim();
 
-  if (!name) { showError('Enter partner name'); return false; }
+  if (!ownerName) { showError('Enter owner name'); return false; }
+  if (!companyName) { showError('Enter company / shop name'); return false; }
   if (!mobile || mobile.length < 9) { showError('Enter a valid mobile number'); return false; }
 
   var refCode = generateRefCode();
@@ -387,12 +396,13 @@ function handleSubmit(e) {
   btn.innerHTML = '<span class="spinner"></span>Registering...';
 
   if (!SCRIPT_URL) {
-    onRegistrationSuccess(name, mobile, address, location, geo, refCode);
+    onRegistrationSuccess(ownerName, companyName, mobile, address, location, geo, refCode);
     return false;
   }
 
   var payload = {
-    name: name,
+    owner_name: ownerName,
+    company_name: companyName,
     mobile: mobile,
     address: address,
     location: location,
@@ -407,7 +417,7 @@ function handleSubmit(e) {
   .then(function(res) { return res.json(); })
   .then(function(data) {
     if (data.success) {
-      onRegistrationSuccess(name, mobile, address, location, geo, data.ref_code || refCode);
+      onRegistrationSuccess(ownerName, companyName, mobile, address, location, geo, data.ref_code || refCode);
     } else {
       showError(data.error || 'Registration failed');
       resetButton();
@@ -421,7 +431,7 @@ function handleSubmit(e) {
   return false;
 }
 
-function onRegistrationSuccess(name, mobile, address, location, geo, refCode) {
+function onRegistrationSuccess(ownerName, companyName, mobile, address, location, geo, refCode) {
   var url = BASE_URL + encodeURIComponent(refCode);
 
   // Generate QR
@@ -436,13 +446,13 @@ function onRegistrationSuccess(name, mobile, address, location, geo, refCode) {
     correctLevel: QRCode.CorrectLevel.M
   });
 
-  document.getElementById('qrPartnerLabel').textContent = name;
+  document.getElementById('qrCompanyLabel').textContent = companyName;
   document.getElementById('qrRefBadge').textContent = refCode;
   document.getElementById('qrUrlLabel').textContent = url;
   document.getElementById('qrOutput').classList.add('visible');
   document.getElementById('partnerForm').style.display = 'none';
 
-  saveToHistory(name, refCode, location);
+  saveToHistory(ownerName, companyName, refCode, location);
 }
 
 /* ========================================
@@ -543,11 +553,11 @@ function hideAlerts() {
 /* ========================================
    HISTORY (localStorage)
    ======================================== */
-function saveToHistory(name, code, location) {
+function saveToHistory(ownerName, companyName, code, location) {
   try {
     var history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
     history = history.filter(function(h) { return h.code !== code; });
-    history.unshift({ name: name, code: code, location: location || '', ts: Date.now() });
+    history.unshift({ name: ownerName, company: companyName, code: code, location: location || '', ts: Date.now() });
     if (history.length > 30) history = history.slice(0, 30);
     localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
     renderHistory();
@@ -563,7 +573,7 @@ function renderHistory() {
     section.style.display = 'block';
     list.innerHTML = history.map(function(h) {
       return '<li>'
-        + '<span class="history-name">' + escapeHtml(h.name) + '</span>'
+        + '<span class="history-name">' + escapeHtml(h.company || h.name) + '<br><span style="font-size:0.75rem;color:var(--text-muted)">' + escapeHtml(h.name) + '</span></span>'
         + '<span class="history-meta">'
         + '<span class="history-code">' + escapeHtml(h.code) + '</span>'
         + (h.location ? '<span class="history-location">' + escapeHtml(h.location) + '</span>' : '')

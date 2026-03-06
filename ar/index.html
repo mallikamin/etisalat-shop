@@ -2424,36 +2424,30 @@
   })();
   </script>
 
-<!--Start of Tawk.to Script-->
+<!--Start of Tawk.to Script — 2/10 interference mode -->
 <script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+var _tawkShown = false;
 
-// Proactive trigger: open chat after 30s on page
+// Never auto-pop. On mobile, hide widget until user earns it (90s + 50% scroll).
 Tawk_API.onLoad = function(){
-  setTimeout(function(){
-    if(!Tawk_API.isChatOngoing()){
-      Tawk_API.maximize();
-    }
-  }, 30000);
+  if (sessionStorage.getItem('tawk_dismissed')) { Tawk_API.hideWidget(); return; }
+  var isMobile = window.innerWidth < 768;
+  if (isMobile) {
+    Tawk_API.hideWidget();
+    var timeOk = false, scrollOk = false;
+    setTimeout(function(){ timeOk = true; if (scrollOk && !_tawkShown) { _tawkShown = true; Tawk_API.showWidget(); } }, 90000);
+    window.addEventListener('scroll', function(){
+      if (_tawkShown) return;
+      var scrollable = document.body.scrollHeight - window.innerHeight;
+      var scrollPct = scrollable > 0 ? window.scrollY / scrollable : 1;
+      if (scrollPct > 0.5) { scrollOk = true; if (timeOk) { _tawkShown = true; Tawk_API.showWidget(); } }
+    }, {passive:true});
+  }
 };
-
-// WhatsApp handoff after chat ends
-Tawk_API.onChatEnded = function(){
-  var wa = document.createElement('div');
-  wa.innerHTML = '<a href="https://wa.me/971566999377?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D9%83%D9%86%D8%AA%20%D8%A3%D8%AA%D8%AD%D8%AF%D8%AB%20%D8%B9%D9%84%D9%89%20%D9%85%D9%88%D9%82%D8%B9%D9%83%D9%85" target="_blank" style="position:fixed;bottom:80px;left:20px;background:#25D366;color:#fff;padding:12px 20px;border-radius:25px;text-decoration:none;font-weight:bold;z-index:99999;box-shadow:0 2px 8px rgba(0,0,0,0.3)">تواصل عبر واتساب</a>';
-  document.body.appendChild(wa);
-  setTimeout(function(){ wa.remove(); }, 30000);
-};
-
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/699eef3642971f1c3a85ef9a/1jiadcrg7';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
+Tawk_API.onChatMinimized = function(){ sessionStorage.setItem('tawk_dismissed','1'); Tawk_API.hideWidget(); };
 </script>
+<script async src='https://embed.tawk.to/699eef3642971f1c3a85ef9a/1jiadcrg7' charset='UTF-8' crossorigin='*'></script>
 <!--End of Tawk.to Script-->
 </body>
 </html>

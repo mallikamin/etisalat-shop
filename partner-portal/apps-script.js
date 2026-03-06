@@ -79,7 +79,7 @@ function doGet(e) {
   try {
     var action = (e.parameter.action || '').trim();
 
-    // Check if ref code exists (column index 6)
+    // Check if ref code exists (column index 6) — also returns company_name for attribution
     if (action === 'check' && e.parameter.ref) {
       var ref = String(e.parameter.ref).toLowerCase();
       var ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -87,7 +87,7 @@ function doGet(e) {
       var data = sheet.getDataRange().getValues();
       for (var i = 1; i < data.length; i++) {
         if (String(data[i][6]).toLowerCase() === ref) {
-          return jsonResponse({ exists: true });
+          return jsonResponse({ exists: true, company_name: String(data[i][1]) });
         }
       }
       return jsonResponse({ exists: false });

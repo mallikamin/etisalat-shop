@@ -983,6 +983,7 @@ var CSV_URLS = [
 var WA_NUMBER = '971566999377';
 var ATTR_STORAGE_KEY = 'es_partner_ref';
 var ATTR_DAYS = 90;
+var PARTNER_API = 'https://script.google.com/macros/s/AKfycbyH1KBC63S7yB3wSpHw-s5bZHH1Rwqta4Fsd6hIz8NCe0GqiaZZx13VdOsDALenWbqW/exec';
 
 /* ========================================
    STATE
@@ -1037,9 +1038,13 @@ function initTrackingContext() {
     refCode = stored;
   }
 
-  var ctx = { refCode: refCode };
+  var shopName = readStoredShopName();
+  var ctx = { refCode: refCode, shopName: shopName };
   if (ctx.refCode) {
     trackScanOnce(ctx.refCode);
+    if (!shopName) {
+      fetchAndCacheShopName(ctx.refCode);
+    }
   }
   return ctx;
 }
@@ -1056,9 +1061,11 @@ function getRefFromUrl() {
   }
 }
 
-function writeStoredRef(ref) {
+function writeStoredRef(ref, shopName) {
   try {
-    var value = JSON.stringify({ ref: ref, ts: Date.now() });
+    var existing = {};
+    try { existing = JSON.parse(localStorage.getItem(ATTR_STORAGE_KEY) || '{}'); } catch(x){}
+    var value = JSON.stringify({ ref: ref, ts: Date.now(), shop: shopName || existing.shop || '' });
     localStorage.setItem(ATTR_STORAGE_KEY, value);
   } catch (e) {}
 }
@@ -1080,13 +1087,40 @@ function readStoredRef() {
   }
 }
 
+function readStoredShopName() {
+  try {
+    var raw = localStorage.getItem(ATTR_STORAGE_KEY);
+    if (!raw) return '';
+    var parsed = JSON.parse(raw);
+    return parsed.shop || '';
+  } catch (e) { return ''; }
+}
+
+function fetchAndCacheShopName(refCode) {
+  if (!PARTNER_API || !refCode) return;
+  fetch(PARTNER_API + '?action=check&ref=' + encodeURIComponent(refCode))
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.exists && data.company_name) {
+        trackingContext.shopName = data.company_name;
+        writeStoredRef(refCode, data.company_name);
+      }
+    })
+    .catch(function() {});
+}
+
 function createLeadToken() {
   return 'L-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8).toUpperCase();
 }
 
 function buildTrackedMessage(baseMessage, leadToken) {
   if (!trackingContext.refCode) return baseMessage;
-  return baseMessage + '\nRef:' + trackingContext.refCode + '\nLeadToken:' + leadToken;
+  var shopLabel = trackingContext.shopName || readStoredShopName();
+  var attribution = '\n\n--- Lead Forwarded from ---';
+  if (shopLabel) attribution += '\nShop: ' + shopLabel;
+  attribution += '\nRef: ' + trackingContext.refCode;
+  attribution += '\nLead Token: ' + leadToken;
+  return baseMessage + attribution;
 }
 
 function buildWhatsAppHref(baseMessage, leadToken) {
@@ -1450,40 +1484,30 @@ document.addEventListener('click', function(e) {
 loadNumbers();
 </script>
 
-<!--Start of Tawk.to Script-->
+<!--Start of Tawk.to Script — 2/10 interference mode -->
 <script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+var _tawkShown = false;
 
-// Once user minimizes chat, never auto-pop again this session
-var _tawkDismissed = false;
-Tawk_API.onChatMinimized = function(){ _tawkDismissed = true; };
-
-// Proactive trigger: open chat once after 20s (respects dismiss)
+// Never auto-pop. On mobile, hide widget until user earns it (90s + 50% scroll).
 Tawk_API.onLoad = function(){
-  setTimeout(function(){
-    if(!_tawkDismissed && !Tawk_API.isChatOngoing()){
-      Tawk_API.maximize();
-    }
-  }, 20000);
+  if (sessionStorage.getItem('tawk_dismissed')) { Tawk_API.hideWidget(); return; }
+  var isMobile = window.innerWidth < 768;
+  if (isMobile) {
+    Tawk_API.hideWidget();
+    var timeOk = false, scrollOk = false;
+    setTimeout(function(){ timeOk = true; if (scrollOk && !_tawkShown) { _tawkShown = true; Tawk_API.showWidget(); } }, 90000);
+    window.addEventListener('scroll', function(){
+      if (_tawkShown) return;
+      var scrollable = document.body.scrollHeight - window.innerHeight;
+      var scrollPct = scrollable > 0 ? window.scrollY / scrollable : 1;
+      if (scrollPct > 0.5) { scrollOk = true; if (timeOk) { _tawkShown = true; Tawk_API.showWidget(); } }
+    }, {passive:true});
+  }
 };
-
-// WhatsApp handoff after chat ends
-Tawk_API.onChatEnded = function(){
-  var wa = document.createElement('div');
-  wa.innerHTML = '<a href="https://wa.me/971566999377?text=Hi%2C%20I%20was%20chatting%20on%20your%20website" target="_blank" style="position:fixed;bottom:80px;right:20px;background:#25D366;color:#fff;padding:12px 20px;border-radius:25px;text-decoration:none;font-weight:bold;z-index:99999;box-shadow:0 2px 8px rgba(0,0,0,0.3)">Continue on WhatsApp</a>';
-  document.body.appendChild(wa);
-  setTimeout(function(){ wa.remove(); }, 30000);
-};
-
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/699eef3642971f1c3a85ef9a/1jiadcrg7';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
+Tawk_API.onChatMinimized = function(){ sessionStorage.setItem('tawk_dismissed','1'); Tawk_API.hideWidget(); };
 </script>
+<script async src='https://embed.tawk.to/699eef3642971f1c3a85ef9a/1jiadcrg7' charset='UTF-8' crossorigin='*'></script>
 <!--End of Tawk.to Script-->
 </body>
 </html>

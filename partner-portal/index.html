@@ -307,12 +307,13 @@
     <div class="btn-row">
       <button class="btn btn-gold" onclick="downloadQR()">Download PNG</button>
       <button class="btn btn-outline" onclick="copyLink()">Copy Link</button>
+      <button class="btn btn-outline" id="printBannerBtn" onclick="printBanner()">Print Banner</button>
       <button class="btn btn-outline" onclick="resetForm()">New Partner</button>
     </div>
   </div>
 
   <div style="margin-top:24px;text-align:center">
-    <a href="./print.html" class="btn btn-outline" style="text-decoration:none;display:inline-block">Print QR Banners</a>
+    <a href="./print-batch.html" class="btn btn-outline" style="text-decoration:none;display:inline-block">Print QR Banners (All Partners)</a>
   </div>
 
   <div class="history" id="historySection" style="display:none">
@@ -587,6 +588,16 @@ function escapeHtml(str) {
   var div = document.createElement('div');
   div.appendChild(document.createTextNode(str));
   return div.innerHTML;
+}
+
+/* ========================================
+   PRINT BANNER — opens print-batch with this partner pre-selected
+   ======================================== */
+function printBanner() {
+  var refCode = document.getElementById('qrRefBadge').textContent;
+  if (refCode) {
+    window.open('./print-batch.html?ref=' + encodeURIComponent(refCode), '_blank');
+  }
 }
 
 /* ========================================

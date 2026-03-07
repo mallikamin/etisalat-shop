@@ -1096,9 +1096,11 @@ function readStoredShopName() {
   } catch (e) { return ''; }
 }
 
+var _shopNamePromise = null;
+
 function fetchAndCacheShopName(refCode) {
   if (!PARTNER_API || !refCode) return;
-  fetch(PARTNER_API + '?action=check&ref=' + encodeURIComponent(refCode))
+  _shopNamePromise = fetch(PARTNER_API + '?action=check&ref=' + encodeURIComponent(refCode))
     .then(function(r) { return r.json(); })
     .then(function(data) {
       if (data.exists && data.company_name) {
@@ -1448,10 +1450,26 @@ for (var t = 0; t < categoryTabs.length; t++) {
 }
 
 // WhatsApp click tracking (delegated)
+// Waits for shop name fetch if still in-flight, then opens WhatsApp
 document.addEventListener('click', function(e) {
   var link = e.target.closest('.btn-wa');
   if (!link) return;
 
+  // If shop name fetch is still pending, wait for it (max 2s) before opening
+  if (trackingContext.refCode && !trackingContext.shopName && _shopNamePromise) {
+    e.preventDefault();
+    var timeout = new Promise(function(resolve) { setTimeout(resolve, 2000); });
+    Promise.race([_shopNamePromise, timeout]).then(function() {
+      fireWhatsAppClick(link);
+      link.click();
+    });
+    return;
+  }
+
+  fireWhatsAppClick(link);
+});
+
+function fireWhatsAppClick(link) {
   var leadToken = createLeadToken();
   var num = link.getAttribute('data-num');
   var cat = link.getAttribute('data-cat');
@@ -1476,7 +1494,7 @@ document.addEventListener('click', function(e) {
       content_ids: [trackingContext.refCode || 'direct']
     });
   }
-});
+}
 
 /* ========================================
    INIT

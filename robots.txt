@@ -1,5 +1,5 @@
-# etisalat.shop — Authorized Etisalat Dealer, UAE
-# https://etisalat.shop/
+# goldennummbers.com — Authorized Etisalat Dealer, UAE
+# https://goldennummbers.com/
 
 User-agent: *
 Allow: /
@@ -7,7 +7,7 @@ Disallow: /generate_ads.py
 Disallow: /generate_assets.py
 
 # Sitemap
-Sitemap: https://etisalat.shop/sitemap.xml
+Sitemap: https://goldennummbers.com/sitemap.xml
 
 # AI Crawlers — welcome
 User-agent: GPTBot

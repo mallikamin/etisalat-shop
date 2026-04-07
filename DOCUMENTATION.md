@@ -1,8 +1,8 @@
-# etisalat.shop — Full Documentation & Notes
+# goldennummbers.com — Full Documentation & Notes
 
 ## Project Overview
-- **Domain**: etisalat.shop (DNS propagating to GitHub Pages)
-- **Live URL**: https://etisalat.shop/
+- **Domain**: goldennummbers.com (DNS propagating to GitHub Pages)
+- **Live URL**: https://goldennummbers.com/
 - **GitHub Repo**: mallikamin/etisalat-shop
 - **Branch**: main
 - **Theme**: Midnight Gold (dark navy #0D1117, gold #C9A962, Playfair Display + DM Sans)
@@ -98,7 +98,7 @@
 - **Verified**: Yes (tag: tOXpiMn_uiXU0YmYMd6bALCCTPBA6wY5UsBh4Gmd3Nc)
 - **Sitemap**: Submitted (sitemap.xml, 6 URLs)
 - **Indexing**: Manually requested for all 6 URLs on 2026-02-22
-- **Property**: https://etisalat.shop/
+- **Property**: https://goldennummbers.com/
 
 ### Bing Webmaster Tools
 - **Added**: Imported from Google Search Console
@@ -166,7 +166,7 @@ All profiles are linked in:
 - Auto-deploys on push
 
 ### Domain (DNS)
-- **Domain**: etisalat.shop (GoDaddy)
+- **Domain**: goldennummbers.com (GoDaddy)
 - **Status**: DNS propagating (as of 2026-02-22)
 - **Nameservers**: Changed to GoDaddy defaults (ns45/ns46.domaincontrol.com)
 - **A Records**: 4 GitHub Pages IPs configured
@@ -235,7 +235,7 @@ AED 50/day (~AED 1,500/month, stretches $400 credit over ~32 days)
 
 ### When DNS Propagates
 - [ ] Add custom domain back in GitHub Pages settings
-- [ ] Update ALL canonical URLs from mallikamin.github.io to etisalat.shop
+- [ ] Update ALL canonical URLs from mallikamin.github.io to goldennummbers.com
 - [ ] Update ALL OG URLs
 - [ ] Update form _next redirect URL
 - [ ] Update sitemap.xml URLs
@@ -266,7 +266,7 @@ AED 50/day (~AED 1,500/month, stretches $400 credit over ~32 days)
 ## Session Log — 2026-03-01
 
 ### What Was Built (Playbook Audit + Fixes)
-1. Ran full audit of etisalat.shop against Digital Marketing Playbook (22 chapters)
+1. Ran full audit of goldennummbers.com against Digital Marketing Playbook (22 chapters)
 2. Added trust badges strip to homepage + Arabic page (Authorized Dealer, Free Delivery, Same-Day, All Emirates, 500+ Customers)
 3. Added customer testimonials section (4 reviews) to homepage
 4. Added Arabic testimonials section (3 reviews) to AR homepage
@@ -332,7 +332,7 @@ AED 50/day (~AED 1,500/month, stretches $400 credit over ~32 days)
 | Date | Error | Root Cause | Fix |
 |------|-------|-----------|-----|
 | 2026-02-22 | GoDaddy DNS locked | Custom nameservers (usacloudserver.us) overriding GoDaddy | Changed NS to GoDaddy defaults |
-| 2026-02-22 | CNAME conflict for www | Existing CNAME www→etisalat.shop | Edited to point to mallikamin.github.io |
+| 2026-02-22 | CNAME conflict for www | Existing CNAME www→goldennummbers.com | Edited to point to mallikamin.github.io |
 | 2026-02-22 | git push rejected | GitHub Pages auto-created CNAME commits | git pull --rebase then push |
 | 2026-02-22 | DNS not propagating globally | .shop TLD registry still serving old NS | Waiting — GoDaddy's own NS returns correct IPs |
 | 2026-02-22 | Choco install gh failed | No admin rights + lock file | Used git directly |
@@ -341,7 +341,7 @@ AED 50/day (~AED 1,500/month, stretches $400 credit over ~32 days)
 ---
 
 ## Important Notes
-- Domain `etisalat.shop` is a valuable/precious name — partner in Dubai owns GoDaddy access
+- Domain `goldennummbers.com` is a valuable/precious name — partner in Dubai owns GoDaddy access
 - The old hosting was set up by "some random IT guy" — not actively used
 - FormSubmit.co requires first-time email confirmation
 - This site is the landing page for FBAI (Facebook Ads AI project at C:\FBAI)

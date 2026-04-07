@@ -1,8 +1,8 @@
 {
-  "name": "etisalat.shop - Authorized Etisalat Dealer",
-  "short_name": "etisalat.shop",
+  "name": "goldennummbers.com - Authorized Etisalat Dealer",
+  "short_name": "goldennummbers.com",
   "description": "Etisalat postpaid plans, VIP numbers, unlimited data & calling. Authorized dealer in UAE.",
-  "start_url": "/etisalat-shop/",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#0D1117",
   "theme_color": "#C9A962",

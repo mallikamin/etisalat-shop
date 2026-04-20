@@ -12,6 +12,7 @@
  */
 (function () {
   'use strict';
+  var PIXEL_ID = '1456083435966506';
   var PIXEL_VALUE = 500; // avg AED per lead — used for pixel attribution weighting
   var CURRENCY = 'AED';
 
@@ -22,6 +23,51 @@
   function safe(s, max) {
     if (s == null) return '';
     return String(s).trim().substring(0, max || 100);
+  }
+
+  function normalizePhone(raw) {
+    if (!raw) return '';
+    var digits = String(raw).replace(/[^0-9]/g, '');
+    if (!digits) return '';
+    if (digits.charAt(0) === '0') digits = '971' + digits.slice(1);
+    if (digits.length === 9) digits = '971' + digits;
+    return digits;
+  }
+
+  function splitName(full) {
+    if (!full) return { fn: '', ln: '' };
+    var parts = String(full).trim().split(/\s+/);
+    return { fn: (parts[0] || '').toLowerCase(), ln: (parts.slice(1).join(' ') || '').toLowerCase() };
+  }
+
+  /**
+   * Manual Advanced Matching — enriches the pixel with hashed user identity
+   * so Meta can match events to user accounts (improves match rate 20-30%).
+   * Call this BEFORE firing a pixel event (e.g., on form submit) with whatever
+   * identity fields you have. Meta auto-hashes client-side via SHA-256.
+   * Pass any subset of {email, phone, name, city, country, zip, gender, dob, externalId}.
+   */
+  function setUserIdentity(opts) {
+    opts = opts || {};
+    if (typeof fbq !== 'function') return;
+    var data = {};
+    if (opts.email)   data.em = String(opts.email).trim().toLowerCase();
+    if (opts.phone)   data.ph = normalizePhone(opts.phone);
+    if (opts.name) {
+      var n = splitName(opts.name);
+      if (n.fn) data.fn = n.fn;
+      if (n.ln) data.ln = n.ln;
+    }
+    if (opts.firstName) data.fn = String(opts.firstName).trim().toLowerCase();
+    if (opts.lastName)  data.ln = String(opts.lastName).trim().toLowerCase();
+    if (opts.city)      data.ct = String(opts.city).trim().toLowerCase().replace(/\s+/g, '');
+    if (opts.country)   data.country = String(opts.country).trim().toLowerCase();
+    if (opts.zip)       data.zp = String(opts.zip).trim();
+    if (opts.gender)    data.ge = String(opts.gender).charAt(0).toLowerCase();
+    if (opts.dob)       data.db = String(opts.dob).replace(/[^0-9]/g, '').slice(0, 8);
+    if (opts.externalId) data.external_id = String(opts.externalId);
+    if (!Object.keys(data).length) return;
+    try { fbq('init', PIXEL_ID, data); } catch (e) {}
   }
 
   function trackWhatsAppClick(ctx, pageContext) {
@@ -139,7 +185,9 @@
     trackNumberInquiry: trackNumberInquiry,
     trackLead: trackLead,
     trackPartnerScan: trackPartnerScan,
+    setUserIdentity: setUserIdentity,
     VALUE: PIXEL_VALUE,
-    CURRENCY: CURRENCY
+    CURRENCY: CURRENCY,
+    PIXEL_ID: PIXEL_ID
   };
 })();

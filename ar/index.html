@@ -164,6 +164,9 @@
   <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1456083435966506&ev=PageView&noscript=1"/></noscript>
   <!-- End Facebook Pixel -->
 
+  <!-- Unified tracking helper (fbq/gtag/ttq dedup + manual advanced matching) -->
+  <script src="/assets/tracking.js" defer></script>
+
   <style>
     /* ========================================
        RESET & BASE
@@ -2308,7 +2311,10 @@
       var url = 'https://wa.me/971566999377?text=' + encodeURIComponent(text);
       window.open(url, '_blank');
 
-      if (window.GN) window.GN.trackLead({ source: 'whatsapp_form_ar', interest: interest });
+      if (window.GN) {
+        window.GN.setUserIdentity({ name: name, phone: phone, email: email, country: 'ae' });
+        window.GN.trackLead({ source: 'whatsapp_form_ar', interest: interest });
+      }
     }
   </script>
 

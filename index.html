@@ -212,6 +212,9 @@
   <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1456083435966506&ev=PageView&noscript=1"/></noscript>
   <!-- End Facebook Pixel -->
 
+  <!-- Unified tracking helper (fbq/gtag/ttq dedup + manual advanced matching) -->
+  <script src="/assets/tracking.js" defer></script>
+
   <style>
     /* ========================================
        RESET & BASE
@@ -2420,18 +2423,23 @@
       var url = 'https://wa.me/971566999377?text=' + encodeURIComponent(text);
       window.open(url, '_blank');
 
+      if (window.GN) window.GN.setUserIdentity({ name: name, phone: phone, email: email, country: 'ae' });
+
       var eid = genEventId();
       if (typeof fbq === 'function') {
         fbq('track', 'Contact', {
           content_name: 'WhatsApp Form Send',
-          content_category: interest
+          content_category: interest,
+          value: 500,
+          currency: 'AED'
         }, {eventID: eid});
       }
       if (typeof gtag === 'function') {
         gtag('event', 'generate_lead', {
-          event_category: 'whatsapp_form',
-          event_label: interest,
+          lead_source: 'whatsapp_form',
+          interest_type: interest,
           value: 1,
+          currency: 'AED',
           event_id: eid
         });
       }
@@ -2443,20 +2451,26 @@
     document.addEventListener('click', function(e) {
       var link = e.target.closest('a[href*="wa.me"]');
       if (link) {
+        var eid = (typeof genEventId === 'function') ? genEventId() : ('wa_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8));
+        var ctx = link.textContent.trim().substring(0, 50) || 'cta';
+        var dest = link.href;
         if (typeof fbq === 'function') {
           fbq('track', 'Contact', {
             content_name: 'WhatsApp Click',
-            content_category: link.textContent.trim().substring(0, 50)
-          });
-        if (typeof ttq !== 'undefined') ttq.track('Contact', {
+            content_category: ctx,
+            value: 500,
+            currency: 'AED'
+          }, {eventID: eid});
+          if (typeof ttq !== 'undefined') ttq.track('Contact', {
             content_name: 'WhatsApp Click',
-            content_category: link.textContent.trim().substring(0, 50)
+            content_category: ctx
           });
         }
         if (typeof gtag === 'function') {
           gtag('event', 'contact', {
-            event_category: 'whatsapp',
-            event_label: link.href
+            cta_context: ctx,
+            destination_url: dest,
+            event_id: eid
           });
         }
       }
@@ -2468,18 +2482,28 @@
     var formEl = document.querySelector('form[action*="formsubmit"]');
     if (formEl) {
       formEl.addEventListener('submit', function() {
+        if (window.GN) window.GN.setUserIdentity({
+          name: (document.getElementById('name') || {}).value,
+          phone: (document.getElementById('phone') || {}).value,
+          email: (document.getElementById('email') || {}).value,
+          country: 'ae'
+        });
         var eid = genEventId();
         if (typeof gtag === 'function') {
           gtag('event', 'generate_lead', {
-            event_category: 'email_form',
-            event_label: document.getElementById('interest').value,
+            lead_source: 'email_form',
+            interest_type: document.getElementById('interest').value,
+            value: 1,
+            currency: 'AED',
             event_id: eid
           });
         }
         if (typeof fbq === 'function') {
           fbq('track', 'Lead', {
             content_name: 'Form Submit',
-            content_category: document.getElementById('interest').value
+            content_category: document.getElementById('interest').value,
+            value: 500,
+            currency: 'AED'
           }, {eventID: eid});
         if (typeof ttq !== 'undefined') ttq.track('SubmitForm', {
             content_name: 'Form Submit',

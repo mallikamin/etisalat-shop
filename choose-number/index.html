@@ -1491,11 +1491,11 @@ function fireWhatsAppClick(link) {
 
   if (typeof gtag === 'function') {
     gtag('event', 'number_inquiry', {
-      event_category: 'choose_number',
-      event_label: num,
-      value: cat,
+      number_id: num,
+      number_category: cat,
       ref_code: trackingContext.refCode || '',
-      lead_token: leadToken
+      lead_token: leadToken,
+      event_id: leadToken
     });
   }
 
@@ -1503,12 +1503,14 @@ function fireWhatsAppClick(link) {
     fbq('track', 'Contact', {
       content_name: 'Number Inquiry',
       content_category: cat,
-      content_ids: [trackingContext.refCode || 'direct']
-    });
-        if (typeof ttq !== 'undefined') ttq.track('Contact', {
+      content_ids: [num],
+      value: 500,
+      currency: 'AED'
+    }, {eventID: leadToken});
+    if (typeof ttq !== 'undefined') ttq.track('Contact', {
       content_name: 'Number Inquiry',
       content_category: cat,
-      content_ids: [trackingContext.refCode || 'direct']
+      content_ids: [num]
     });
   }
 }

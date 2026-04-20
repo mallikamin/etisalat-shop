@@ -662,31 +662,13 @@ a { color: inherit; }
 })();
 </script>
 
+<script src="/assets/tracking.js" defer></script>
 <script>
 document.addEventListener('click', function(e) {
   var link = e.target.closest('a[href*="wa.me"]');
-  if (!link) return;
-
-  if (typeof gtag === 'function') {
-    gtag('event', 'contact', {
-      event_category: 'whatsapp',
-      event_label: link.href
-    });
-    gtag('event', 'generate_lead', {
-      event_category: 'whatsapp_click',
-      event_label: 'emirati_page'
-    });
-  }
-
-  if (typeof fbq === 'function') {
-    fbq('track', 'Contact', {
-      content_name: 'WhatsApp Click',
-      content_category: 'Emirati Plan'
-    });
-        if (typeof ttq !== 'undefined') ttq.track('Contact', {
-      content_name: 'WhatsApp Click',
-      content_category: 'Emirati Plan'
-    });
+  if (link && window.GN) {
+    window.GN.trackWhatsAppClick('Emirati Plan', '/emirati/');
+    window.GN.trackLead({ source: 'whatsapp_click', interest: 'emirati_page' });
   }
 });
 </script>

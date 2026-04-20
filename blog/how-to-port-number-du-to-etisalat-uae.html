@@ -1240,26 +1240,16 @@
     </div>
   </footer>
 
-  <!-- WhatsApp Click Tracking — fires FB Pixel 'Contact' event on every wa.me click -->
-  <script>
-    document.addEventListener('click', function(e) {
-      var link = e.target.closest('a[href*="wa.me"]');
-      if (link) {
-        if (typeof fbq === 'function') {
-          fbq('track', 'Contact', {
-            content_name: 'WhatsApp Click',
-            content_category: link.textContent.trim().substring(0, 50)
-          });
-        }
-        if (typeof gtag === 'function') {
-          gtag('event', 'whatsapp_click', {
-            link_text: link.textContent.trim().substring(0, 50),
-            page_title: document.title
-          });
-        }
-      }
-    });
-  </script>
+  <!-- WhatsApp Click Tracking (shared helper) -->
+<script src="/assets/tracking.js" defer></script>
+<script>
+document.addEventListener('click', function(e) {
+  var link = e.target.closest('a[href*="wa.me"]');
+  if (link && window.GN) {
+    window.GN.trackWhatsAppClick(link.textContent.trim().substring(0, 50), location.pathname);
+  }
+});
+</script>
 
 
 </body>

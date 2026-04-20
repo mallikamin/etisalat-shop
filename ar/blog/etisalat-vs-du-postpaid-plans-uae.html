@@ -642,16 +642,16 @@
     <span class="whatsapp-tooltip">تواصل مع مبيعات اتصالات</span>
   </a>
 
-  <!-- WhatsApp Click Tracking -->
-  <script>
-    document.addEventListener('click', function(e) {
-      var link = e.target.closest('a[href*="wa.me"]');
-      if (link && typeof fbq === 'function') {
-        fbq('track', 'Contact', { content_name: 'WhatsApp Click', content_category: link.textContent.trim().substring(0, 50) });
-        if (typeof ttq !== 'undefined') ttq.track('Contact', { content_name: 'WhatsApp Click', content_category: link.textContent.trim().substring(0, 50) });
-      }
-    });
-  </script>
+  <!-- WhatsApp Click Tracking (shared helper) -->
+<script src="/assets/tracking.js" defer></script>
+<script>
+document.addEventListener('click', function(e) {
+  var link = e.target.closest('a[href*="wa.me"]');
+  if (link && window.GN) {
+    window.GN.trackWhatsAppClick(link.textContent.trim().substring(0, 50), location.pathname);
+  }
+});
+</script>
 
 </body>
 </html>

@@ -353,14 +353,11 @@ footer a:hover{color:var(--gold)}
   </div>
 </footer>
 
+<script src="/assets/tracking.js" defer></script>
 <script>
 document.addEventListener('click', function(e) {
   var link = e.target.closest('a[href*="wa.me"]');
-  if (link) {
-    if (typeof fbq === 'function') fbq('track', 'Contact', { content_name: 'WhatsApp Click', content_category: 'Abu Dhabi Page' });
-        if (typeof ttq !== 'undefined') ttq.track('Contact', { content_name: 'WhatsApp Click', content_category: 'Abu Dhabi Page' });
-    if (typeof gtag === 'function') gtag('event', 'contact', { event_category: 'whatsapp', event_label: 'abu_dhabi_page' });
-  }
+  if (link && window.GN) window.GN.trackWhatsAppClick('Abu Dhabi Page', '/abu-dhabi/');
 });
 </script>
 </body>

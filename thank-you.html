@@ -9,7 +9,7 @@
     gtag('js', new Date());
     gtag('config', 'G-G34631QW03');
     var _eid = Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
-    gtag('event', 'generate_lead', { event_category: 'form', event_label: 'inquiry_form', event_id: _eid });
+    gtag('event', 'generate_lead', { lead_source: 'form', interest_type: 'inquiry_form', value: 500, currency: 'AED', event_id: _eid });
   </script>
 
   <meta charset="UTF-8">
@@ -177,27 +177,11 @@
   </div>
 
   <!-- WhatsApp Click Tracking — fires FB Pixel + GA4 events on every wa.me click -->
+  <script src="/assets/tracking.js" defer></script>
   <script>
     document.addEventListener('click', function(e) {
       var link = e.target.closest('a[href*="wa.me"]');
-      if (link) {
-        if (typeof fbq === 'function') {
-          fbq('track', 'Contact', {
-            content_name: 'WhatsApp Click',
-            content_category: 'Thank You Page'
-          });
-        if (typeof ttq !== 'undefined') ttq.track('Contact', {
-            content_name: 'WhatsApp Click',
-            content_category: 'Thank You Page'
-          });
-        }
-        if (typeof gtag === 'function') {
-          gtag('event', 'contact', {
-            event_category: 'whatsapp',
-            event_label: 'thank_you_page'
-          });
-        }
-      }
+      if (link && window.GN) window.GN.trackWhatsAppClick('Thank You Page', '/thank-you');
     });
   </script>
 </body>

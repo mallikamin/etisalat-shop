@@ -2429,9 +2429,10 @@
       }
       if (typeof gtag === 'function') {
         gtag('event', 'generate_lead', {
-          event_category: 'whatsapp_form',
-          event_label: interest,
+          lead_source: 'whatsapp_form',
+          interest_type: interest,
           value: 1,
+          currency: 'AED',
           event_id: eid
         });
       }
@@ -2443,20 +2444,26 @@
     document.addEventListener('click', function(e) {
       var link = e.target.closest('a[href*="wa.me"]');
       if (link) {
+        var eid = (typeof genEventId === 'function') ? genEventId() : ('wa_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8));
+        var ctx = link.textContent.trim().substring(0, 50) || 'cta';
+        var dest = link.href;
         if (typeof fbq === 'function') {
           fbq('track', 'Contact', {
             content_name: 'WhatsApp Click',
-            content_category: link.textContent.trim().substring(0, 50)
-          });
-        if (typeof ttq !== 'undefined') ttq.track('Contact', {
+            content_category: ctx,
+            value: 500,
+            currency: 'AED'
+          }, {eventID: eid});
+          if (typeof ttq !== 'undefined') ttq.track('Contact', {
             content_name: 'WhatsApp Click',
-            content_category: link.textContent.trim().substring(0, 50)
+            content_category: ctx
           });
         }
         if (typeof gtag === 'function') {
           gtag('event', 'contact', {
-            event_category: 'whatsapp',
-            event_label: link.href
+            cta_context: ctx,
+            destination_url: dest,
+            event_id: eid
           });
         }
       }
@@ -2471,15 +2478,19 @@
         var eid = genEventId();
         if (typeof gtag === 'function') {
           gtag('event', 'generate_lead', {
-            event_category: 'email_form',
-            event_label: document.getElementById('interest').value,
+            lead_source: 'email_form',
+            interest_type: document.getElementById('interest').value,
+            value: 1,
+            currency: 'AED',
             event_id: eid
           });
         }
         if (typeof fbq === 'function') {
           fbq('track', 'Lead', {
             content_name: 'Form Submit',
-            content_category: document.getElementById('interest').value
+            content_category: document.getElementById('interest').value,
+            value: 500,
+            currency: 'AED'
           }, {eventID: eid});
         if (typeof ttq !== 'undefined') ttq.track('SubmitForm', {
             content_name: 'Form Submit',

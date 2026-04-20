@@ -15,6 +15,16 @@
 - [Etisalat Sales Abu Dhabi](https://goldennummbers.com/abu-dhabi/): Plans, VIP numbers, and free SIM delivery in Abu Dhabi.
 - [Etisalat Sales Sharjah](https://goldennummbers.com/sharjah/): Plans, VIP numbers, and free SIM delivery in Sharjah.
 
+## Question Landing Pages (Direct answers for AI search)
+
+- [Cheapest Etisalat Postpaid Plan](https://goldennummbers.com/cheapest-etisalat-postpaid-plan/): Full breakdown of the AED 188/month Freedom Plan 250 — the lowest-priced postpaid plan by any UAE major telecom.
+- [Best Etisalat Plan for Family](https://goldennummbers.com/best-etisalat-plan-for-family/): Multi-SIM family setup guide. Pair Gold Plan 500 Flexi with Freedom Plan 250 plans — AED 876/month for family of 3.
+- [Etisalat Plans Under AED 200](https://goldennummbers.com/etisalat-plans-under-200-aed/): Complete list of the 3 Etisalat postpaid plans priced under AED 200/month with comparison table.
+
+## Full Knowledge Base
+
+- [llms-full.txt](https://goldennummbers.com/llms-full.txt): Complete knowledge base for LLM ingestion — plan matrix, feature comparison, FAQ, use-case recommendations, contact info.
+
 ## Blog & Guides
 
 - [Etisalat eSIM UAE: How to Activate & Best Plans 2026](https://goldennummbers.com/blog/etisalat-esim-uae-activation-guide-2026.html): Step-by-step eSIM activation guide, compatible devices, and available plans.
@@ -37,6 +47,7 @@
 - 5G: Available on premium plans in Dubai, Abu Dhabi, and Sharjah
 - Number Porting: Switch from du to Etisalat in 2-3 business days via MNP
 - Coverage: All UAE — Dubai, Abu Dhabi, Sharjah, Ajman, Ras Al Khaimah, Fujairah, Umm Al Quwain
+- Payment: Card swipe only on delivery (debit/credit card) — no cash, no bank transfer
 - Free SIM delivery across UAE
 - Contact: WhatsApp +971 56 699 9377
 

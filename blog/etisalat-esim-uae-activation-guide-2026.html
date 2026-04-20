@@ -955,6 +955,54 @@
   </script>
   <!-- TikTok Pixel Code End -->
 
+  <!-- TikTok Funnel Events (ViewContent + ClickButton) -->
+  <script>
+  (function(){
+    if (typeof ttq === 'undefined') return;
+    var p = window.location.pathname;
+    function getCat() {
+      if (p === '/' || p === '/index.html' || p.endsWith('/index.html') && p.split('/').length === 2) return 'Homepage';
+      if (p.indexOf('/ar/blog') > -1) return 'Blog AR';
+      if (p.indexOf('/ar/') === 0 || p === '/ar' || p === '/ar/') return 'Homepage AR';
+      if (p.indexOf('choose-number') > -1) return 'Number Browsing';
+      if (p.indexOf('emirati') > -1) return 'Emirati Plan';
+      if (p.indexOf('dubai') > -1) return 'Dubai Plans';
+      if (p.indexOf('abu-dhabi') > -1) return 'Abu Dhabi Plans';
+      if (p.indexOf('sharjah') > -1) return 'Sharjah Plans';
+      if (p.indexOf('/blog') > -1) return 'Blog';
+      if (p.indexOf('thank-you') > -1) return 'Thank You';
+      if (p.indexOf('privacy') > -1) return 'Privacy';
+      if (p.indexOf('404') > -1) return '404';
+      return 'Other';
+    }
+    var cat = getCat();
+    var title = (document.title || 'Golden Numbers').substring(0, 100);
+    try {
+      ttq.track('ViewContent', {
+        content_name: title,
+        content_category: cat,
+        content_type: 'product_page',
+        content_id: p
+      });
+    } catch(e){}
+    document.addEventListener('click', function(e){
+      try {
+        var el = e.target.closest('.nav-cta, .btn-primary, .hero-cta, .btn-outline, [data-tt-cta]');
+        if (!el) return;
+        if (el.classList.contains('btn-wa')) return;
+        var label = (el.textContent || '').trim().substring(0, 80);
+        var href = el.getAttribute('href') || '';
+        ttq.track('ClickButton', {
+          content_name: label,
+          content_category: cat,
+          content_id: href
+        });
+      } catch(err){}
+    }, true);
+  })();
+  </script>
+  <!-- End TikTok Funnel Events -->
+
   <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1456083435966506&ev=PageView&noscript=1"/></noscript>
   <!-- End Facebook Pixel -->
 

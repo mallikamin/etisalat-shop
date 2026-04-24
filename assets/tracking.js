@@ -20,9 +20,142 @@
     return 'e_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
   }
 
+  function createLeadTokenShort() {
+    // 7-char uppercase token — used inside the WA Ref: suffix Bilal reads
+    return Math.random().toString(36).slice(2, 6).toUpperCase() + Date.now().toString(36).slice(-3).toUpperCase();
+  }
+
   function safe(s, max) {
     if (s == null) return '';
     return String(s).trim().substring(0, max || 100);
+  }
+
+  /* ========================================
+     TRAFFIC SOURCE ATTRIBUTION
+     ========================================
+     Classifies every visitor as Organic (O) or Performance Marketing (PM),
+     then by channel. Last-touch per session, sessionStorage-cached.
+  */
+  function extractCampaignTag(utmCampaign) {
+    var clean = String(utmCampaign || '').replace(/[^a-zA-Z0-9]/g, '');
+    if (!clean) return '';
+    // Numeric-only = likely Meta/Google campaign ID -> last 6 chars (most entropic)
+    if (/^\d+$/.test(clean)) return clean.slice(-6).toUpperCase();
+    // Alphanumeric = human-named campaign -> first 8 chars
+    return clean.slice(0, 8).toUpperCase();
+  }
+
+  function detectTrafficSource() {
+    var p;
+    try { p = new URLSearchParams(window.location.search || ''); } catch (e) { p = null; }
+    function q(k) { try { return p && p.get(k) || ''; } catch (e) { return ''; } }
+
+    var campaign = extractCampaignTag(q('utm_campaign'));
+    var utmSource = q('utm_source').toLowerCase();
+    var partner = (q('ref') || '').replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 15).toUpperCase();
+
+    // PAID — click IDs are highest-signal
+    if (q('fbclid') || /^(facebook|instagram|fb|ig|meta)$/.test(utmSource)) {
+      return { cls: 'PM', ch: 'FB', campaign: campaign, partner: partner };
+    }
+    if (q('gclid') || q('gbraid') || q('wbraid') || /^(google|adwords|gads)$/.test(utmSource)) {
+      return { cls: 'PM', ch: 'GOOG', campaign: campaign, partner: partner };
+    }
+    if (q('ttclid') || /^(tiktok|tt)$/.test(utmSource)) {
+      return { cls: 'PM', ch: 'TIKTOK', campaign: campaign, partner: partner };
+    }
+    if (q('msclkid') || /^(bing|microsoft)$/.test(utmSource)) {
+      return { cls: 'PM', ch: 'BING', campaign: campaign, partner: partner };
+    }
+    if (utmSource && !/^(organic|direct|referral|email|rss)$/.test(utmSource)) {
+      return { cls: 'PM', ch: utmSource.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8), campaign: campaign, partner: partner };
+    }
+
+    // ORGANIC — classify by referrer hostname
+    var refHost = '';
+    try { refHost = (new URL(document.referrer || '')).hostname.toLowerCase(); } catch (e) {}
+    if (!refHost || refHost === window.location.hostname) return { cls: 'O', ch: 'DIRECT', campaign: '', partner: partner };
+
+    if (/(^|\.)google\./.test(refHost))     return { cls: 'O', ch: 'SEO', campaign: 'GOOGLE', partner: partner };
+    if (/(^|\.)bing\./.test(refHost))       return { cls: 'O', ch: 'SEO', campaign: 'BING', partner: partner };
+    if (/(^|\.)duckduckgo\./.test(refHost)) return { cls: 'O', ch: 'SEO', campaign: 'DDG', partner: partner };
+    if (/(^|\.)yahoo\./.test(refHost))      return { cls: 'O', ch: 'SEO', campaign: 'YAHOO', partner: partner };
+    if (/(^|\.)yandex\./.test(refHost))     return { cls: 'O', ch: 'SEO', campaign: 'YANDEX', partner: partner };
+
+    if (/chatgpt\.com|openai\.com/.test(refHost))      return { cls: 'O', ch: 'AI', campaign: 'CHATGPT', partner: partner };
+    if (/perplexity\.ai/.test(refHost))                return { cls: 'O', ch: 'AI', campaign: 'PPLX', partner: partner };
+    if (/claude\.ai|anthropic\.com/.test(refHost))     return { cls: 'O', ch: 'AI', campaign: 'CLAUDE', partner: partner };
+    if (/copilot\.microsoft\.com|bing\.com\/chat/.test(refHost)) return { cls: 'O', ch: 'AI', campaign: 'COPILOT', partner: partner };
+    if (/gemini\.google\.com|bard\.google\.com/.test(refHost))   return { cls: 'O', ch: 'AI', campaign: 'GEMINI', partner: partner };
+
+    if (/facebook\.com|fb\.com/.test(refHost))   return { cls: 'O', ch: 'SOCIAL', campaign: 'FB', partner: partner };
+    if (/instagram\.com/.test(refHost))          return { cls: 'O', ch: 'SOCIAL', campaign: 'IG', partner: partner };
+    if (/linkedin\.com/.test(refHost))           return { cls: 'O', ch: 'SOCIAL', campaign: 'LNKD', partner: partner };
+    if (/(^|\.)x\.com|twitter\.com/.test(refHost)) return { cls: 'O', ch: 'SOCIAL', campaign: 'X', partner: partner };
+    if (/tiktok\.com/.test(refHost))             return { cls: 'O', ch: 'SOCIAL', campaign: 'TIKTOK', partner: partner };
+    if (/reddit\.com/.test(refHost))             return { cls: 'O', ch: 'SOCIAL', campaign: 'REDDIT', partner: partner };
+    if (/youtube\.com|youtu\.be/.test(refHost))  return { cls: 'O', ch: 'SOCIAL', campaign: 'YT', partner: partner };
+
+    return { cls: 'O', ch: 'REFERRAL', campaign: refHost.replace(/^www\./, '').split('.')[0].toUpperCase().slice(0, 10), partner: partner };
+  }
+
+  function getTrafficSource() {
+    try {
+      var cached = sessionStorage.getItem('gn_traffic_src');
+      if (cached) {
+        var parsed = JSON.parse(cached);
+        if (parsed && parsed.cls) return parsed;
+      }
+    } catch (e) {}
+    var src = detectTrafficSource();
+    try { sessionStorage.setItem('gn_traffic_src', JSON.stringify(src)); } catch (e) {}
+    return src;
+  }
+
+  /* Ref code canonical format (v1) — always 7 dash-separated fields.
+     GN1 - <CLS> - <CH> - <CAMPAIGN> - <PARTNER> - <SOURCE> - <TOKEN>
+       GN1      version prefix (bumps on format change, enables forward-compat parsing)
+       CLS      O | PM
+       CH       FB | GOOG | TIKTOK | BING | SEO | AI | SOCIAL | DIRECT | REFERRAL | <OTHER>
+       CAMPAIGN last-6 of numeric campaign ID / first-8 of named campaign / SEO engine / AI brand / social brand / X
+       PARTNER  SHOP code from ?ref= param, or X
+       SOURCE   CTA origin: HERO, MIDPAGE, FAB, FOOTER, CARD<DIGITS>, FORM, etc.
+       TOKEN    7-char uppercase unique id
+
+     Parse in Python:
+       parts = ref.split('-')  # always 7 items for GN1
+       [version, cls, ch, campaign, partner, source, token] = parts
+  */
+  function buildRefCode(source, leadToken) {
+    var src = getTrafficSource();
+    var cleanSrc = String(source || 'CTA').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 20) || 'CTA';
+    return [
+      'GN1',
+      src.cls || 'O',
+      src.ch || 'DIRECT',
+      src.campaign || 'X',
+      src.partner || 'X',
+      cleanSrc,
+      leadToken
+    ].join('-');
+  }
+
+  // Rewrites an <a href="wa.me/..."> link to append the Ref: suffix before nav.
+  // Returns the lead token so the caller can use it as eventID for pixel dedup.
+  function rewriteWaHref(link, sourceCtx) {
+    var leadToken = createLeadTokenShort();
+    var source = sourceCtx || link.getAttribute('data-cta') || (link.textContent || '').trim().slice(0, 30);
+    try {
+      var href = link.getAttribute('href') || '';
+      var qIdx = href.indexOf('?text=');
+      var base = qIdx >= 0 ? href.substring(0, qIdx) : href;
+      var existing = qIdx >= 0
+        ? decodeURIComponent(href.substring(qIdx + 6))
+        : 'Hi, I\'m interested in an Etisalat VIP number from goldennummbers.com';
+      var tracked = existing + '\n\nRef: ' + buildRefCode(source, leadToken);
+      link.setAttribute('href', base + '?text=' + encodeURIComponent(tracked));
+    } catch (e) {}
+    return leadToken;
   }
 
   function normalizePhone(raw) {
@@ -181,11 +314,15 @@
 
   window.GN = {
     genEventId: genEventId,
+    createLeadTokenShort: createLeadTokenShort,
     trackWhatsAppClick: trackWhatsAppClick,
     trackNumberInquiry: trackNumberInquiry,
     trackLead: trackLead,
     trackPartnerScan: trackPartnerScan,
     setUserIdentity: setUserIdentity,
+    getTrafficSource: getTrafficSource,
+    buildRefCode: buildRefCode,
+    rewriteWaHref: rewriteWaHref,
     VALUE: PIXEL_VALUE,
     CURRENCY: CURRENCY,
     PIXEL_ID: PIXEL_ID

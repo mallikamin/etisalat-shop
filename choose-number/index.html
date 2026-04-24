@@ -150,6 +150,17 @@
   document,'script','https://connect.facebook.net/en_US/fbevents.js');
   fbq('init', '1456083435966506');
   fbq('track', 'PageView');
+  // ViewContent with AED value: tells Meta this landing page = high-intent.
+  // Improves LINK_CLICKS optimization by letting the algorithm learn which users
+  // actually reach the number catalog (not just click the ad).
+  fbq('track', 'ViewContent', {
+    content_name: 'Choose Number Landing',
+    content_category: 'VIP Number Catalog',
+    content_type: 'product_group',
+    content_ids: ['choose-number'],
+    value: 500,
+    currency: 'AED'
+  });
 </script>
   <!-- TikTok Pixel Code Start -->
   <script>
@@ -381,6 +392,125 @@ a { color: inherit; }
   margin: 0 auto;
   line-height: 1.6;
 }
+
+/* ========================================
+   WHATSAPP CTA — HERO + FLOATING FAB
+   ======================================== */
+.hero-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.hero-cta-wa {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: #25D366;
+  color: #fff;
+  padding: 0.95rem 1.75rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1rem;
+  box-shadow: 0 6px 18px rgba(37, 211, 102, 0.35);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  text-decoration: none;
+  white-space: nowrap;
+  border: none;
+  cursor: pointer;
+}
+.hero-cta-wa:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(37, 211, 102, 0.5);
+  background: #20bd5a;
+  color: #fff;
+}
+.hero-cta-wa svg { width: 20px; height: 20px; flex-shrink: 0; fill: #fff; }
+
+.hero-cta-call {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  color: var(--gold);
+  border: 1px solid rgba(201, 169, 98, 0.6);
+  padding: 0.95rem 1.5rem;
+  border-radius: 999px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.hero-cta-call:hover { background: rgba(201, 169, 98, 0.1); color: var(--gold-light); }
+.hero-cta-call svg { width: 18px; height: 18px; fill: currentColor; }
+
+.wa-fab {
+  position: fixed;
+  bottom: 22px;
+  right: 22px;
+  z-index: 9998;
+  width: 62px;
+  height: 62px;
+  background: #25D366;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  animation: waPulse 2.4s ease-out infinite;
+  text-decoration: none;
+  color: #fff;
+  transition: transform 0.15s ease;
+}
+.wa-fab svg { width: 32px; height: 32px; fill: #fff; }
+.wa-fab:hover {
+  transform: scale(1.08);
+  color: #fff;
+  animation-play-state: paused;
+}
+.wa-fab-label {
+  position: absolute;
+  right: 74px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #fff;
+  color: #075E54;
+  padding: 0.55rem 0.95rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.wa-fab:hover .wa-fab-label { opacity: 1; }
+
+@keyframes waPulse {
+  0%   { box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), 0 0 0 0 rgba(37, 211, 102, 0.55); }
+  70%  { box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), 0 0 0 18px rgba(37, 211, 102, 0); }
+  100% { box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+
+/* Mid-page anchor CTA — shows between search controls and results */
+.mid-cta {
+  background: linear-gradient(135deg, rgba(37, 211, 102, 0.1), rgba(37, 211, 102, 0.04));
+  border: 1px solid rgba(37, 211, 102, 0.3);
+  border-radius: 14px;
+  padding: 1.1rem 1.4rem;
+  margin: 1.25rem 0 1.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.mid-cta-text { color: var(--text); font-size: 0.95rem; line-height: 1.45; }
+.mid-cta-text strong { color: #25D366; }
+.mid-cta .hero-cta-wa { margin-top: 0; padding: 0.7rem 1.25rem; font-size: 0.9rem; }
 
 /* ========================================
    SEARCH CONTROLS
@@ -886,6 +1016,15 @@ a { color: inherit; }
   .numbers-grid { grid-template-columns: 1fr; }
 
   .hero { padding: 6.5rem 1.25rem 1.5rem; }
+
+  .hero-cta-wa { font-size: 0.95rem; padding: 0.85rem 1.5rem; }
+  .hero-cta-call { font-size: 0.9rem; padding: 0.85rem 1.25rem; }
+  .wa-fab { width: 58px; height: 58px; bottom: 18px; right: 18px; }
+  .wa-fab svg { width: 30px; height: 30px; }
+  .wa-fab-label { display: none; }
+
+  .mid-cta { flex-direction: column; align-items: stretch; text-align: center; }
+  .mid-cta .hero-cta-wa { justify-content: center; }
 }
 
 @media (max-width: 480px) {
@@ -922,6 +1061,16 @@ a { color: inherit; }
 <section class="hero">
   <h1>Choose Your <span>Perfect Number</span></h1>
   <p class="hero-sub">Browse available Etisalat VIP numbers. Search by digits, filter by category, and inquire instantly via WhatsApp.</p>
+  <div class="hero-cta-row">
+    <a class="hero-cta-wa" href="https://wa.me/971566999377?text=Hi%2C%20I%E2%80%99m%20looking%20for%20an%20Etisalat%20VIP%20number.%20Can%20you%20share%20available%20options%3F" target="_blank" rel="noopener noreferrer" data-cta="hero_wa" aria-label="Chat on WhatsApp now">
+      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Chat on WhatsApp
+    </a>
+    <a class="hero-cta-call" href="tel:+971566999377" data-cta="hero_call" aria-label="Call us now">
+      <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+      Call
+    </a>
+  </div>
 </section>
 
 <!-- ============ SEARCH & RESULTS ============ -->
@@ -971,6 +1120,18 @@ a { color: inherit; }
         <button class="cat-tab" data-category="silver" role="tab" aria-selected="false">Silver</button>
         <button class="cat-tab" data-category="gold" role="tab" aria-selected="false">Gold</button>
       </div>
+    </div>
+
+    <!-- Mid-page WhatsApp CTA — shown to users even before any number matches load -->
+    <div class="mid-cta">
+      <div class="mid-cta-text">
+        <strong>Can&rsquo;t find your perfect number?</strong><br>
+        Tell us what you want &mdash; we have 2500+ more numbers not shown here.
+      </div>
+      <a class="hero-cta-wa" href="https://wa.me/971566999377?text=Hi%2C%20I%E2%80%99m%20looking%20for%20a%20specific%20Etisalat%20VIP%20number%20pattern.%20Can%20you%20send%20me%20options%3F" target="_blank" rel="noopener noreferrer" data-cta="mid_page" aria-label="Chat with sales on WhatsApp">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Request Custom Numbers
+      </a>
     </div>
 
     <!-- Results Header -->
@@ -1172,21 +1333,123 @@ function fetchAndCacheShopName(refCode) {
 }
 
 function createLeadToken() {
-  return 'L-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8).toUpperCase();
+  // Short, human-readable token: 7 uppercase alphanumeric chars
+  return Math.random().toString(36).slice(2, 6).toUpperCase() + Date.now().toString(36).slice(-3).toUpperCase();
 }
 
-function buildTrackedMessage(baseMessage, leadToken) {
-  if (!trackingContext.refCode) return baseMessage;
-  var shopLabel = trackingContext.shopName || readStoredShopName();
-  var attribution = '\n\n--- Lead Forwarded from ---';
-  if (shopLabel) attribution += '\nShop: ' + shopLabel;
-  attribution += '\nRef: ' + trackingContext.refCode;
-  attribution += '\nLead Token: ' + leadToken;
-  return baseMessage + attribution;
+/* ========================================
+   TRAFFIC SOURCE ATTRIBUTION
+   ========================================
+   Classifies every visitor as Organic (O) or Performance Marketing (PM),
+   then by channel. Last-touch per session, persisted in sessionStorage so
+   Ref code is stable across page navigations within a visit.
+
+   Detection priority:
+     1. Paid click IDs (fbclid, gclid, ttclid) → PM-<CHANNEL>
+     2. utm_source → PM-<CHANNEL> or O-<CHANNEL>
+     3. document.referrer hostname → O-SEO / O-AI / O-SOCIAL / O-REFERRAL
+     4. fallback → O-DIRECT
+*/
+function extractCampaignTag(utmCampaign) {
+  var clean = String(utmCampaign || '').replace(/[^a-zA-Z0-9]/g, '');
+  if (!clean) return '';
+  // Numeric-only = likely Meta/Google campaign ID -> last 6 chars
+  if (/^\d+$/.test(clean)) return clean.slice(-6).toUpperCase();
+  // Named campaign -> first 8 chars
+  return clean.slice(0, 8).toUpperCase();
 }
 
-function buildWhatsAppHref(baseMessage, leadToken) {
-  var trackedMessage = buildTrackedMessage(baseMessage, leadToken);
+function detectTrafficSource() {
+  var p;
+  try { p = new URLSearchParams(window.location.search || ''); } catch (e) { p = null; }
+  function q(k) { try { return p && p.get(k) || ''; } catch (e) { return ''; } }
+
+  var campaign = extractCampaignTag(q('utm_campaign'));
+  var utmSource = q('utm_source').toLowerCase();
+
+  if (q('fbclid') || /^(facebook|instagram|fb|ig|meta)$/.test(utmSource))
+    return { cls: 'PM', ch: 'FB', campaign: campaign };
+  if (q('gclid') || q('gbraid') || q('wbraid') || /^(google|adwords|gads)$/.test(utmSource))
+    return { cls: 'PM', ch: 'GOOG', campaign: campaign };
+  if (q('ttclid') || /^(tiktok|tt)$/.test(utmSource))
+    return { cls: 'PM', ch: 'TIKTOK', campaign: campaign };
+  if (q('msclkid') || /^(bing|microsoft)$/.test(utmSource))
+    return { cls: 'PM', ch: 'BING', campaign: campaign };
+  if (utmSource && !/^(organic|direct|referral|email|rss)$/.test(utmSource))
+    return { cls: 'PM', ch: utmSource.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8), campaign: campaign };
+
+  var refHost = '';
+  try { refHost = (new URL(document.referrer || '')).hostname.toLowerCase(); } catch (e) {}
+  if (!refHost || refHost === window.location.hostname) return { cls: 'O', ch: 'DIRECT', campaign: '' };
+
+  if (/(^|\.)google\./.test(refHost))     return { cls: 'O', ch: 'SEO', campaign: 'GOOGLE' };
+  if (/(^|\.)bing\./.test(refHost))       return { cls: 'O', ch: 'SEO', campaign: 'BING' };
+  if (/(^|\.)duckduckgo\./.test(refHost)) return { cls: 'O', ch: 'SEO', campaign: 'DDG' };
+  if (/(^|\.)yahoo\./.test(refHost))      return { cls: 'O', ch: 'SEO', campaign: 'YAHOO' };
+  if (/(^|\.)yandex\./.test(refHost))     return { cls: 'O', ch: 'SEO', campaign: 'YANDEX' };
+
+  if (/chatgpt\.com|openai\.com/.test(refHost))      return { cls: 'O', ch: 'AI', campaign: 'CHATGPT' };
+  if (/perplexity\.ai/.test(refHost))                return { cls: 'O', ch: 'AI', campaign: 'PPLX' };
+  if (/claude\.ai|anthropic\.com/.test(refHost))     return { cls: 'O', ch: 'AI', campaign: 'CLAUDE' };
+  if (/copilot\.microsoft\.com|bing\.com\/chat/.test(refHost)) return { cls: 'O', ch: 'AI', campaign: 'COPILOT' };
+  if (/gemini\.google\.com|bard\.google\.com/.test(refHost))   return { cls: 'O', ch: 'AI', campaign: 'GEMINI' };
+
+  if (/facebook\.com|fb\.com/.test(refHost))   return { cls: 'O', ch: 'SOCIAL', campaign: 'FB' };
+  if (/instagram\.com/.test(refHost))          return { cls: 'O', ch: 'SOCIAL', campaign: 'IG' };
+  if (/linkedin\.com/.test(refHost))           return { cls: 'O', ch: 'SOCIAL', campaign: 'LNKD' };
+  if (/(^|\.)x\.com|twitter\.com/.test(refHost)) return { cls: 'O', ch: 'SOCIAL', campaign: 'X' };
+  if (/tiktok\.com/.test(refHost))             return { cls: 'O', ch: 'SOCIAL', campaign: 'TIKTOK' };
+  if (/reddit\.com/.test(refHost))             return { cls: 'O', ch: 'SOCIAL', campaign: 'REDDIT' };
+  if (/youtube\.com|youtu\.be/.test(refHost))  return { cls: 'O', ch: 'SOCIAL', campaign: 'YT' };
+
+  return { cls: 'O', ch: 'REFERRAL', campaign: refHost.replace(/^www\./, '').split('.')[0].toUpperCase().slice(0, 10) };
+}
+
+function getTrafficSource() {
+  try {
+    var cached = sessionStorage.getItem('gn_traffic_src');
+    if (cached) {
+      var parsed = JSON.parse(cached);
+      if (parsed && parsed.cls) return parsed;
+    }
+  } catch (e) {}
+  var src = detectTrafficSource();
+  try { sessionStorage.setItem('gn_traffic_src', JSON.stringify(src)); } catch (e) {}
+  return src;
+}
+
+var trafficSource = getTrafficSource();
+
+/* Canonical Ref code (v1) — always 7 dash-separated fields.
+   GN1 - <CLS> - <CH> - <CAMPAIGN> - <PARTNER> - <SOURCE> - <TOKEN>
+     GN1      version prefix — future format changes bump to GN2
+     CLS      O | PM
+     CH       FB | GOOG | TIKTOK | BING | SEO | AI | SOCIAL | DIRECT | REFERRAL | <OTHER>
+     CAMPAIGN last-6 of numeric campaign ID / first-8 of named campaign / SEO engine brand / AI brand / social brand / X
+     PARTNER  SHOP code from ?ref= QR/link, or X
+     SOURCE   CTA origin: HERO, MIDPAGE, FAB, FOOTER, CARD<DIGITS>
+     TOKEN    7-char uppercase unique id
+
+   Parse in Python:  [ver, cls, ch, campaign, partner, source, token] = ref.split('-')
+*/
+function buildRefCode(source, leadToken) {
+  var cls = trafficSource.cls || 'O';
+  var ch = trafficSource.ch || 'DIRECT';
+  var campaign = trafficSource.campaign || 'X';
+  var partner = 'X';
+  if (trackingContext && trackingContext.refCode) {
+    partner = trackingContext.refCode.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 15) || 'X';
+  }
+  var cleanSrc = String(source || 'CTA').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 20) || 'CTA';
+  return ['GN1', cls, ch, campaign, partner, cleanSrc, leadToken].join('-');
+}
+
+function buildTrackedMessage(baseMessage, source, leadToken) {
+  return baseMessage + '\n\nRef: ' + buildRefCode(source, leadToken);
+}
+
+function buildWhatsAppHref(baseMessage, source, leadToken) {
+  var trackedMessage = buildTrackedMessage(baseMessage, source, leadToken);
   return 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(trackedMessage);
 }
 
@@ -1534,7 +1797,8 @@ function fireWhatsAppClick(link) {
   var num = link.getAttribute('data-num');
   var cat = link.getAttribute('data-cat');
   var baseMsg = link.getAttribute('data-message') || 'Hi, I\'m looking for an Etisalat VIP number. Can you share available options?';
-  var trackedHref = buildWhatsAppHref(baseMsg, leadToken);
+  var source = num ? ('CARD-' + String(num).replace(/\D/g, '')) : 'CARD';
+  var trackedHref = buildWhatsAppHref(baseMsg, source, leadToken);
   link.setAttribute('href', trackedHref);
 
   if (typeof gtag === 'function') {
@@ -1581,35 +1845,97 @@ function fireWhatsAppClick(link) {
 }
 
 /* ========================================
+   GLOBAL WA CLICK TRACKING (hero, FAB, mid-CTA, footer, error/empty states)
+   ========================================
+   The .btn-wa handler above fires with number_id/number_category for card
+   clicks. This listener catches every OTHER wa.me click so none leak without
+   (a) a Meta Contact / GA4 contact event, and
+   (b) the Ref: GN-<SOURCE>-<TOKEN> suffix Bilal reads in WhatsApp.
+   Must live outside the .btn-wa handler to avoid double-firing. */
+document.addEventListener('click', function(e) {
+  var link = e.target.closest('a[href*="wa.me"]');
+  if (!link) return;
+  if (link.classList.contains('btn-wa')) return;
+
+  var leadToken = createLeadToken();
+  var ctx = link.getAttribute('data-cta') || (link.textContent || '').trim().substring(0, 40) || 'cta';
+
+  // Rewrite href to append Ref suffix so Bilal can trace every message to source
+  try {
+    var href = link.getAttribute('href') || '';
+    var qIdx = href.indexOf('?text=');
+    var base = qIdx >= 0 ? href.substring(0, qIdx) : href;
+    var existing = qIdx >= 0 ? decodeURIComponent(href.substring(qIdx + 6)) : 'Hi, I\'m interested in an Etisalat VIP number from goldennummbers.com';
+    var tracked = buildTrackedMessage(existing, ctx, leadToken);
+    link.setAttribute('href', base + '?text=' + encodeURIComponent(tracked));
+  } catch (err) {}
+
+  if (typeof fbq === 'function') {
+    fbq('track', 'Contact', {
+      content_name: 'WhatsApp Click',
+      content_category: ctx,
+      value: 500,
+      currency: 'AED'
+    }, { eventID: leadToken });
+  }
+  if (typeof ttq !== 'undefined' && ttq.track) {
+    ttq.track('Contact', {
+      content_name: 'WhatsApp Click',
+      content_category: ctx,
+      value: 500,
+      currency: 'AED'
+    });
+  }
+  if (typeof gtag === 'function') {
+    gtag('event', 'contact', {
+      cta_context: ctx,
+      page_context: '/choose-number/',
+      event_id: leadToken,
+      lead_token: leadToken
+    });
+  }
+});
+
+/* ========================================
+   CALL TRACKING (hero tel: click)
+   ======================================== */
+document.addEventListener('click', function(e) {
+  var tel = e.target.closest('a[href^="tel:"]');
+  if (!tel) return;
+  var eid = 'e_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+  var ctx = tel.getAttribute('data-cta') || 'call';
+  if (typeof fbq === 'function') {
+    fbq('track', 'Contact', {
+      content_name: 'Phone Call Click',
+      content_category: ctx,
+      value: 500,
+      currency: 'AED'
+    }, { eventID: eid });
+  }
+  if (typeof gtag === 'function') {
+    gtag('event', 'phone_call', {
+      cta_context: ctx,
+      page_context: '/choose-number/',
+      event_id: eid
+    });
+  }
+});
+
+/* ========================================
    INIT
    ======================================== */
 loadNumbers();
 </script>
 
-<!--Start of Tawk.to Script — 2/10 interference mode -->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-var _tawkShown = false;
+<!-- Floating WhatsApp FAB — always-visible primary CTA for ad-landing traffic -->
+<a class="wa-fab" href="https://wa.me/971566999377?text=Hi%2C%20I%E2%80%99m%20looking%20for%20an%20Etisalat%20VIP%20number.%20Can%20you%20share%20available%20options%3F" target="_blank" rel="noopener noreferrer" data-cta="floating_fab" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  <span class="wa-fab-label">Chat on WhatsApp</span>
+</a>
 
-// Never auto-pop. On mobile, hide widget until user earns it (90s + 50% scroll).
-Tawk_API.onLoad = function(){
-  if (sessionStorage.getItem('tawk_dismissed')) { Tawk_API.hideWidget(); return; }
-  var isMobile = window.innerWidth < 768;
-  if (isMobile) {
-    Tawk_API.hideWidget();
-    var timeOk = false, scrollOk = false;
-    setTimeout(function(){ timeOk = true; if (scrollOk && !_tawkShown) { _tawkShown = true; Tawk_API.showWidget(); } }, 90000);
-    window.addEventListener('scroll', function(){
-      if (_tawkShown) return;
-      var scrollable = document.body.scrollHeight - window.innerHeight;
-      var scrollPct = scrollable > 0 ? window.scrollY / scrollable : 1;
-      if (scrollPct > 0.5) { scrollOk = true; if (timeOk) { _tawkShown = true; Tawk_API.showWidget(); } }
-    }, {passive:true});
-  }
-};
-Tawk_API.onChatMinimized = function(){ sessionStorage.setItem('tawk_dismissed','1'); Tawk_API.hideWidget(); };
-</script>
-<script async src='https://embed.tawk.to/699eef3642971f1c3a85ef9a/1jiadcrg7' charset='UTF-8' crossorigin='*'></script>
-<!--End of Tawk.to Script-->
+<!-- Tawk.to REMOVED on ad-landing page 2026-04-24: competed with WA FAB
+     for bottom-right position and diluted funnel. Users arriving from paid
+     LINK_CLICKS campaigns should go straight to WhatsApp (highest close rate).
+     If re-enabling, coordinate position via Tawk_API.setAttributes offset. -->
 </body>
 </html>

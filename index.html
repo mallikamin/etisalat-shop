@@ -3066,12 +3066,17 @@
         text += '\n*Message:* ' + message;
       }
 
+      // Append canonical Ref: suffix so inbound WA message can be mapped to source (O vs PM + channel)
+      var formToken = (window.GN && window.GN.createLeadTokenShort) ? window.GN.createLeadTokenShort() : ('T' + Date.now().toString(36).slice(-6).toUpperCase());
+      var ref = (window.GN && window.GN.buildRefCode) ? window.GN.buildRefCode('FORM', formToken) : ('GN1-O-DIRECT-X-X-FORM-' + formToken);
+      text += '\n\nRef: ' + ref;
+
       var url = 'https://wa.me/971566999377?text=' + encodeURIComponent(text);
       window.open(url, '_blank');
 
       if (window.GN) window.GN.setUserIdentity({ name: name, phone: phone, email: email, country: 'ae' });
 
-      var eid = genEventId();
+      var eid = formToken;
       if (typeof fbq === 'function') {
         fbq('track', 'Contact', {
           content_name: 'WhatsApp Form Send',
@@ -3092,37 +3097,41 @@
     }
   </script>
 
-  <!-- WhatsApp Click Tracking — fires FB Pixel + GA4 events on every wa.me click -->
+  <!-- WhatsApp Click Tracking — fires FB Pixel + GA4 events AND rewrites href with Ref: GN1-... -->
   <script>
     document.addEventListener('click', function(e) {
       var link = e.target.closest('a[href*="wa.me"]');
-      if (link) {
-        var eid = (typeof genEventId === 'function') ? genEventId() : ('wa_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8));
-        var ctx = link.textContent.trim().substring(0, 50) || 'cta';
-        var dest = link.href;
-        if (typeof fbq === 'function') {
-          fbq('track', 'Contact', {
-            content_name: 'WhatsApp Click',
-            content_category: ctx,
-            value: 500,
-            currency: 'AED'
-          }, {eventID: eid});
-        }
-        if (typeof ttq !== 'undefined') {
-          ttq.track('Contact', {
-            content_name: 'WhatsApp Click',
-            content_category: ctx,
-            value: 500,
-            currency: 'AED'
-          });
-        }
-        if (typeof gtag === 'function') {
-          gtag('event', 'contact', {
-            cta_context: ctx,
-            destination_url: dest,
-            event_id: eid
-          });
-        }
+      if (!link) return;
+      var ctx = link.getAttribute('data-cta') || link.textContent.trim().substring(0, 40) || 'cta';
+      // GN.rewriteWaHref appends Ref: GN1-<CLS>-<CH>-<CAMPAIGN>-<PARTNER>-<SOURCE>-<TOKEN>
+      // to the wa.me text param and returns the token for pixel dedup.
+      var eid = (window.GN && window.GN.rewriteWaHref)
+        ? window.GN.rewriteWaHref(link, ctx)
+        : ((typeof genEventId === 'function') ? genEventId() : ('wa_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8)));
+      var dest = link.getAttribute('href');
+      if (typeof fbq === 'function') {
+        fbq('track', 'Contact', {
+          content_name: 'WhatsApp Click',
+          content_category: ctx,
+          value: 500,
+          currency: 'AED'
+        }, {eventID: eid});
+      }
+      if (typeof ttq !== 'undefined') {
+        ttq.track('Contact', {
+          content_name: 'WhatsApp Click',
+          content_category: ctx,
+          value: 500,
+          currency: 'AED'
+        });
+      }
+      if (typeof gtag === 'function') {
+        gtag('event', 'contact', {
+          cta_context: ctx,
+          destination_url: dest,
+          event_id: eid,
+          lead_token: eid
+        });
       }
     });
   </script>

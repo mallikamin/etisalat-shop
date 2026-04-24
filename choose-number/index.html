@@ -1338,6 +1338,42 @@ function createLeadToken() {
 }
 
 /* ========================================
+   TIKTOK CAPI FORWARDER (server-side mirror)
+   ========================================
+   POSTs events to the Cloudflare Pages Function at /api/tiktok-event which
+   proxies them to TikTok Events API. Same event_id as the client ttq.track()
+   call → TikTok dedupes the pair. Restores ~15% of events lost to ad-blockers.
+*/
+function forwardToTikTokCapi(eventName, eventId, source, properties) {
+  try {
+    if (typeof fetch !== 'function') return;
+    fetch('/api/tiktok-event', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        event: eventName,
+        event_id: eventId,
+        page_url: location.href,
+        page_referrer: document.referrer,
+        properties: properties || {},
+      }),
+      keepalive: true,
+    }).catch(function () {});
+  } catch (e) {}
+}
+
+// Page-load ViewContent server-side mirror
+(function () {
+  var eid = 'e_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+  forwardToTikTokCapi('ViewContent', eid, 'pageload', {
+    content_name: document.title.slice(0, 80),
+    content_category: '/choose-number/',
+    content_type: 'product_group',
+    content_id: '/choose-number/',
+  });
+})();
+
+/* ========================================
    TRAFFIC SOURCE ATTRIBUTION
    ========================================
    Classifies every visitor as Organic (O) or Performance Marketing (PM),
@@ -1868,6 +1904,13 @@ function fireWhatsAppClick(link) {
       currency: 'AED'
     });
   }
+
+  // Server-side CAPI mirror — same event_id so TikTok dedupes client + server
+  var capiProps = { content_name: 'Number Inquiry', content_category: cat, content_id: num, value: cat === 'Gold' ? 500 : 188, currency: 'AED' };
+  forwardToTikTokCapi('AddToWishlist', leadToken, 'CARD', capiProps);
+  forwardToTikTokCapi('AddToCart', leadToken, 'CARD', capiProps);
+  forwardToTikTokCapi('InitiateCheckout', leadToken, 'CARD', capiProps);
+  forwardToTikTokCapi('Contact', leadToken, 'CARD', capiProps);
 }
 
 /* ========================================
@@ -1934,6 +1977,12 @@ document.addEventListener('click', function(e) {
       lead_token: leadToken
     });
   }
+
+  // Server-side CAPI mirror
+  var capiProps = { content_name: 'WhatsApp Click', content_category: ctx, value: 500, currency: 'AED' };
+  forwardToTikTokCapi('AddToCart', leadToken, ctx, capiProps);
+  forwardToTikTokCapi('InitiateCheckout', leadToken, ctx, { content_name: 'WhatsApp Conversation Initiated', value: 500, currency: 'AED' });
+  forwardToTikTokCapi('Contact', leadToken, ctx, capiProps);
 });
 
 /* ========================================

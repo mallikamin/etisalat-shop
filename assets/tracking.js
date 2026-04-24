@@ -140,10 +140,35 @@
     ].join('-');
   }
 
+  // Server-side CAPI forward — POSTs the same event to our Cloudflare Pages
+  // Function at /api/tiktok-event, which hashes PII and forwards to TikTok
+  // Events API. TikTok dedupes with the client pixel via event_id.
+  // Fire-and-forget — never blocks user navigation.
+  function forwardToTikTokCapi(eventName, eventId, source, properties) {
+    try {
+      if (typeof fetch !== 'function') return;
+      var payload = {
+        event: eventName,
+        event_id: eventId,
+        page_url: (typeof location !== 'undefined') ? location.href : '',
+        page_referrer: (typeof document !== 'undefined') ? document.referrer : '',
+        properties: properties || {},
+      };
+      // keepalive=true so the request survives page unload (critical for
+      // WA clicks that immediately navigate away)
+      fetch('/api/tiktok-event', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        keepalive: true,
+      }).catch(function () {});
+    } catch (e) {}
+  }
+
   // Rewrites an <a href="wa.me/..."> link to append the Ref: suffix before nav.
   // Also fires TikTok vertical funnel events (AddToCart + InitiateCheckout) so
-  // the pixel reports all 6 funnel steps TikTok optimizer expects. These use the
-  // same eventID as the Contact event for dedup on server side later.
+  // the pixel reports all 6 funnel steps TikTok optimizer expects. Same event_id
+  // is used for the server-side CAPI call so TikTok dedupes the pair.
   // Returns the lead token so the caller can use it as eventID for pixel dedup.
   function rewriteWaHref(link, sourceCtx) {
     var leadToken = createLeadTokenShort();
@@ -159,24 +184,27 @@
       link.setAttribute('href', base + '?text=' + encodeURIComponent(tracked));
     } catch (e) {}
 
-    // Fire TikTok vertical funnel events — closes the "missing events" pixel gap
+    var valueProps = {
+      content_name: 'WA CTA Click',
+      content_category: source,
+      content_type: 'product',
+      value: PIXEL_VALUE,
+      currency: CURRENCY
+    };
+
+    // Client-side pixel events (visible in browser)
     if (typeof ttq !== 'undefined' && ttq.track) {
       try {
-        ttq.track('AddToCart', {
-          content_name: 'WA CTA Click',
-          content_category: source,
-          content_type: 'product',
-          value: PIXEL_VALUE,
-          currency: CURRENCY
-        });
-        ttq.track('InitiateCheckout', {
-          content_name: 'WhatsApp Conversation Initiated',
-          content_category: source,
-          value: PIXEL_VALUE,
-          currency: CURRENCY
-        });
+        ttq.track('AddToCart', valueProps);
+        ttq.track('InitiateCheckout', { content_name: 'WhatsApp Conversation Initiated', content_category: source, value: PIXEL_VALUE, currency: CURRENCY });
       } catch (e) {}
     }
+
+    // Server-side CAPI mirror for ad-blocker resilience + 15% CPA uplift
+    forwardToTikTokCapi('AddToCart', leadToken, source, valueProps);
+    forwardToTikTokCapi('InitiateCheckout', leadToken, source, { content_name: 'WhatsApp Conversation Initiated', value: PIXEL_VALUE, currency: CURRENCY });
+    forwardToTikTokCapi('Contact', leadToken, source, { content_name: 'WhatsApp Click', value: PIXEL_VALUE, currency: CURRENCY });
+
     return leadToken;
   }
 
@@ -345,8 +373,31 @@
     getTrafficSource: getTrafficSource,
     buildRefCode: buildRefCode,
     rewriteWaHref: rewriteWaHref,
+    forwardToTikTokCapi: forwardToTikTokCapi,
     VALUE: PIXEL_VALUE,
     CURRENCY: CURRENCY,
     PIXEL_ID: PIXEL_ID
   };
+
+  // Fire server-side ViewContent on page load so TikTok sees it even when
+  // ad-blockers nuke the client pixel. Uses a fresh event_id (different
+  // from any click events) since ViewContent is a standalone signal.
+  function fireViewContentCapi() {
+    var eid = genEventId();
+    var title = (typeof document !== 'undefined' && document.title) ? document.title.slice(0, 80) : '';
+    var path = (typeof location !== 'undefined') ? location.pathname : '';
+    forwardToTikTokCapi('ViewContent', eid, 'pageload', {
+      content_name: title,
+      content_category: path,
+      content_type: 'product_group',
+      content_id: path,
+    });
+  }
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      setTimeout(fireViewContentCapi, 100);
+    } else {
+      document.addEventListener('DOMContentLoaded', fireViewContentCapi);
+    }
+  }
 })();

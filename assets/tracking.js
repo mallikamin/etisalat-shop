@@ -141,6 +141,9 @@
   }
 
   // Rewrites an <a href="wa.me/..."> link to append the Ref: suffix before nav.
+  // Also fires TikTok vertical funnel events (AddToCart + InitiateCheckout) so
+  // the pixel reports all 6 funnel steps TikTok optimizer expects. These use the
+  // same eventID as the Contact event for dedup on server side later.
   // Returns the lead token so the caller can use it as eventID for pixel dedup.
   function rewriteWaHref(link, sourceCtx) {
     var leadToken = createLeadTokenShort();
@@ -155,6 +158,25 @@
       var tracked = existing + '\n\nRef: ' + buildRefCode(source, leadToken);
       link.setAttribute('href', base + '?text=' + encodeURIComponent(tracked));
     } catch (e) {}
+
+    // Fire TikTok vertical funnel events — closes the "missing events" pixel gap
+    if (typeof ttq !== 'undefined' && ttq.track) {
+      try {
+        ttq.track('AddToCart', {
+          content_name: 'WA CTA Click',
+          content_category: source,
+          content_type: 'product',
+          value: PIXEL_VALUE,
+          currency: CURRENCY
+        });
+        ttq.track('InitiateCheckout', {
+          content_name: 'WhatsApp Conversation Initiated',
+          content_category: source,
+          value: PIXEL_VALUE,
+          currency: CURRENCY
+        });
+      } catch (e) {}
+    }
     return leadToken;
   }
 

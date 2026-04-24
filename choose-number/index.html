@@ -1736,11 +1736,20 @@ searchInput.addEventListener('input', function() {
   searchTimer = setTimeout(function() {
     applyFilters();
 
-    if (searchQuery.length >= 3 && typeof gtag === 'function') {
-      gtag('event', 'search', {
-        search_term: searchQuery,
-        event_category: 'choose_number'
-      });
+    if (searchQuery.length >= 3) {
+      if (typeof gtag === 'function') {
+        gtag('event', 'search', {
+          search_term: searchQuery,
+          event_category: 'choose_number'
+        });
+      }
+      // TikTok Search event — one of the 6 vertical funnel events TikTok expects
+      if (typeof ttq !== 'undefined' && ttq.track) {
+        ttq.track('Search', {
+          query: searchQuery,
+          content_category: activeCategory
+        });
+      }
     }
   }, 300);
 });
@@ -1821,8 +1830,10 @@ function fireWhatsAppClick(link) {
     }, {eventID: leadToken});
   }
 
-  // TikTok: fire AddToWishlist (intent signal) + Contact (action). Independent of fbq so ad-blockers
-  // that kill Meta don't also kill TikTok tracking.
+  // TikTok: full vertical funnel — AddToWishlist (browse) + AddToCart (select)
+  // + InitiateCheckout (start conversion) + Contact (conversion).
+  // Fires all 6 TikTok expected funnel events; closes the "missing vertical funnel
+  // events" diagnostic flagged in TikTok Ads Manager.
   if (typeof ttq !== 'undefined') {
     var numValue = cat === 'Gold' ? 500 : 188;
     ttq.track('AddToWishlist', {
@@ -1830,6 +1841,21 @@ function fireWhatsAppClick(link) {
       content_name: num,
       content_category: cat,
       content_type: 'product',
+      value: numValue,
+      currency: 'AED'
+    });
+    ttq.track('AddToCart', {
+      content_id: num,
+      content_name: num,
+      content_category: cat,
+      content_type: 'product',
+      value: numValue,
+      currency: 'AED'
+    });
+    ttq.track('InitiateCheckout', {
+      content_id: num,
+      content_name: 'WhatsApp Inquiry Started',
+      content_category: cat,
       value: numValue,
       currency: 'AED'
     });
@@ -1879,6 +1905,20 @@ document.addEventListener('click', function(e) {
     }, { eventID: leadToken });
   }
   if (typeof ttq !== 'undefined' && ttq.track) {
+    // Fire full vertical funnel so TikTok sees all 6 stages
+    ttq.track('AddToCart', {
+      content_name: 'WA CTA Click',
+      content_category: ctx,
+      content_type: 'product',
+      value: 500,
+      currency: 'AED'
+    });
+    ttq.track('InitiateCheckout', {
+      content_name: 'WhatsApp Conversation Initiated',
+      content_category: ctx,
+      value: 500,
+      currency: 'AED'
+    });
     ttq.track('Contact', {
       content_name: 'WhatsApp Click',
       content_category: ctx,

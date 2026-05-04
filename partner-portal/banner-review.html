@@ -164,7 +164,7 @@
 </div>
 <div class="toolbar" style="margin-top:-16px">
   <label>Google Review URL:</label>
-  <input type="text" id="reviewUrl" value="https://g.page/r/etisalat-shop/review" placeholder="Paste your Google review link" oninput="regenerateQR()">
+  <input type="text" id="reviewUrl" value="https://g.page/r/CW4kdlymGKSiEAE/review" placeholder="Paste your Google review link" oninput="regenerateQR()">
 </div>
 
 <div class="card" id="card">
@@ -184,7 +184,7 @@
 
   <div class="qr-wrap" id="qrCode"></div>
 
-  <div class="card-url" id="urlLabel">g.page/r/etisalat-shop/review</div>
+  <div class="card-url" id="urlLabel">Scan to review on Google</div>
 
   <div class="card-footer">Thank you for your feedback!</div>
 </div>
@@ -195,7 +195,7 @@ var currentSize = 'medium';
 
 function renderQR(size) {
   var el = document.getElementById('qrCode');
-  var url = document.getElementById('reviewUrl').value.trim() || 'https://g.page/r/etisalat-shop/review';
+  var url = document.getElementById('reviewUrl').value.trim() || 'https://g.page/r/CW4kdlymGKSiEAE/review';
   el.innerHTML = '';
   new QRCode(el, {
     text: url,

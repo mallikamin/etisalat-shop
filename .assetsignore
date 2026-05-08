@@ -67,6 +67,20 @@ DOMAIN_MIGRATION_*.md
 CHECKPOINT_*.md
 PAUSE_CHECKPOINT_*.md
 PROBIZ.docx
+# Defense-in-depth — any pipeline / CRM / session-notes / playbook / readme markdown
+PIPELINE_*.md
+*_PIPELINE.md
+*CRM*.md
+SESSION_NOTES_*.md
+PLAYBOOK*.md
+README*.md
+GOTCHAS*.md
+CREDENTIALS*.md
+TEST-LOG-*.md
+INCIDENT_*.md
+TIKTOK_*.md
+*.bak
+*.bak_*
 
 # --- Build / generation scripts (not meant to be downloadable) ---
 generate_ads.py

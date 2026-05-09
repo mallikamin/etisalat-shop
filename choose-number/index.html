@@ -708,6 +708,12 @@ a { color: inherit; }
 }
 
 .number-card.gold-card { border-left-color: var(--gold); }
+.number-card.platinum-card {
+  border-left-color: var(--platinum);
+  border-left-width: 4px;
+  background: linear-gradient(180deg, rgba(229, 228, 226, 0.04) 0%, var(--surface) 60%);
+}
+.number-card.platinum-card:hover { border-color: rgba(229, 228, 226, 0.4); }
 
 @keyframes deepLinkPulse {
   0%, 100% { box-shadow: 0 12px 40px rgba(0,0,0,0.3), 0 0 0 0 rgba(201, 169, 98, 0); }
@@ -756,6 +762,13 @@ a { color: inherit; }
   background: rgba(201, 169, 98, 0.12);
   color: var(--gold);
   border: 1px solid rgba(201, 169, 98, 0.25);
+}
+
+.badge-platinum {
+  background: rgba(229, 228, 226, 0.14);
+  color: var(--platinum);
+  border: 1px solid rgba(229, 228, 226, 0.35);
+  box-shadow: 0 0 8px rgba(229, 228, 226, 0.15);
 }
 
 .btn-wa {
@@ -826,6 +839,11 @@ a { color: inherit; }
   color: var(--gold);
 }
 
+.tier-icon.platinum-icon {
+  background: rgba(229, 228, 226, 0.15);
+  color: var(--platinum);
+}
+
 .tier-info h3 {
   font-family: var(--font-heading);
   font-size: 0.95rem;
@@ -835,6 +853,7 @@ a { color: inherit; }
 
 .tier-info h3.silver-text { color: var(--silver); }
 .tier-info h3.gold-text { color: var(--gold); }
+.tier-info h3.platinum-text { color: var(--platinum); }
 
 .tier-info p {
   color: var(--text-muted);
@@ -856,6 +875,7 @@ a { color: inherit; }
 
 .tier-price.silver-price { color: var(--silver); }
 .tier-price.gold-price { color: var(--gold); }
+.tier-price.platinum-price { color: var(--platinum); }
 
 .card-price {
   font-size: 0.85rem;
@@ -871,6 +891,7 @@ a { color: inherit; }
 
 .card-price.silver-card-price { color: var(--silver); }
 .card-price.gold-card-price { color: var(--gold); }
+.card-price.platinum-card-price { color: var(--platinum); }
 
 /* ========================================
    ERROR & EMPTY STATES
@@ -1111,6 +1132,16 @@ a { color: inherit; }
           <p>Ultra-premium vanity numbers. Included with Gold plan.</p>
         </div>
       </div>
+      <div class="tier-item">
+        <div class="tier-icon platinum-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <div class="tier-info">
+          <h3 class="platinum-text">Platinum</h3>
+          <div class="tier-price platinum-price">AED 1,000<span> · number</span></div>
+          <p>Hand-picked elite numbers. One-time fee, paired with any postpaid plan.</p>
+        </div>
+      </div>
     </div>
 
     <!-- Search Controls -->
@@ -1131,6 +1162,7 @@ a { color: inherit; }
         <button class="cat-tab active" data-category="all" role="tab" aria-selected="true">All Numbers</button>
         <button class="cat-tab" data-category="silver" role="tab" aria-selected="false">Silver</button>
         <button class="cat-tab" data-category="gold" role="tab" aria-selected="false">Gold</button>
+        <button class="cat-tab" data-category="platinum" role="tab" aria-selected="false">Platinum</button>
       </div>
     </div>
 
@@ -1673,6 +1705,7 @@ function parseCSV(csv) {
     var cat = category;
     if (catLower === 'gold') cat = 'Gold';
     else if (catLower === 'silver') cat = 'Silver';
+    else if (catLower === 'platinum') cat = 'Platinum';
     else continue; // Skip Silver Plus and any other categories
 
     // Use "With Zero" column for search and display (e.g. "0564970555")
@@ -1706,7 +1739,8 @@ function applyFilters() {
   if (activeCategory !== 'all') {
     var catMap = {
       'gold': 'Gold',
-      'silver': 'Silver'
+      'silver': 'Silver',
+      'platinum': 'Platinum'
     };
     var target = catMap[activeCategory];
     if (target) {
@@ -1782,7 +1816,7 @@ function attachCardViewContentObserver() {
         if (!msisdn || _viewedMsisdns[msisdn]) { _cardObserver.unobserve(card); continue; }
         _viewedMsisdns[msisdn] = true;
         var cat = card.getAttribute('data-cat') || 'Silver';
-        var v = cat === 'Gold' ? 500 : 188;
+        var v = cat === 'Platinum' ? 1000 : (cat === 'Gold' ? 500 : 188);
         try {
           fbq('track', 'ViewContent', {
             content_name: 'VIP Number Card',
@@ -1827,6 +1861,7 @@ function createCard(num) {
 
   var cardClass = 'number-card';
   if (num.category === 'Gold') cardClass += ' gold-card';
+  else if (num.category === 'Platinum') cardClass += ' platinum-card';
   card.className = cardClass;
   // Catalog match keys — MSISDN matches feed.xml g:id, with-zero matches deep-link ?n= param
   card.setAttribute('data-msisdn', num.msisdn || '');
@@ -1837,7 +1872,11 @@ function createCard(num) {
   var badgeClass = 'number-badge ';
   var priceClass = 'card-price ';
   var priceText = '';
-  if (num.category === 'Gold') {
+  if (num.category === 'Platinum') {
+    badgeClass += 'badge-platinum';
+    priceClass += 'platinum-card-price';
+    priceText = 'AED 1,000<span> · platinum number</span>';
+  } else if (num.category === 'Gold') {
     badgeClass += 'badge-gold';
     priceClass += 'gold-card-price';
     priceText = 'AED 500<span>/mo plan</span>';
@@ -1847,13 +1886,17 @@ function createCard(num) {
     priceText = 'AED 188<span>/mo plan</span>';
   }
 
+  var waMessage = num.category === 'Platinum'
+    ? 'Hi, I\'m interested in the Platinum number ' + num.formatted + ' (AED 1,000) from goldennummbers.com'
+    : 'Hi, I\'m interested in the ' + num.category + ' number ' + num.formatted + ' from goldennummbers.com';
+
   card.innerHTML =
     '<div class="card-top">' +
       '<span class="number-display">' + escapeHtml(num.formatted) + '</span>' +
       '<span class="' + badgeClass + '">' + escapeHtml(num.category) + '</span>' +
     '</div>' +
     '<div class="' + priceClass + '">' + priceText + '</div>' +
-    '<a class="btn-wa" href="https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent('Hi, I\'m interested in the ' + num.category + ' number ' + num.formatted + ' from goldennummbers.com') + '" target="_blank" rel="noopener noreferrer" data-message="' + escapeHtml('Hi, I\'m interested in the ' + num.category + ' number ' + num.formatted + ' from goldennummbers.com') + '" data-num="' + escapeHtml(num.formatted) + '" data-msisdn="' + escapeHtml(num.msisdn || '') + '" data-cat="' + escapeHtml(num.category) + '">' +
+    '<a class="btn-wa" href="https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(waMessage) + '" target="_blank" rel="noopener noreferrer" data-message="' + escapeHtml(waMessage) + '" data-num="' + escapeHtml(num.formatted) + '" data-msisdn="' + escapeHtml(num.msisdn || '') + '" data-cat="' + escapeHtml(num.category) + '">' +
       '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>' +
       'Inquire on WhatsApp' +
     '</a>';
@@ -1952,7 +1995,7 @@ function fireWhatsAppClick(link) {
   var source = num ? ('CARD-' + String(num).replace(/\D/g, '')) : 'CARD';
   var trackedHref = buildWhatsAppHref(baseMsg, source, leadToken);
   link.setAttribute('href', trackedHref);
-  var planValue = cat === 'Gold' ? 500 : 188;
+  var planValue = cat === 'Platinum' ? 1000 : (cat === 'Gold' ? 500 : 188);
 
   if (typeof gtag === 'function') {
     gtag('event', 'number_inquiry', {
@@ -1981,7 +2024,7 @@ function fireWhatsAppClick(link) {
   // Fires all 6 TikTok expected funnel events; closes the "missing vertical funnel
   // events" diagnostic flagged in TikTok Ads Manager.
   if (typeof ttq !== 'undefined') {
-    var numValue = cat === 'Gold' ? 500 : 188;
+    var numValue = cat === 'Platinum' ? 1000 : (cat === 'Gold' ? 500 : 188);
     ttq.track('AddToWishlist', {
       content_id: num,
       content_name: num,
@@ -2016,7 +2059,7 @@ function fireWhatsAppClick(link) {
   }
 
   // Server-side CAPI mirror — same event_id so TikTok dedupes client + server
-  var capiProps = { content_name: 'Number Inquiry', content_category: cat, content_id: num, value: cat === 'Gold' ? 500 : 188, currency: 'AED' };
+  var capiProps = { content_name: 'Number Inquiry', content_category: cat, content_id: num, value: planValue, currency: 'AED' };
   forwardToTikTokCapi('AddToWishlist', leadToken, 'CARD', capiProps);
   forwardToTikTokCapi('AddToCart', leadToken, 'CARD', capiProps);
   forwardToTikTokCapi('InitiateCheckout', leadToken, 'CARD', capiProps);

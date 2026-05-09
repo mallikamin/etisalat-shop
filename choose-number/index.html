@@ -1555,14 +1555,50 @@ function trackScanOnce(refCode) {
 }
 
 /* ========================================
-   CSV FETCH & PARSE
+   CSV FETCH & PARSE (with localStorage cache, 1h TTL)
+   - First paint: render from cache instantly if available, then refresh in
+     background. Without cache: show spinner, fetch normally.
+   - Cache key versioned (v2) — bump when parser/schema changes so old caches
+     get invalidated automatically.
    ======================================== */
+var NUMBERS_CACHE_KEY = 'gn_numbers_cache_v2';
+var NUMBERS_CACHE_TTL_MS = 60 * 60 * 1000;
+
+function readCachedNumbers() {
+  try {
+    var raw = localStorage.getItem(NUMBERS_CACHE_KEY);
+    if (!raw) return null;
+    var p = JSON.parse(raw);
+    if (!p || !p.ts || !Array.isArray(p.numbers)) return null;
+    if (Date.now() - p.ts > NUMBERS_CACHE_TTL_MS) return null;
+    return p.numbers;
+  } catch (e) { return null; }
+}
+
+function writeCachedNumbers(nums) {
+  try {
+    localStorage.setItem(NUMBERS_CACHE_KEY, JSON.stringify({ ts: Date.now(), numbers: nums }));
+  } catch (e) {} // quota exceeded / disabled — silent
+}
+
 function loadNumbers() {
-  loadingState.style.display = 'block';
-  errorState.style.display = 'none';
-  emptyState.style.display = 'none';
-  numbersGrid.innerHTML = '';
-  resultsHeader.style.display = 'none';
+  var cached = readCachedNumbers();
+  var renderedFromCache = false;
+
+  if (cached && cached.length) {
+    allNumbers = cached;
+    loadingState.style.display = 'none';
+    errorState.style.display = 'none';
+    emptyState.style.display = 'none';
+    applyFilters();
+    renderedFromCache = true;
+  } else {
+    loadingState.style.display = 'block';
+    errorState.style.display = 'none';
+    emptyState.style.display = 'none';
+    numbersGrid.innerHTML = '';
+    resultsHeader.style.display = 'none';
+  }
 
   var sheetPromises = SHEETS.map(function(s) {
     return fetchFirstAvailableCsv(buildCsvUrls(s))
@@ -1587,10 +1623,19 @@ function loadNumbers() {
           merged.push(n);
         }
       }
+      if (merged.length === 0) throw new Error('No numbers parsed');
+
+      var prevLen = renderedFromCache ? allNumbers.length : -1;
       allNumbers = merged;
-      if (allNumbers.length === 0) throw new Error('No numbers parsed');
-      loadingState.style.display = 'none';
-      applyFilters();
+      writeCachedNumbers(merged);
+
+      if (!renderedFromCache) {
+        loadingState.style.display = 'none';
+        applyFilters();
+      } else if (merged.length !== prevLen) {
+        // Cache differed from fresh data — re-render silently
+        applyFilters();
+      }
 
       if (typeof gtag === 'function') {
         gtag('event', 'numbers_loaded', {
@@ -1601,8 +1646,11 @@ function loadNumbers() {
     })
     .catch(function(err) {
       console.error('Fetch error:', err);
-      loadingState.style.display = 'none';
-      errorState.style.display = 'block';
+      // If user is already looking at cached data, swallow the error.
+      if (!renderedFromCache) {
+        loadingState.style.display = 'none';
+        errorState.style.display = 'block';
+      }
 
       if (typeof gtag === 'function') {
         gtag('event', 'exception', {
@@ -1767,8 +1815,13 @@ function applyFilters() {
 }
 
 /* ========================================
-   RENDERING
+   RENDERING — chunked via requestIdleCallback to keep first paint fast
+   when the result set is hundreds of cards. Token-guarded so a filter
+   change mid-render aborts the previous pass cleanly.
    ======================================== */
+var _renderToken = 0;
+var RENDER_CHUNK_SIZE = 80;
+
 function render() {
   numbersGrid.innerHTML = '';
 
@@ -1789,13 +1842,33 @@ function render() {
   var catLabel = activeCategory === 'all' ? '' : ' ' + activeCategory.replace('-', ' ');
   resultsCount.innerHTML = '<strong>' + filteredNumbers.length + '</strong>' + catLabel + ' numbers available';
 
-  // Render cards
-  for (var i = 0; i < filteredNumbers.length; i++) {
-    numbersGrid.appendChild(createCard(filteredNumbers[i]));
-  }
+  var token = ++_renderToken;
+  var batch = filteredNumbers;
+  var pos = 0;
 
-  attachCardViewContentObserver();
-  applyDeepLinkHighlight();
+  function renderChunk() {
+    if (token !== _renderToken) return;
+    var fragment = document.createDocumentFragment();
+    var end = Math.min(pos + RENDER_CHUNK_SIZE, batch.length);
+    for (var i = pos; i < end; i++) {
+      fragment.appendChild(createCard(batch[i]));
+    }
+    numbersGrid.appendChild(fragment);
+    pos = end;
+
+    applyDeepLinkHighlight(); // idempotent; scrolls to target as soon as it lands
+
+    if (pos < batch.length) {
+      if (window.requestIdleCallback) {
+        window.requestIdleCallback(renderChunk, { timeout: 200 });
+      } else {
+        setTimeout(renderChunk, 0);
+      }
+    } else {
+      attachCardViewContentObserver();
+    }
+  }
+  renderChunk();
 }
 
 /* Per-card ViewContent — fires once per session per card with the catalog

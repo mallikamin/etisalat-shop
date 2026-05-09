@@ -38,7 +38,7 @@ CSV_URL = (
     f"https://docs.google.com/spreadsheets/d/{SHEET_ID}"
     f"/gviz/tq?tqx=out:csv&headers=1&gid={SHEET_GID}"
 )
-SITE_URL = "https://etisalat.shop"
+SITE_URL = "https://goldennummbers.com"
 ROOT = Path(__file__).resolve().parent
 CARDS_DIR = ROOT / "cards"
 FEED_PATH = ROOT / "feed.xml"

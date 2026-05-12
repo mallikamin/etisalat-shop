@@ -1560,7 +1560,7 @@ function trackScanOnce(refCode) {
    - Cache key versioned (v2) — bump when parser/schema changes so old caches
      get invalidated automatically.
    ======================================== */
-var NUMBERS_CACHE_KEY = 'gn_numbers_cache_v3';
+var NUMBERS_CACHE_KEY = 'gn_numbers_cache_v4';
 var NUMBERS_CACHE_TTL_MS = 60 * 60 * 1000;
 
 function readCachedNumbers() {
@@ -1728,6 +1728,7 @@ function parseCSV(csv) {
   var idxCategory = col('category', 1);
   var idxMsisdn = col('msisdn', 2);
   var idxWithZero = col('with zero', 3);
+  var idxWithoutZero = col('without zero', 4);
   var idxStatus = col('status', 5);
 
   for (var i = 1; i < lines.length; i++) {
@@ -1741,11 +1742,22 @@ function parseCSV(csv) {
     var category = String(clean[idxCategory] || '').trim();
     var msisdn = String(clean[idxMsisdn] || '').trim();
     var formatted = String(clean[idxWithZero] || '').trim();
+    var withoutZero = String(clean[idxWithoutZero] || '').trim().replace(/\s/g, '');
     var status = String(clean[idxStatus] || '').trim();
 
-    // Skip non-available, skip header rows
     if (status.toLowerCase() !== 'available') continue;
-    if (!msisdn || msisdn === 'MSISDN') continue;
+    if (msisdn === 'MSISDN') continue;
+
+    // Use "With Zero" column for search and display (e.g. "0564970555")
+    var withZero = formatted.replace(/\s/g, '');
+
+    // Derive MSISDN from other columns when blank — team often only fills
+    // "With Zero" / "Without Zero". Format is 971 + 9-digit local number.
+    if (!msisdn) {
+      if (withoutZero) msisdn = '971' + withoutZero;
+      else if (withZero.length === 10 && withZero.charAt(0) === '0') msisdn = '971' + withZero.substring(1);
+    }
+    if (!msisdn) continue;
 
     // Normalize category (handle case variations)
     var catLower = category.toLowerCase();
@@ -1755,8 +1767,8 @@ function parseCSV(csv) {
     else if (catLower === 'platinum') cat = 'Platinum';
     else continue; // Skip Silver Plus and any other categories
 
-    // Use "With Zero" column for search and display (e.g. "0564970555")
-    var withZero = formatted.replace(/\s/g, '');
+    if (!withZero && withoutZero) withZero = '0' + withoutZero;
+    if (!withZero) continue;
 
     // Format display number: 0564970555 → 056 497 0555
     var display = withZero;

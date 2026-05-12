@@ -1241,8 +1241,7 @@ a { color: inherit; }
    sheets are merged and deduped by digits.
    ======================================== */
 var SHEETS = [
-  { id: '1qAw1YQkKEbq-R3LullCBNr0MweGfC2KEO-rot9ff8dw', gid: '0' },
-  { id: '1XQ4qvJNb-O-Av9JWNrcE4AWYM8nmPZZ1KLkyB6MD7ZA', gid: '0' }
+  { id: '1qAw1YQkKEbq-R3LullCBNr0MweGfC2KEO-rot9ff8dw', gid: '0' }
 ];
 function buildCsvUrls(sheet) {
   var base = 'https://docs.google.com/spreadsheets/d/' + sheet.id;
@@ -1561,7 +1560,7 @@ function trackScanOnce(refCode) {
    - Cache key versioned (v2) — bump when parser/schema changes so old caches
      get invalidated automatically.
    ======================================== */
-var NUMBERS_CACHE_KEY = 'gn_numbers_cache_v2';
+var NUMBERS_CACHE_KEY = 'gn_numbers_cache_v3';
 var NUMBERS_CACHE_TTL_MS = 60 * 60 * 1000;
 
 function readCachedNumbers() {
@@ -1670,7 +1669,7 @@ function fetchFirstAvailableCsv(urls) {
     }
 
     var url = urls[idx++];
-    return fetch(url)
+    return fetch(url, { cache: 'no-store' })
       .then(function(res) {
         if (!res.ok) throw new Error('HTTP ' + res.status);
         return res.text();

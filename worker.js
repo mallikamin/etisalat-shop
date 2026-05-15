@@ -6,6 +6,9 @@
  *   GET  /oauth/tiktok/start            -> branded landing page with "Connect" button
  *   GET  /oauth/tiktok/authorize        -> 302 to TikTok consent screen (CSRF state cookie)
  *   GET  /oauth/tiktok/callback         -> exchanges code, displays tokens for admin copy
+ *   GET  /oauth/pinterest/start         -> branded landing page with "Connect" button
+ *   GET  /oauth/pinterest/authorize     -> 302 to Pinterest consent screen (CSRF state cookie, prompt=consent)
+ *   GET  /oauth/pinterest/callback      -> exchanges code via Basic auth, displays tokens
  *   GET  /r                             -> WhatsApp short-link redirect
  *   everything else                     -> served as static assets from ./  (env.ASSETS)
  *
@@ -14,6 +17,8 @@
  *   TIKTOK_PIXEL_ID           plaintext, e.g. D7J1GQRC77UDQGOITA8G
  *   TIKTOK_CLIENT_KEY         plaintext, Content Posting API client key
  *   TIKTOK_CLIENT_SECRET      secret, Content Posting API client secret
+ *   PINTEREST_CLIENT_ID       plaintext, Pinterest app ID (1568917 for GoldenNumbers Poster)
+ *   PINTEREST_CLIENT_SECRET   secret, Pinterest app client secret
  *
  * Why a Worker (not Pages Functions): this project deploys as
  * "Workers with Static Assets" instead of Pages. Same capabilities,
@@ -27,6 +32,11 @@ const TIKTOK_OAUTH_AUTHORIZE = "https://www.tiktok.com/v2/auth/authorize/";
 const TIKTOK_OAUTH_TOKEN     = "https://open.tiktokapis.com/v2/oauth/token/";
 const TIKTOK_OAUTH_REDIRECT  = "https://goldennummbers.com/oauth/tiktok/callback";
 const TIKTOK_OAUTH_SCOPES    = "user.info.basic,video.publish,video.upload";
+
+const PINTEREST_OAUTH_AUTHORIZE = "https://www.pinterest.com/oauth/";
+const PINTEREST_OAUTH_TOKEN     = "https://api.pinterest.com/v5/oauth/token";
+const PINTEREST_OAUTH_REDIRECT  = "https://goldennummbers.com/oauth/pinterest/callback";
+const PINTEREST_OAUTH_SCOPES    = "boards:read,boards:write,pins:read,pins:write,user_accounts:read";
 
 // /r — short-link redirect for FB direct-CTW ads.
 // Generates a unique token, builds the canonical Ref code, redirects to
@@ -229,6 +239,17 @@ function pageStart() {
   `);
 }
 
+function pageStartPinterest() {
+  return htmlShell("Connect Pinterest — goldennummbers", `
+    <h1>Connect Pinterest Posting</h1>
+    <p>This authorizes the goldennummbers content scheduler to publish pins to the Pinterest business account <span class="handle">Telecom Store UAE</span> via the Pinterest API v5.</p>
+    <p>Requested scopes: <code>boards:read</code>, <code>boards:write</code>, <code>pins:read</code>, <code>pins:write</code>, <code>user_accounts:read</code>. The token is stored only on our scheduler server and is used exclusively to post to the connected business account. No third-party data is read or written.</p>
+    <a class="btn" href="/oauth/pinterest/authorize">Connect Telecom Store UAE</a>
+    <hr>
+    <p class="muted">Operated by Probiz, Dubai, UAE. See our <a href="/terms/" style="color:var(--gold)">Terms</a> and <a href="/privacy/" style="color:var(--gold)">Privacy Policy</a>.</p>
+  `);
+}
+
 function handleTikTokOAuthAuthorize(request, env) {
   if (!env.TIKTOK_CLIENT_KEY) {
     return new Response("TIKTOK_CLIENT_KEY env var missing", { status: 500 });
@@ -349,6 +370,136 @@ async function handleTikTokOAuthCallback(request, env) {
   }});
 }
 
+// --- Pinterest API v5 OAuth --------------------------------------------------
+//
+// Mirror of the TikTok flow, with three Pinterest-specific differences:
+//   1. Authorization URL is https://www.pinterest.com/oauth/ (no /authorize suffix)
+//   2. Token endpoint at /v5/oauth/token uses HTTP Basic auth for client creds,
+//      NOT body params (TikTok puts client_key + client_secret in the form body).
+//   3. We always send prompt=consent so the consent screen re-appears even when
+//      the app is already authorized — needed for the Standard-access upgrade
+//      demo video where the reviewer must see scopes granted.
+
+function handlePinterestOAuthAuthorize(request, env) {
+  if (!env.PINTEREST_CLIENT_ID) {
+    return new Response("PINTEREST_CLIENT_ID env var missing", { status: 500 });
+  }
+  const state = randomState();
+  const params = new URLSearchParams({
+    client_id: env.PINTEREST_CLIENT_ID,
+    scope: PINTEREST_OAUTH_SCOPES,
+    response_type: "code",
+    redirect_uri: PINTEREST_OAUTH_REDIRECT,
+    state: state,
+    prompt: "consent",
+  });
+  const target = PINTEREST_OAUTH_AUTHORIZE + "?" + params.toString();
+  return new Response(null, {
+    status: 302,
+    headers: {
+      Location: target,
+      "Set-Cookie": `pinterest_oauth_state=${state}; Path=/oauth/pinterest/; Secure; HttpOnly; SameSite=Lax; Max-Age=600`,
+    },
+  });
+}
+
+async function handlePinterestOAuthCallback(request, env) {
+  const url = new URL(request.url);
+  const code = url.searchParams.get("code") || "";
+  const state = url.searchParams.get("state") || "";
+  const error = url.searchParams.get("error") || "";
+  const errorDesc = url.searchParams.get("error_description") || "";
+
+  if (error) {
+    return new Response(htmlShell("Pinterest auth failed", `
+      <h1>Authorization failed</h1>
+      <p class="err">Pinterest returned an error: <code>${error}</code></p>
+      <p>${errorDesc}</p>
+      <a class="btn" href="/oauth/pinterest/start">Try again</a>
+    `), { status: 400, headers: { "Content-Type": "text/html; charset=utf-8" } });
+  }
+
+  if (!code) {
+    return new Response("Missing code parameter", { status: 400 });
+  }
+
+  const cookieState = getCookie(request.headers.get("Cookie") || "", "pinterest_oauth_state");
+  if (!cookieState || cookieState !== state) {
+    return new Response(htmlShell("State mismatch", `
+      <h1>State mismatch</h1>
+      <p class="err">CSRF protection rejected this callback. Restart the flow.</p>
+      <a class="btn" href="/oauth/pinterest/start">Restart</a>
+    `), { status: 400, headers: { "Content-Type": "text/html; charset=utf-8" } });
+  }
+
+  if (!env.PINTEREST_CLIENT_ID || !env.PINTEREST_CLIENT_SECRET) {
+    return new Response("PINTEREST_CLIENT_ID/SECRET env vars missing", { status: 500 });
+  }
+
+  const basicAuth = btoa(`${env.PINTEREST_CLIENT_ID}:${env.PINTEREST_CLIENT_SECRET}`);
+  const tokenResp = await fetch(PINTEREST_OAUTH_TOKEN, {
+    method: "POST",
+    headers: {
+      "Authorization": `Basic ${basicAuth}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams({
+      grant_type: "authorization_code",
+      code: code,
+      redirect_uri: PINTEREST_OAUTH_REDIRECT,
+    }).toString(),
+  });
+
+  const tokenJson = await tokenResp.json().catch(() => ({}));
+
+  if (!tokenResp.ok || tokenJson.error || !tokenJson.access_token) {
+    const errStr = JSON.stringify(tokenJson, null, 2);
+    return new Response(htmlShell("Token exchange failed", `
+      <h1>Token exchange failed</h1>
+      <p class="err">Pinterest rejected the authorization code.</p>
+      <pre class="box">${errStr.replace(/</g, "&lt;")}</pre>
+      <a class="btn" href="/oauth/pinterest/start">Try again</a>
+    `), { status: 502, headers: { "Content-Type": "text/html; charset=utf-8" } });
+  }
+
+  const now = Math.floor(Date.now() / 1000);
+  const expiresAt        = now + (tokenJson.expires_in || 2592000);
+  const refreshExpiresAt = now + (tokenJson.refresh_token_expires_in || 31536000);
+
+  const config = {
+    scope: tokenJson.scope,
+    access_token: tokenJson.access_token,
+    expires_at: expiresAt,
+    refresh_token: tokenJson.refresh_token,
+    refresh_expires_at: refreshExpiresAt,
+    token_type: tokenJson.token_type || "bearer",
+    saved_at: new Date().toISOString(),
+  };
+
+  return new Response(htmlShell("Pinterest connected", `
+    <h1>Pinterest connected</h1>
+    <p class="ok">Authorization complete for Telecom Store UAE.</p>
+    <p>Copy the JSON below and save it on the scheduler as <code>/opt/meta-poster/pinterest_config.json</code>:</p>
+    <div style="position:relative">
+      <pre id="cfg" class="box" style="white-space:pre-wrap">${JSON.stringify(config, null, 2)}</pre>
+      <button class="copy" style="position:absolute;top:10px;right:10px" onclick="copy('cfg',this)">Copy JSON</button>
+    </div>
+    <h2>Scopes granted</h2>
+    <p class="muted"><code>${tokenJson.scope || "(none)"}</code></p>
+    <h2>Next steps</h2>
+    <ul class="bullets">
+      <li>SCP this JSON to <code>loom-edge:/opt/meta-poster/pinterest_config.json</code></li>
+      <li>Run <code>python3 pinterest_poster.py --dry-run</code> to preview a pin payload</li>
+      <li>Set <code>PINTEREST_TRIAL_MODE=0</code> on the edge only after Pinterest grants Standard access</li>
+    </ul>
+    <hr>
+    <p class="muted">This page is shown only on direct callback and is not indexed.</p>
+  `), { status: 200, headers: {
+    "Content-Type": "text/html; charset=utf-8",
+    "Set-Cookie": "pinterest_oauth_state=; Path=/oauth/pinterest/; Secure; HttpOnly; SameSite=Lax; Max-Age=0",
+  }});
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -371,6 +522,18 @@ export default {
 
     if (url.pathname === "/oauth/tiktok/callback") {
       return handleTikTokOAuthCallback(request, env);
+    }
+
+    if (url.pathname === "/oauth/pinterest/start") {
+      return new Response(pageStartPinterest(), { status: 200, headers: { "Content-Type": "text/html; charset=utf-8" } });
+    }
+
+    if (url.pathname === "/oauth/pinterest/authorize") {
+      return handlePinterestOAuthAuthorize(request, env);
+    }
+
+    if (url.pathname === "/oauth/pinterest/callback") {
+      return handlePinterestOAuthCallback(request, env);
     }
 
     // Fall through to static assets binding for everything else

@@ -6,7 +6,7 @@
     <loc>https://goldennummbers.com/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://goldennummbers.com/"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://goldennummbers.com/ar/"/>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -57,22 +57,34 @@
     <priority>0.9</priority>
   </url>
 
-  <!-- ===== CITY LANDING PAGES ===== -->
+  <!-- ===== CITY & KEYWORD LANDING PAGES ===== -->
   <url>
     <loc>https://goldennummbers.com/dubai/</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://goldennummbers.com/abu-dhabi/</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://goldennummbers.com/sharjah/</loc>
-    <lastmod>2026-05-04</lastmod>
+    <lastmod>2026-05-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://goldennummbers.com/premium-numbers-uae/</loc>
+    <lastmod>2026-05-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://goldennummbers.com/etisalat-postpaid-plans-dubai/</loc>
+    <lastmod>2026-05-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -94,6 +106,42 @@
   </url>
 
   <!-- ===== BLOG POSTS (English) ===== -->
+  <url>
+    <loc>https://goldennummbers.com/blog/best-etisalat-postpaid-plans-uae-2026.html</loc>
+    <lastmod>2026-05-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://goldennummbers.com/blog/difference-silver-gold-platinum-numbers.html</loc>
+    <lastmod>2026-05-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://goldennummbers.com/blog/how-to-choose-vip-number-dubai.html</loc>
+    <lastmod>2026-05-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://goldennummbers.com/blog/top-fancy-numbers-uae.html</loc>
+    <lastmod>2026-05-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://goldennummbers.com/blog/benefits-etisalat-unlimited-plans.html</loc>
+    <lastmod>2026-05-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://goldennummbers.com/blog/how-much-golden-number-cost-uae.html</loc>
+    <lastmod>2026-05-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <url>
     <loc>https://goldennummbers.com/blog/etisalat-esim-uae-activation-guide-2026.html</loc>
     <lastmod>2026-05-04</lastmod>
@@ -156,6 +204,18 @@
   </url>
 
   <!-- ===== UTILITY ===== -->
+  <url>
+    <loc>https://goldennummbers.com/about/</loc>
+    <lastmod>2026-05-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://goldennummbers.com/refund-policy/</loc>
+    <lastmod>2026-05-25</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
   <url>
     <loc>https://goldennummbers.com/privacy/</loc>
     <lastmod>2026-05-04</lastmod>

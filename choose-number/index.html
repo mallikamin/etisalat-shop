@@ -2090,6 +2090,16 @@ function fireWhatsAppClick(link) {
       lead_token: leadToken,
       event_id: leadToken
     });
+    // Canonical GA4 lead conversion (recommended event, value-bearing).
+    // Mark ONLY `generate_lead` as the Key Event in GA4 to avoid double-counting.
+    gtag('event', 'generate_lead', {
+      currency: 'AED',
+      value: planValue,
+      lead_source: 'number_card',
+      number_id: num,
+      number_category: cat,
+      event_id: leadToken
+    });
   }
 
   if (typeof fbq === 'function') {
@@ -2214,6 +2224,13 @@ document.addEventListener('click', function(e) {
       event_id: leadToken,
       lead_token: leadToken
     });
+    // Canonical GA4 lead conversion (see card handler note).
+    gtag('event', 'generate_lead', {
+      currency: 'AED',
+      value: 500,
+      lead_source: ctx,
+      event_id: leadToken
+    });
   }
 
   // Server-side CAPI mirror
@@ -2243,6 +2260,13 @@ document.addEventListener('click', function(e) {
     gtag('event', 'phone_call', {
       cta_context: ctx,
       page_context: '/choose-number/',
+      event_id: eid
+    });
+    // Canonical GA4 lead conversion (see card handler note).
+    gtag('event', 'generate_lead', {
+      currency: 'AED',
+      value: 500,
+      lead_source: 'phone_call',
       event_id: eid
     });
   }

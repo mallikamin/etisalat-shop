@@ -749,8 +749,14 @@ def page_html(site, num, all_numbers):
 {jsonld_blocks}
 
 <style>{css}</style>
+<script type="application/ld+json">{{"@context":"https://schema.org","@type":"Organization","name":"{site['brand']}","alternateName":"Etisalat Authorized Consultant","url":"{site['base_url']}/","logo":"{site['base_url']}/logo-square.png","image":"{site['base_url']}/logo-square.png","slogan":"Etisalat Authorized Consultant - Postpaid Plans, VIP Gold & Platinum Numbers, Free Delivery Across UAE","areaServed":"AE"}}</script>
 </head>
 <body>
+<!-- etisalat-consultant-bar -->
+<div class="etisalat-consultant-bar" style="display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;background:linear-gradient(90deg,#0D1117,#1F2630);border-bottom:1px solid #C9A962;color:#E0C58A;text-align:center;font:600 13px/1.4 'DM Sans',Arial,sans-serif;padding:7px 12px">
+  <img src="/etisalat-logo.png" alt="etisalat by e& - Authorized Consultant" style="height:20px;width:auto;background:#fff;border-radius:5px;padding:2px 5px;box-sizing:content-box">
+  <span>Etisalat Authorized Consultant &middot; Postpaid Plans &middot; VIP Gold &amp; Platinum Numbers &middot; Free Delivery Across UAE</span>
+</div>
 
 <nav class="nav">
   <div class="container nav-inner">
@@ -935,8 +941,14 @@ def hub_index_html(site, numbers):
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>{css}</style>
+<script type="application/ld+json">{{"@context":"https://schema.org","@type":"Organization","name":"{site['brand']}","alternateName":"Etisalat Authorized Consultant","url":"{site['base_url']}/","logo":"{site['base_url']}/logo-square.png","image":"{site['base_url']}/logo-square.png","slogan":"Etisalat Authorized Consultant - Postpaid Plans, VIP Gold & Platinum Numbers, Free Delivery Across UAE","areaServed":"AE"}}</script>
 </head>
 <body>
+<!-- etisalat-consultant-bar -->
+<div class="etisalat-consultant-bar" style="display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;background:linear-gradient(90deg,#0D1117,#1F2630);border-bottom:1px solid #C9A962;color:#E0C58A;text-align:center;font:600 13px/1.4 'DM Sans',Arial,sans-serif;padding:7px 12px">
+  <img src="/etisalat-logo.png" alt="etisalat by e& - Authorized Consultant" style="height:20px;width:auto;background:#fff;border-radius:5px;padding:2px 5px;box-sizing:content-box">
+  <span>Etisalat Authorized Consultant &middot; Postpaid Plans &middot; VIP Gold &amp; Platinum Numbers &middot; Free Delivery Across UAE</span>
+</div>
 
 <nav class="nav">
   <div class="container nav-inner">

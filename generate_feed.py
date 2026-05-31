@@ -32,12 +32,11 @@ from PIL import Image, ImageDraw, ImageFont
 
 # ---- Config ---------------------------------------------------------------
 
-SHEET_ID = "1qAw1YQkKEbq-R3LullCBNr0MweGfC2KEO-rot9ff8dw"
-SHEET_GID = "0"
-CSV_URL = (
-    f"https://docs.google.com/spreadsheets/d/{SHEET_ID}"
-    f"/gviz/tq?tqx=out:csv&headers=1&gid={SHEET_GID}"
-)
+# Both inventory sheets — same pair the /choose-number/ pages + generate_number_pages.py consume.
+SHEETS = [
+    {"id": "1qAw1YQkKEbq-R3LullCBNr0MweGfC2KEO-rot9ff8dw", "gid": "0"},
+    {"id": "1Lmfsc-0H0R0hXv0wddktRwisHI74yu9JfrtxPajm9hk", "gid": "0"},
+]
 SITE_URL = "https://goldennummbers.com"
 ROOT = Path(__file__).resolve().parent
 CARDS_DIR = ROOT / "cards"
@@ -59,13 +58,27 @@ GOOGLE_CATEGORY = "Electronics > Communications > Telephony > Mobile Phones"
 # ---- Sheet ----------------------------------------------------------------
 
 def fetch_sheet() -> list[dict]:
-    req = urllib.request.Request(
-        CSV_URL,
-        headers={"User-Agent": "etisalat-shop/feed-generator"},
-    )
-    with urllib.request.urlopen(req, timeout=30) as r:
-        data = r.read().decode("utf-8-sig")
-    return list(csv.DictReader(io.StringIO(data)))
+    """Fetch + concatenate all configured sheets, de-duped by MSISDN (first wins)."""
+    rows: list[dict] = []
+    seen: set[str] = set()
+    for sh in SHEETS:
+        url = (
+            f"https://docs.google.com/spreadsheets/d/{sh['id']}"
+            f"/gviz/tq?tqx=out:csv&headers=1&gid={sh['gid']}"
+        )
+        req = urllib.request.Request(
+            url, headers={"User-Agent": "etisalat-shop/feed-generator"}
+        )
+        with urllib.request.urlopen(req, timeout=30) as r:
+            data = r.read().decode("utf-8-sig")
+        for row in csv.DictReader(io.StringIO(data)):
+            msisdn = (row.get("MSISDN") or "").strip()
+            if msisdn and msisdn in seen:
+                continue
+            if msisdn:
+                seen.add(msisdn)
+            rows.append(row)
+    return rows
 
 
 def format_number(with_zero: str) -> str:
@@ -372,9 +385,9 @@ def main() -> int:
     )
     args = ap.parse_args()
 
-    print(f"Fetching sheet: {CSV_URL}")
+    print(f"Fetching {len(SHEETS)} sheet(s)")
     rows = fetch_sheet()
-    print(f"  {len(rows)} total rows")
+    print(f"  {len(rows)} total rows (de-duped across sheets)")
 
     available = [
         r for r in rows

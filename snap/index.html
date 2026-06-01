@@ -96,6 +96,19 @@
     .stick .btn-wa{box-shadow:0 -2px 30px rgba(0,0,0,.5),0 8px 26px rgba(37,211,102,.3)}
     @media(min-width:600px){ h1{font-size:2.3rem} }
   </style>
+
+  <!-- Snap Pixel Code -->
+  <script type='text/javascript'>
+  (function(e,t,n){if(e.snaptr)return;var a=e.snaptr=function()
+  {a.handleRequest?a.handleRequest.apply(a,arguments):a.queue.push(arguments)};
+  a.queue=[];var s='script';r=t.createElement(s);r.async=!0;
+  r.src=n;var u=t.getElementsByTagName(s)[0];
+  u.parentNode.insertBefore(r,u);})(window,document,
+  'https://sc-static.net/scevent.min.js');
+  snaptr('init', '245f4c6d-9a73-4d20-b97a-387ddba19323', {});
+  snaptr('track', 'PAGE_VIEW');
+  </script>
+  <!-- End Snap Pixel Code -->
 </head>
 <body>
   <div class="wrap">
@@ -172,6 +185,10 @@
         var ctx = a.getAttribute('data-cta') || 'snap_cta';
         if (typeof gtag === 'function') {
           gtag('event', 'generate_lead', { lead_source: 'snapchat_ad', cta_context: ctx, value: 1, currency: 'AED' });
+        }
+        // Snap conversion signal — maps the WhatsApp CTA click to the ad's "Sign Up" CTA
+        if (typeof snaptr === 'function') {
+          snaptr('track', 'SIGN_UP', { description: ctx });
         }
       });
     });

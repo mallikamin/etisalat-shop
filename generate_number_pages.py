@@ -701,6 +701,16 @@ def page_html(site, num, all_numbers):
     related_tier   = rel_html(rel_tier,   f"More {num['category']} VIP Numbers")
     related_prefix = rel_html(rel_prefix, f"More Etisalat {info['prefix']} Numbers")
 
+    # Links UP to the category hubs this number belongs to (internal-link mesh:
+    # hubs are the indexable layer, number pages feed them crawl paths).
+    hub_links_html = ""
+    if CURRENT_HUBS:
+        _links = [f'<a href="/numbers/{h["slug"]}/">{html.escape(h["h1"])}</a>'
+                  for h in CURRENT_HUBS if h["pred"](num, info)]
+        if _links:
+            hub_links_html = ('<section class="section"><h2>Browse by category</h2><p>'
+                              + " · ".join(_links) + "</p></section>")
+
     faq_html = "".join(
         f'<div class="faq"><h3>{html.escape(q)}</h3><p>{html.escape(a)}</p></div>'
         for q, a in faqs
@@ -822,6 +832,8 @@ def page_html(site, num, all_numbers):
     {related_prefix}
   </section>
 
+  {hub_links_html}
+
   <section class="section">
     <h2>Frequently asked questions</h2>
     {faq_html}
@@ -854,9 +866,224 @@ def page_html(site, num, all_numbers):
 
 
 # ===========================================================================
+# 4b. CATEGORY HUBS (/numbers/<slug>/) — quality-over-quantity indexing.
+# Google declined to index 3k+ near-identical per-number pages (only ~100
+# indexed). The play: ~13 genuinely differentiated, rankable category pages
+# (tier / prefix / pattern), each targeting a real search query ("etisalat
+# gold number", "786 number uae"), each funnelling internal links down to
+# the number pages. Set CURRENT_HUBS before page_html runs so per-number
+# pages link UP to their hubs (crawl mesh).
+# ===========================================================================
+HUB_MAX_CARDS = 240
+CURRENT_HUBS = []
+
+
+def _hub_membership_defs():
+    """Single source of truth: hub slug, copy, and membership predicate.
+    Predicates take (num, feats) where feats = analyze(num['digits'])."""
+    def has(f, *words):
+        return any(any(w in p for w in words) for p in f.get("patterns", []))
+
+    defs = [
+        {"slug": "gold-numbers", "label": "Gold numbers",
+         "h1": "Etisalat Gold Numbers UAE",
+         "intro": "Gold VIP numbers — strong patterns like repeating pairs, AABB blocks and round tails, free with the AED 500/month Etisalat postpaid plan. The most-searched VIP tier in the UAE."},
+        {"slug": "silver-numbers", "label": "Silver numbers",
+         "h1": "Etisalat Silver VIP Numbers UAE",
+         "intro": "Entry VIP tier — memorable Etisalat numbers free with the AED 188/month postpaid plan. The fastest-moving tier in our live inventory."},
+        {"slug": "platinum-numbers", "label": "Platinum numbers",
+         "h1": "Etisalat Platinum Numbers UAE",
+         "intro": "Ultra-VIP Etisalat numbers — five- and six-identical-digit tails and signature patterns. AED 1,000 one-time with a postpaid plan; the status tier for business owners."},
+    ]
+    tier_by_slug = {"gold-numbers": "Gold", "silver-numbers": "Silver", "platinum-numbers": "Platinum"}
+    for d in defs:
+        d["pred"] = (lambda t: lambda n, f: n["category"] == t)(tier_by_slug[d["slug"]])
+
+    for prefix, blurb in PREFIX_INFO.items():
+        defs.append({"slug": f"{prefix}-numbers", "label": f"{prefix} numbers",
+                     "h1": f"Etisalat {prefix} VIP Numbers UAE",
+                     "intro": blurb,
+                     "pred": (lambda p: lambda n, f: f.get("prefix") == p)(prefix)})
+
+    defs += [
+        {"slug": "repeating-digit-numbers", "label": "Repeating digits",
+         "h1": "Repeating-Digit Etisalat Numbers UAE",
+         "intro": "Numbers ending in 3–6 identical digits (777, 8888, 99999) — the most recognisable VIP pattern in the UAE.",
+         "pred": lambda n, f: has(f, "identical", "repeating", "occurrences")},
+        {"slug": "mirror-numbers", "label": "Mirror numbers",
+         "h1": "Mirror & Palindrome Etisalat Numbers UAE",
+         "intro": "Numbers whose tails read the same forwards and backwards (52125, 7227) — subtle, memorable and rare.",
+         "pred": lambda n, f: has(f, "palindrome")},
+        {"slug": "round-numbers", "label": "Round numbers",
+         "h1": "Round Etisalat Numbers Ending in 000",
+         "intro": "Numbers ending in consecutive zeros — the classic business signature (x000, x0000).",
+         "pred": lambda n, f: f.get("trailing_zeros", 0) >= 3},
+        {"slug": "sequence-numbers", "label": "Sequential numbers",
+         "h1": "Sequential Etisalat Numbers (1234 / 4321)",
+         "intro": "Ascending and descending tails like 1234, 5678 and 4321 — clean, ordered, instantly memorable.",
+         "pred": lambda n, f: has(f, "ascending", "descending")},
+        {"slug": "786-numbers", "label": "786 numbers",
+         "h1": "786 Numbers UAE — Lucky Etisalat Numbers",
+         "intro": "Etisalat numbers containing 786 — the most requested lucky pattern in the UAE, available in Silver, Gold and Platinum tiers.",
+         "pred": lambda n, f: "786" in n["digits"]},
+    ]
+    return defs
+
+
+def build_hubs(numbers):
+    """Compute hubs + members (sorted best-pattern-first). Hubs with <3 members
+    are dropped — a near-empty category page is worse than none."""
+    feats = {n["digits"]: analyze(n["digits"]) for n in numbers}
+    hubs = []
+    for d in _hub_membership_defs():
+        mem = [n for n in numbers if d["pred"](n, feats[n["digits"]])]
+        mem.sort(key=lambda n: feats[n["digits"]].get("score", 0), reverse=True)
+        if len(mem) >= 3:
+            hubs.append(dict(d, members=mem))
+    return hubs
+
+
+def _hub_css(css_vars):
+    css = """:root{
+    --bg:__bg__;--panel:__panel__;--panel2:__panel2__;--border:__border__;
+    --text:__text__;--muted:__muted__;--gold:__gold__;--gold2:__gold2__;
+    --silver:__silver__;--platinum:__platinum__;--green:__green__;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+  a{color:var(--gold);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .container{max-width:1100px;margin:0 auto;padding:0 1.25rem}
+  .nav{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--border);padding:0.9rem 0;z-index:50}
+  .nav-inner{display:flex;justify-content:space-between;align-items:center}
+  .logo{font-family:'Playfair Display',serif;font-weight:700;font-size:1.35rem;color:var(--gold)}
+  .nav-links{display:flex;gap:1.25rem;align-items:center}
+  .nav-links a{color:var(--text);font-weight:500;font-size:0.95rem}
+  .btn-contact{background:var(--green);color:#fff !important;padding:0.55rem 1.1rem;border-radius:999px;font-weight:600;font-size:0.9rem}
+  .hero{padding:2.5rem 0 1.5rem;text-align:center}
+  h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3rem);font-weight:700;margin-bottom:0.6rem}
+  .sub{color:var(--muted);max-width:680px;margin:0 auto 1.5rem;font-size:1.05rem}
+  .section{padding:2rem 0;border-top:1px solid var(--border)}
+  .section h2{font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:1rem}
+  .related{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:0.75rem}
+  .rcard{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:1rem;display:flex;flex-direction:column;gap:0.4rem;transition:border-color .15s}
+  .rcard:hover{border-color:var(--gold);text-decoration:none}
+  .rcard .rnum{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--gold);font-variant-numeric:tabular-nums;letter-spacing:0.04em}
+  .rcard .rmeta{font-size:0.82rem;color:var(--muted)}
+  footer{padding:3rem 0;border-top:1px solid var(--border);margin-top:2rem;color:var(--muted);font-size:0.9rem;text-align:center}
+  footer a{color:var(--muted)}
+  """
+    for k, v in css_vars.items():
+        css = css.replace(f"__{k}__", v)
+    return css
+
+
+def _hub_browse_section(hubs, current_slug=None):
+    """'Browse by category' card grid used on the main hub + each category hub."""
+    if not hubs:
+        return ""
+    cards = "".join(
+        f'<a class="rcard" href="/numbers/{h["slug"]}/">'
+        f'<span class="rnum">{html.escape(h["label"])}</span>'
+        f'<span class="rmeta">{len(h["members"])} available</span></a>'
+        for h in hubs if h["slug"] != current_slug
+    )
+    return f'<section class="section"><h2>Browse by category</h2><div class="related">{cards}</div></section>'
+
+
+def hub_page_html(site, hub, hubs):
+    """One rankable category landing page: unique intro, best-pattern-first
+    card grid (capped), CollectionPage/ItemList JSON-LD, hub cross-links."""
+    members = hub["members"]
+    shown = members[:HUB_MAX_CARDS]
+    more = len(members) - len(shown)
+    hub_url = f"{site['base_url']}/numbers/{hub['slug']}/"
+    title = f"{hub['h1']} — {len(members)} Available | {site['brand']}"
+    description = (f"{hub['intro']} {len(members)} available now from {site['brand']}, "
+                   f"authorized Etisalat dealer — same-day SIM delivery across the UAE.")
+
+    cards = "".join(
+        f'<a class="rcard" href="/numbers/{slug_for(n)}/">'
+        f'<span class="rnum">{html.escape(n["formatted"])}</span>'
+        f'<span class="rmeta">{n["category"]} · plan from {TIER_PRICE[n["category"]]["display"]}</span>'
+        f'</a>'
+        for n in shown
+    )
+    more_html = (f'<p style="margin-top:1rem;color:var(--muted)">+ {more} more in live inventory — '
+                 f'<a href="/choose-number/">browse the full picker</a>.</p>') if more > 0 else ""
+
+    item_list = ",".join(
+        f'{{"@type":"ListItem","position":{i + 1},"url":"{url_for(site, n)}","name":"{n["formatted"]}"}}'
+        for i, n in enumerate(shown[:25])
+    )
+    jsonld = (f'{{"@context":"https://schema.org","@type":"CollectionPage","name":"{html.escape(hub["h1"])}",'
+              f'"url":"{hub_url}","isPartOf":{{"@type":"WebSite","name":"{site["brand"]}","url":"{site["base_url"]}/"}},'
+              f'"mainEntity":{{"@type":"ItemList","numberOfItems":{len(members)},"itemListElement":[{item_list}]}}}}')
+
+    wa_msg = f"Hi, I'm interested in {hub['label']} from {site['domain']}"
+    wa_href = f"https://wa.me/{site['wa_number']}?text={urllib.parse.quote(wa_msg)}"
+
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{html.escape(title)}</title>
+<meta name="description" content="{html.escape(description)}">
+<meta name="theme-color" content="{site['theme_color']}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{hub_url}">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{html.escape(title)}">
+<meta property="og:description" content="{html.escape(description)}">
+<meta property="og:url" content="{hub_url}">
+<link rel="icon" href="/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>{_hub_css(site['css_vars'])}</style>
+<script type="application/ld+json">{jsonld}</script>
+</head>
+<body>
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="logo" href="/">{site['brand']}</a>
+    <div class="nav-links">
+      <a href="/numbers/">All Numbers</a>
+      <a href="/choose-number/">Browse</a>
+      <a class="btn-contact" href="{wa_href}" target="_blank" rel="noopener">Contact Now</a>
+    </div>
+  </div>
+</nav>
+
+<header class="container hero">
+  <h1>{html.escape(hub['h1'])}</h1>
+  <p class="sub">{html.escape(hub['intro'])} Live inventory: {len(members)} available today.</p>
+</header>
+
+<main class="container">
+  <section class="section">
+    <div class="related">{cards}</div>
+    {more_html}
+  </section>
+  {_hub_browse_section(hubs, current_slug=hub['slug'])}
+</main>
+
+<footer>
+  <div class="container">
+    <p>&copy; {site['brand']} — Authorized Etisalat dealer in the UAE.<br>
+    <a href="/">Home</a> · <a href="/numbers/">All Numbers</a> · <a href="/choose-number/">Choose Number</a></p>
+  </div>
+</footer>
+
+</body>
+</html>"""
+
+
+# ===========================================================================
 # 5. HUB INDEX (/numbers/)
 # ===========================================================================
-def hub_index_html(site, numbers):
+def hub_index_html(site, numbers, hubs=None):
     css_vars = site["css_vars"]
     by_tier = defaultdict(list)
     for n in numbers:
@@ -887,35 +1114,9 @@ def hub_index_html(site, numbers):
         f"Same-day SIM delivery in Dubai, Abu Dhabi and Sharjah."
     )
 
-    css = """:root{
-    --bg:__bg__;--panel:__panel__;--panel2:__panel2__;--border:__border__;
-    --text:__text__;--muted:__muted__;--gold:__gold__;--gold2:__gold2__;
-    --silver:__silver__;--platinum:__platinum__;--green:__green__;
-  }
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
-  a{color:var(--gold);text-decoration:none}
-  a:hover{text-decoration:underline}
-  .container{max-width:1100px;margin:0 auto;padding:0 1.25rem}
-  .nav{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--border);padding:0.9rem 0;z-index:50}
-  .nav-inner{display:flex;justify-content:space-between;align-items:center}
-  .logo{font-family:'Playfair Display',serif;font-weight:700;font-size:1.35rem;color:var(--gold)}
-  .nav-links{display:flex;gap:1.25rem;align-items:center}
-  .nav-links a{color:var(--text);font-weight:500;font-size:0.95rem}
-  .btn-contact{background:var(--green);color:#fff !important;padding:0.55rem 1.1rem;border-radius:999px;font-weight:600;font-size:0.9rem}
-  .hero{padding:2.5rem 0 1.5rem;text-align:center}
-  h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3rem);font-weight:700;margin-bottom:0.6rem}
-  .sub{color:var(--muted);max-width:680px;margin:0 auto 1.5rem;font-size:1.05rem}
-  .section{padding:2rem 0;border-top:1px solid var(--border)}
-  .section h2{font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:1rem}
-  .related{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:0.75rem}
-  .rcard{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:1rem;display:flex;flex-direction:column;gap:0.4rem;transition:border-color .15s}
-  .rcard:hover{border-color:var(--gold);text-decoration:none}
-  .rcard .rnum{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--gold);font-variant-numeric:tabular-nums;letter-spacing:0.04em}
-  .rcard .rmeta{font-size:0.82rem;color:var(--muted)}
-  footer{padding:3rem 0;border-top:1px solid var(--border);margin-top:2rem;color:var(--muted);font-size:0.9rem;text-align:center}
-  footer a{color:var(--muted)}
-  """ % css_vars
+    # NOTE: was `""" % css_vars` — a no-op with a dict and no %()s placeholders,
+    # which shipped literal __bg__ vars to production. _hub_css does the replace.
+    css = _hub_css(css_vars)
 
     wa_msg = f"Hi, I'd like to browse available Etisalat VIP numbers from {site['domain']}"
     wa_href = f"https://wa.me/{site['wa_number']}?text={urllib.parse.quote(wa_msg)}"
@@ -966,6 +1167,7 @@ def hub_index_html(site, numbers):
 </header>
 
 <main class="container">
+  {_hub_browse_section(hubs)}
   {body_blocks}
 </main>
 
@@ -983,15 +1185,18 @@ def hub_index_html(site, numbers):
 # ===========================================================================
 # 6. SITEMAP
 # ===========================================================================
-def write_sitemap_numbers(site, numbers):
-    """Write /sitemap-numbers.xml with one entry per number page + the hub.
-    Then write /sitemap-index.xml that points to both the original sitemap.xml
-    and sitemap-numbers.xml, so GSC sees a single submission point."""
+def write_sitemap_numbers(site, numbers, hubs=None):
+    """Write /sitemap-numbers.xml with one entry per number page + the hub
+    + the category hubs. Then write /sitemap-index.xml that points to both the
+    original sitemap.xml and sitemap-numbers.xml, so GSC sees a single
+    submission point."""
     proj = site["project_dir"]
     base = site["base_url"]
     lines = ['<?xml version="1.0" encoding="UTF-8"?>',
              '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     lines.append(f'  <url><loc>{base}/numbers/</loc><changefreq>daily</changefreq><priority>0.9</priority></url>')
+    for h in (hubs or []):
+        lines.append(f'  <url><loc>{base}/numbers/{h["slug"]}/</loc><changefreq>daily</changefreq><priority>0.85</priority></url>')
     for n in numbers:
         lines.append(f'  <url><loc>{base}/numbers/{slug_for(n)}/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>')
     lines.append('</urlset>')
@@ -1017,9 +1222,14 @@ def write_sitemap_numbers(site, numbers):
 # 7. ORCHESTRATION
 # ===========================================================================
 def generate_for_site(site, numbers):
+    global CURRENT_HUBS
     print(f"\n=== {site['label']} -> {len(numbers)} numbers ===")
     out_root = os.path.join(site["project_dir"], "numbers")
     os.makedirs(out_root, exist_ok=True)
+
+    # Category hubs FIRST so per-number pages can link up to them.
+    hubs = build_hubs(numbers)
+    CURRENT_HUBS = hubs
 
     # Per-number pages
     written = 0
@@ -1034,15 +1244,23 @@ def generate_for_site(site, numbers):
         if written % 200 == 0:
             print(f"  ...{written} pages written")
 
+    # Category hub pages
+    for h in hubs:
+        hd = os.path.join(out_root, h["slug"])
+        os.makedirs(hd, exist_ok=True)
+        with open(os.path.join(hd, "index.html"), "w", encoding="utf-8") as f:
+            f.write(hub_page_html(site, h, hubs))
+    print(f"  wrote {len(hubs)} category hubs: " + ", ".join(h["slug"] for h in hubs))
+
     # Hub index
-    hub = hub_index_html(site, numbers)
+    hub = hub_index_html(site, numbers, hubs)
     with open(os.path.join(out_root, "index.html"), "w", encoding="utf-8") as f:
         f.write(hub)
     print(f"  wrote /numbers/index.html (hub)")
 
     # Sitemaps
-    write_sitemap_numbers(site, numbers)
-    print(f"  done: {written} per-number pages + hub + sitemap-numbers.xml")
+    write_sitemap_numbers(site, numbers, hubs)
+    print(f"  done: {written} per-number pages + {len(hubs)} hubs + sitemap-numbers.xml")
 
 
 def main():

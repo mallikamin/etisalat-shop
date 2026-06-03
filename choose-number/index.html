@@ -1181,6 +1181,41 @@ a { color: inherit; }
         <button class="cat-tab" data-category="gold" role="tab" aria-selected="false">Gold</button>
         <button class="cat-tab" data-category="platinum" role="tab" aria-selected="false">Platinum</button>
       </div>
+
+      <!-- Popular pattern chips — order is data-driven (GA4 on-site search, 4.3k searches:
+           repeating 7/8/9 dominate; 786 ~1%). Click = fill search + fire the normal input
+           pipeline (filters + analytics), zero new logic paths. -->
+      <style>
+        .pat-chips{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px}
+        .pat-chips .pat-label{font-size:0.8rem;color:var(--text-muted)}
+        .pat-chip{background:var(--surface);border:1px solid var(--surface-border);color:var(--gold);
+          border-radius:999px;padding:5px 14px;font-size:0.85rem;font-weight:600;cursor:pointer;
+          font-variant-numeric:tabular-nums;transition:border-color .15s}
+        .pat-chip:hover{border-color:var(--gold)}
+      </style>
+      <div class="pat-chips" id="patChips" aria-label="Popular patterns">
+        <span class="pat-label">Popular:</span>
+        <button type="button" class="pat-chip" data-pat="777">777</button>
+        <button type="button" class="pat-chip" data-pat="888">888</button>
+        <button type="button" class="pat-chip" data-pat="999">999</button>
+        <button type="button" class="pat-chip" data-pat="786">786</button>
+        <button type="button" class="pat-chip" data-pat="1111">1111</button>
+        <button type="button" class="pat-chip" data-pat="050">050</button>
+      </div>
+      <script>
+        (function(){
+          var chips = document.querySelectorAll('#patChips .pat-chip');
+          for (var i = 0; i < chips.length; i++) {
+            chips[i].addEventListener('click', function(){
+              var inp = document.getElementById('searchInput');
+              if (!inp) return;
+              inp.value = this.getAttribute('data-pat');
+              inp.dispatchEvent(new Event('input', { bubbles: true }));
+              inp.focus();
+            });
+          }
+        })();
+      </script>
     </div>
 
     <!-- Mid-page WhatsApp CTA — shown to users even before any number matches load -->
@@ -1244,6 +1279,10 @@ a { color: inherit; }
       <a href="../">Home</a>
       <a href="../#plans">Plans</a>
       <a href="../#contact">Contact</a>
+      <a href="../numbers/gold-numbers/">Gold Numbers</a>
+      <a href="../numbers/repeating-digit-numbers/">Repeating Digits</a>
+      <a href="../numbers/786-numbers/">786 Numbers</a>
+      <a href="../numbers/">All Numbers</a>
     </div>
     <div class="footer-copy">&copy; 2026 goldennummbers.com. All rights reserved.</div>
     <div class="footer-disclaimer">All plans and numbers are subject to Etisalat terms and conditions. Number availability is updated periodically and may change without notice.</div>

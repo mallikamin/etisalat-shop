@@ -72,7 +72,7 @@ SITES = {
         "phone_display": "+971 56 902 8087",
         "ga4": "G-G34631QW03",
         "fb_pixel": "1456083435966506",
-        "support_email": "support@goldennummbers.com",
+        "support_email": "support@etisalat.shop",
         "tagline": "Authorized Etisalat Dealer — VIP Mobile Numbers UAE",
         # Midnight Gold theme
         "theme_color": "#0D1117",

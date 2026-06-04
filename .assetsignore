@@ -59,6 +59,17 @@ partner-tracking-api/*.log
 partner-tracking-api/uvicorn.*.log
 
 # --- Internal docs (not for public consumption) ---
+STATE.md
+CLAUDE.md
+_files/
+_context/
+_archive/
+.wa_deploy_bak_*/
+CONTINUATION_*.md
+NOTES_*.md
+GBP_*.md
+WA_*.md
+WHATSAPP_*.md
 ERROR_LOG.md
 DOCUMENTATION.md
 AI_SEO_EXECUTION_PLAN.md
@@ -83,6 +94,9 @@ TIKTOK_*.md
 *.bak_*
 
 # --- Build / generation scripts (not meant to be downloadable) ---
+# No .py belongs on the public site, ever.
+*.py
+**/*.py
 generate_ads.py
 generate_assets.py
 

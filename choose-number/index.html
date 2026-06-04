@@ -800,6 +800,155 @@ a { color: inherit; }
 .btn-wa svg { width: 16px; height: 16px; flex-shrink: 0; }
 
 /* ========================================
+   CHECKOUT (reserve button + modal)
+   ======================================== */
+.card-actions { display: flex; gap: 0.5rem; margin-top: auto; }
+.card-actions .btn-wa { flex: 1; margin-top: 0; }
+
+.btn-reserve {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  background: rgba(201, 169, 98, 0.1);
+  color: var(--gold);
+  border: 1px solid rgba(201, 169, 98, 0.45);
+  border-radius: 6px;
+  padding: 0.6rem 0.9rem;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.btn-reserve:hover {
+  background: rgba(201, 169, 98, 0.22);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(201, 169, 98, 0.2);
+}
+
+.checkout-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 8, 13, 0.82);
+  backdrop-filter: blur(4px);
+  z-index: 1200;
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-y: auto;
+  padding: 2rem 1rem 4rem;
+}
+.checkout-overlay.open { display: flex; }
+
+.checkout-modal {
+  background: var(--surface, #161B22);
+  border: 1px solid rgba(201, 169, 98, 0.3);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 460px;
+  padding: 1.5rem 1.5rem 1.75rem;
+  position: relative;
+}
+
+.checkout-close {
+  position: absolute;
+  top: 0.75rem; right: 0.9rem;
+  background: none; border: none;
+  color: #8B949E; font-size: 1.5rem; line-height: 1;
+  cursor: pointer; padding: 0.25rem;
+}
+.checkout-close:hover { color: #fff; }
+
+.checkout-title {
+  font-family: var(--font-display, 'Playfair Display', serif);
+  font-size: 1.35rem; color: #fff; margin: 0 0 1rem;
+}
+
+.checkout-summary {
+  background: rgba(201, 169, 98, 0.07);
+  border: 1px solid rgba(201, 169, 98, 0.25);
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  margin-bottom: 1.1rem;
+  display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+}
+.checkout-summary .co-num {
+  font-family: var(--font-display, 'Playfair Display', serif);
+  font-size: 1.25rem; color: var(--gold); letter-spacing: 0.04em;
+}
+.checkout-summary .co-meta { font-size: 0.78rem; color: #8B949E; text-align: right; }
+
+.checkout-form label {
+  display: block; font-size: 0.78rem; font-weight: 600;
+  color: #C9D1D9; margin: 0.8rem 0 0.3rem;
+}
+.checkout-form input,
+.checkout-form select,
+.checkout-form textarea {
+  width: 100%;
+  background: #0D1117;
+  border: 1px solid #30363D;
+  border-radius: 6px;
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  padding: 0.6rem 0.75rem;
+}
+.checkout-form input:focus,
+.checkout-form select:focus,
+.checkout-form textarea:focus { outline: none; border-color: var(--gold); }
+.checkout-form textarea { resize: vertical; min-height: 64px; }
+.checkout-row { display: flex; gap: 0.6rem; }
+.checkout-row > div { flex: 1; }
+
+.checkout-err {
+  display: none;
+  color: #f85149; font-size: 0.78rem; margin-top: 0.6rem;
+}
+.checkout-err.show { display: block; }
+
+.checkout-submit {
+  width: 100%;
+  margin-top: 1.1rem;
+  background: linear-gradient(135deg, #C9A962, #B08F45);
+  color: #0D1117;
+  border: none; border-radius: 8px;
+  padding: 0.85rem 1rem;
+  font-family: var(--font-body);
+  font-size: 0.95rem; font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.checkout-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201, 169, 98, 0.3); }
+.checkout-submit:disabled { opacity: 0.55; cursor: wait; transform: none; }
+
+.checkout-note { font-size: 0.72rem; color: #8B949E; margin-top: 0.7rem; text-align: center; }
+
+/* honeypot — visually gone, present in DOM for bots */
+.co-hp { position: absolute; left: -9999px; top: -9999px; height: 0; overflow: hidden; }
+
+.checkout-success { display: none; text-align: center; padding: 0.5rem 0 0.25rem; }
+.checkout-success.show { display: block; }
+.checkout-success .co-check { font-size: 2.4rem; }
+.checkout-success h3 {
+  font-family: var(--font-display, 'Playfair Display', serif);
+  color: #fff; font-size: 1.3rem; margin: 0.5rem 0;
+}
+.checkout-success p { color: #C9D1D9; font-size: 0.86rem; line-height: 1.55; margin: 0.4rem 0 1rem; }
+.btn-checkout-wa {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  background: var(--green, #25D366); color: #fff;
+  border-radius: 8px; padding: 0.85rem 1.6rem;
+  font-weight: 700; font-size: 0.95rem; text-decoration: none;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+.btn-checkout-wa:hover { background: #1ebe57; transform: translateY(-2px); color: #fff; }
+.btn-checkout-wa svg { width: 18px; height: 18px; }
+
+/* ========================================
    TIER LEGEND
    ======================================== */
 .tier-legend {
@@ -2037,10 +2186,13 @@ function createCard(num) {
       '<span class="' + badgeClass + '">' + escapeHtml(num.category) + '</span>' +
     '</div>' +
     '<div class="' + priceClass + '">' + priceText + '</div>' +
+    '<div class="card-actions">' +
+    '<button type="button" class="btn-reserve" data-num="' + escapeHtml(num.formatted) + '" data-msisdn="' + escapeHtml(num.msisdn || '') + '" data-cat="' + escapeHtml(num.category) + '" aria-label="Reserve ' + escapeHtml(num.formatted) + '">🛒 Reserve</button>' +
     '<a class="btn-wa" href="https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(waMessage) + '" target="_blank" rel="noopener noreferrer" data-message="' + escapeHtml(waMessage) + '" data-num="' + escapeHtml(num.formatted) + '" data-msisdn="' + escapeHtml(num.msisdn || '') + '" data-cat="' + escapeHtml(num.category) + '">' +
       '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>' +
       'Inquire on WhatsApp' +
-    '</a>';
+    '</a>' +
+    '</div>';
 
   return card;
 }
@@ -2229,6 +2381,7 @@ document.addEventListener('click', function(e) {
   var link = e.target.closest('a[href*="wa.me"]');
   if (!link) return;
   if (link.classList.contains('btn-wa')) return;
+  if (link.classList.contains('btn-checkout-wa')) return; // checkout handoff tracks itself (href already carries its Ref)
 
   var leadToken = createLeadToken();
   var ctx = link.getAttribute('data-cta') || (link.textContent || '').trim().substring(0, 40) || 'cta';
@@ -2329,10 +2482,312 @@ document.addEventListener('click', function(e) {
 });
 
 /* ========================================
+   CHECKOUT (lean, single number — soft reserve)
+   ========================================
+   Reserve button → modal form (name / mobile / city / address / verification slot)
+   → ① API-backup lead to bilal-sales worker (guards: honeypot, Turnstile when keyed,
+   rate limits server-side) → ② success panel with prefilled WhatsApp handoff.
+   The WhatsApp message is the PRIMARY lead path; the API is the abandon-catcher.
+   Ref code SOURCE field = CHECKOUT → CRM classifies as "Website — Checkout".
+   NOTE: wrapped in DOMContentLoaded — the modal markup sits AFTER this script in the
+   DOM, so the element lookups must wait for the parse to finish. */
+document.addEventListener('DOMContentLoaded', function() {
+var CHECKOUT_API = 'https://bilal-sales.mallikamiin.workers.dev/api/web-checkout';
+var TURNSTILE_SITE_KEY = ''; // paste sitekey once the Turnstile widget exists; empty = widget skipped
+var _checkout = null;        // { num, msisdn, cat, token }
+var _tsWidgetId = null;
+var _tsLoading = false;
+
+var checkoutOverlay = document.getElementById('checkoutOverlay');
+var checkoutFormWrap = document.getElementById('checkoutFormWrap');
+var checkoutSuccess = document.getElementById('checkoutSuccess');
+var checkoutForm = document.getElementById('checkoutForm');
+var coErr = document.getElementById('coErr');
+var coSubmit = document.getElementById('coSubmit');
+
+function loadTurnstileWidget() {
+  if (!TURNSTILE_SITE_KEY || _tsLoading) return;
+  _tsLoading = true;
+  window.__ctTsReady = function() {
+    try {
+      _tsWidgetId = window.turnstile.render('#coTurnstile', { sitekey: TURNSTILE_SITE_KEY, theme: 'dark' });
+    } catch (e) {}
+  };
+  var s = document.createElement('script');
+  s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=__ctTsReady';
+  s.async = true;
+  document.head.appendChild(s);
+}
+
+function checkoutPlanValue(cat) { return cat === 'Platinum' ? 1000 : (cat === 'Gold' ? 500 : 188); }
+function checkoutPlanLabel(cat) {
+  return cat === 'Platinum' ? 'AED 1,000 · platinum number'
+       : cat === 'Gold' ? 'AED 500/mo plan' : 'AED 188/mo plan';
+}
+
+function openCheckout(num, msisdn, cat) {
+  _checkout = { num: num, msisdn: msisdn || '', cat: cat || 'Silver', token: createLeadToken() };
+  document.getElementById('coNum').textContent = num;
+  document.getElementById('coMeta').textContent = _checkout.cat + ' · ' + checkoutPlanLabel(_checkout.cat);
+  checkoutForm.reset();
+  coErr.classList.remove('show');
+  coSubmit.disabled = false;
+  checkoutSuccess.classList.remove('show');
+  checkoutFormWrap.style.display = '';
+  var d = document.getElementById('coDate');
+  var today = new Date();
+  var max = new Date(today.getTime() + 14 * 86400000);
+  d.min = today.toISOString().slice(0, 10);
+  d.max = max.toISOString().slice(0, 10);
+  checkoutOverlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  loadTurnstileWidget();
+
+  var v = checkoutPlanValue(_checkout.cat);
+  if (typeof gtag === 'function') {
+    gtag('event', 'add_to_cart', {
+      currency: 'AED', value: v,
+      items: [{ item_id: _checkout.msisdn || num, item_name: num, item_category: _checkout.cat }]
+    });
+    gtag('event', 'begin_checkout', {
+      currency: 'AED', value: v,
+      items: [{ item_id: _checkout.msisdn || num, item_name: num, item_category: _checkout.cat }]
+    });
+  }
+  if (typeof fbq === 'function') {
+    fbq('track', 'AddToCart', {
+      content_type: 'product', content_ids: [_checkout.msisdn || num],
+      content_category: _checkout.cat, value: v, currency: 'AED'
+    }, { eventID: 'atc_' + _checkout.token });
+    fbq('track', 'InitiateCheckout', {
+      content_type: 'product', content_ids: [_checkout.msisdn || num],
+      content_category: _checkout.cat, value: v, currency: 'AED'
+    }, { eventID: 'ic_' + _checkout.token });
+  }
+  if (typeof ttq !== 'undefined' && ttq.track) {
+    ttq.track('AddToCart', { content_id: num, content_category: _checkout.cat, content_type: 'product', value: v, currency: 'AED' });
+    ttq.track('InitiateCheckout', { content_id: num, content_name: 'Checkout Started', content_category: _checkout.cat, value: v, currency: 'AED' });
+  }
+}
+
+function closeCheckout() {
+  checkoutOverlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function checkoutShowError(msg) {
+  coErr.textContent = msg;
+  coErr.classList.add('show');
+  coSubmit.disabled = false;
+}
+
+document.addEventListener('click', function(e) {
+  var btn = e.target.closest('.btn-reserve');
+  if (!btn) return;
+  openCheckout(btn.getAttribute('data-num'), btn.getAttribute('data-msisdn'), btn.getAttribute('data-cat'));
+});
+
+document.getElementById('checkoutClose').addEventListener('click', closeCheckout);
+checkoutOverlay.addEventListener('click', function(e) { if (e.target === checkoutOverlay) closeCheckout(); });
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && checkoutOverlay.classList.contains('open')) closeCheckout(); });
+
+checkoutForm.addEventListener('submit', function(e) {
+  e.preventDefault();
+  if (!_checkout) return;
+  coErr.classList.remove('show');
+
+  var name = document.getElementById('coName').value.replace(/\s+/g, ' ').trim();
+  var phoneRaw = document.getElementById('coPhone').value;
+  var phoneDigits = phoneRaw.replace(/\D/g, '');
+  var city = document.getElementById('coCity').value;
+  var address = document.getElementById('coAddress').value.replace(/\s+/g, ' ').trim();
+  var slotDate = document.getElementById('coDate').value;
+  var slotTime = document.getElementById('coTime').value;
+
+  if (name.length < 2) return checkoutShowError('Please enter your full name.');
+  var pm = phoneDigits.match(/^(?:971|0)?(5\d{8})$/);
+  if (!pm) return checkoutShowError('Please enter a valid UAE mobile (05x xxx xxxx).');
+  if (!city) return checkoutShowError('Please select your city.');
+  if (address.length < 5) return checkoutShowError('Please enter your delivery address.');
+  if (!slotDate || !slotTime) return checkoutShowError('Please pick a date and time for your verification call.');
+
+  var tsToken = '';
+  if (TURNSTILE_SITE_KEY) {
+    try { tsToken = window.turnstile && _tsWidgetId !== null ? window.turnstile.getResponse(_tsWidgetId) : ''; } catch (err) {}
+    if (!tsToken) return checkoutShowError('Please complete the verification box above.');
+  }
+
+  coSubmit.disabled = true;
+  var localPhone = '0' + pm[1];
+  var v = checkoutPlanValue(_checkout.cat);
+  var token = _checkout.token;
+
+  // Analytics: checkout submit IS the lead (the WA tap that follows is the handoff).
+  if (typeof gtag === 'function') {
+    gtag('event', 'checkout_submit', {
+      number_id: _checkout.num, number_category: _checkout.cat,
+      lead_token: token, event_id: token
+    });
+    gtag('event', 'generate_lead', {
+      currency: 'AED', value: v, lead_source: 'web_checkout',
+      number_id: _checkout.num, number_category: _checkout.cat, event_id: token
+    });
+  }
+  if (typeof fbq === 'function') {
+    fbq('track', 'Lead', {
+      content_name: 'Website Checkout', content_category: _checkout.cat,
+      content_type: 'product', content_ids: [_checkout.msisdn || _checkout.num],
+      value: v, currency: 'AED'
+    }, { eventID: token });
+  }
+  if (typeof ttq !== 'undefined' && ttq.track) {
+    ttq.track('PlaceAnOrder', { content_id: _checkout.num, content_category: _checkout.cat, content_type: 'product', value: v, currency: 'AED' });
+  }
+
+  // API backup — fire-and-continue. The WhatsApp handoff below is the primary lead path,
+  // so a failed/rate-limited POST must never block the customer.
+  var payload = {
+    number: _checkout.num, category: _checkout.cat,
+    name: name, phone: localPhone, city: city, address: address,
+    slot_date: slotDate, slot_time: slotTime,
+    token: token, ref: buildRefCode('CHECKOUT', token),
+    company: document.getElementById('coCompany').value || ''
+  };
+  if (tsToken) payload.ts_token = tsToken;
+  try {
+    fetch(CHECKOUT_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      keepalive: true
+    }).then(function(r) {
+      if (typeof gtag === 'function') gtag('event', 'checkout_api', { api_status: String(r.status), lead_token: token });
+    }).catch(function() {
+      if (typeof gtag === 'function') gtag('event', 'checkout_api', { api_status: 'network_error', lead_token: token });
+    });
+  } catch (err) {}
+
+  // WhatsApp handoff — order summary prefilled; "Checkout Order" header + the CHECKOUT
+  // ref slot are BOTH worker-detection markers (waIsCheckoutMessage in bilal-sales).
+  var waMsg = '🛒 New Checkout Order — goldennummbers.com\n\n' +
+    'Number: ' + _checkout.num + ' (' + _checkout.cat + ')\n' +
+    'Name: ' + name + '\n' +
+    'Mobile: ' + localPhone + '\n' +
+    'City: ' + city + '\n' +
+    'Delivery: ' + address + '\n' +
+    'Verification call: ' + slotDate + ', ' + slotTime;
+  document.getElementById('coWaBtn').setAttribute('href', buildWhatsAppHref(waMsg, 'CHECKOUT', token));
+  document.getElementById('coSuccessNum').textContent = _checkout.num + ' · ' + _checkout.cat;
+
+  checkoutFormWrap.style.display = 'none';
+  checkoutSuccess.classList.add('show');
+});
+
+// The confirm-on-WhatsApp tap = contact handoff (kept OUT of the global wa.me listener
+// below via the btn-checkout-wa guard so the Ref suffix isn't appended twice).
+document.getElementById('coWaBtn').addEventListener('click', function() {
+  if (!_checkout) return;
+  var v = checkoutPlanValue(_checkout.cat);
+  if (typeof gtag === 'function') {
+    gtag('event', 'contact', { cta_context: 'checkout_wa_handoff', page_context: '/choose-number/', event_id: 'wa_' + _checkout.token, lead_token: _checkout.token });
+  }
+  if (typeof fbq === 'function') {
+    fbq('track', 'Contact', {
+      content_name: 'Checkout WhatsApp Handoff', content_category: _checkout.cat,
+      content_type: 'product', content_ids: [_checkout.msisdn || _checkout.num],
+      value: v, currency: 'AED'
+    }, { eventID: 'wa_' + _checkout.token });
+  }
+  if (typeof ttq !== 'undefined' && ttq.track) {
+    ttq.track('Contact', { content_name: 'Checkout WhatsApp Handoff', content_category: _checkout.cat, content_id: _checkout.num, value: v, currency: 'AED' });
+  }
+});
+}); // end DOMContentLoaded (checkout)
+
+/* ========================================
    INIT
    ======================================== */
 loadNumbers();
 </script>
+
+<!-- Checkout modal — lean single-number checkout. Soft reserve: lead → CRM (API backup)
+     + prefilled WhatsApp handoff. No payment, no Emirates ID (collected privately on WA). -->
+<div class="checkout-overlay" id="checkoutOverlay" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
+  <div class="checkout-modal">
+    <button type="button" class="checkout-close" id="checkoutClose" aria-label="Close checkout">&times;</button>
+
+    <div id="checkoutFormWrap">
+      <h2 class="checkout-title" id="checkoutTitle">Secure Checkout</h2>
+      <div class="checkout-summary">
+        <span class="co-num" id="coNum"></span>
+        <span class="co-meta" id="coMeta"></span>
+      </div>
+      <form class="checkout-form" id="checkoutForm" novalidate>
+        <label for="coName">Full Name</label>
+        <input type="text" id="coName" name="name" autocomplete="name" maxlength="60" required>
+
+        <label for="coPhone">Mobile Number (UAE)</label>
+        <input type="tel" id="coPhone" name="phone" autocomplete="tel" inputmode="tel" placeholder="05x xxx xxxx" maxlength="17" required>
+
+        <label for="coCity">City</label>
+        <select id="coCity" name="city" required>
+          <option value="">Select city…</option>
+          <option>Dubai</option>
+          <option>Abu Dhabi</option>
+          <option>Sharjah</option>
+          <option>Ajman</option>
+          <option>Al Ain</option>
+          <option>Ras Al Khaimah</option>
+          <option>Fujairah</option>
+          <option>Umm Al Quwain</option>
+        </select>
+
+        <label for="coAddress">Delivery Address (where we deliver your SIM)</label>
+        <textarea id="coAddress" name="address" autocomplete="street-address" maxlength="240" required></textarea>
+
+        <div class="checkout-row">
+          <div>
+            <label for="coDate">Verification Call — Date</label>
+            <input type="date" id="coDate" name="slot_date" required>
+          </div>
+          <div>
+            <label for="coTime">Time</label>
+            <select id="coTime" name="slot_time" required>
+              <option value="">Select…</option>
+              <option value="9am-1pm">9 AM – 1 PM</option>
+              <option value="1pm-5pm">1 PM – 5 PM</option>
+              <option value="5pm-9pm">5 PM – 9 PM</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- honeypot: real customers never see or fill this -->
+        <div class="co-hp" aria-hidden="true">
+          <label for="coCompany">Company</label>
+          <input type="text" id="coCompany" name="company" tabindex="-1" autocomplete="off">
+        </div>
+
+        <div id="coTurnstile"></div>
+        <div class="checkout-err" id="coErr"></div>
+
+        <button type="submit" class="checkout-submit" id="coSubmit">Reserve My Number</button>
+        <p class="checkout-note">No payment now — pay card-on-delivery. The Etisalat verification department will call you at your chosen time to confirm.</p>
+      </form>
+    </div>
+
+    <div class="checkout-success" id="checkoutSuccess">
+      <div class="co-check">✅</div>
+      <h3>Your Number is Reserved</h3>
+      <p id="coSuccessNum"></p>
+      <p>One of our <strong>Etisalat Authorized Consultants</strong> will get in touch with you. Tap below to confirm your order on WhatsApp — your details are pre-filled.</p>
+      <a class="btn-checkout-wa" id="coWaBtn" href="#" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Confirm Order on WhatsApp
+      </a>
+      <p class="checkout-note">Your order isn't final until you send the WhatsApp confirmation.</p>
+    </div>
+  </div>
+</div>
 
 <!-- Floating WhatsApp FAB — always-visible primary CTA for ad-landing traffic -->
 <a class="wa-fab" href="https://wa.me/971569028087?text=Hi%2C%20I%20want%20to%20reserve%20a%20number%20from%20goldennummbers.com" target="_blank" rel="noopener noreferrer" data-cta="floating_fab" aria-label="Chat on WhatsApp">

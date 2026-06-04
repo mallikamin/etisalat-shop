@@ -6,9 +6,15 @@
     <loc>https://goldennummbers.com/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://goldennummbers.com/"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://goldennummbers.com/ar/"/>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-06-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://goldennummbers.com/faq/</loc>
+    <lastmod>2026-06-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://goldennummbers.com/ar/</loc>

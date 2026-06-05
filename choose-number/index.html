@@ -2545,6 +2545,7 @@ function openCheckout(num, msisdn, cat) {
   checkoutForm.reset();
   coErr.classList.remove('show');
   coSubmit.disabled = false;
+  document.getElementById('coDate').disabled = false; // reset() doesn't undo the call-now lock
   checkoutSuccess.classList.remove('show');
   checkoutFormWrap.style.display = '';
   var d = document.getElementById('coDate');
@@ -2602,6 +2603,17 @@ document.addEventListener('click', function(e) {
 
 document.getElementById('checkoutClose').addEventListener('click', closeCheckout);
 checkoutOverlay.addEventListener('click', function(e) { if (e.target === checkoutOverlay) closeCheckout(); });
+
+// "Call me NOW" — the date is irrelevant for an immediate call: auto-fill today + lock the field.
+document.getElementById('coTime').addEventListener('change', function() {
+  var d = document.getElementById('coDate');
+  if (this.value === 'now') {
+    d.value = new Date().toISOString().slice(0, 10);
+    d.disabled = true;
+  } else {
+    d.disabled = false;
+  }
+});
 document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && checkoutOverlay.classList.contains('open')) closeCheckout(); });
 
 checkoutForm.addEventListener('submit', function(e) {
@@ -2612,14 +2624,17 @@ checkoutForm.addEventListener('submit', function(e) {
   var name = document.getElementById('coName').value.replace(/\s+/g, ' ').trim();
   var phoneRaw = document.getElementById('coPhone').value;
   var phoneDigits = phoneRaw.replace(/\D/g, '');
+  var nationality = document.getElementById('coNationality').value.replace(/\s+/g, ' ').trim();
   var city = document.getElementById('coCity').value;
   var address = document.getElementById('coAddress').value.replace(/\s+/g, ' ').trim();
-  var slotDate = document.getElementById('coDate').value;
   var slotTime = document.getElementById('coTime').value;
+  if (slotTime === 'now') document.getElementById('coDate').value = new Date().toISOString().slice(0, 10);
+  var slotDate = document.getElementById('coDate').value;
 
   if (name.length < 2) return checkoutShowError('Please enter your full name.');
   var pm = phoneDigits.match(/^(?:971|0)?(5\d{8})$/);
   if (!pm) return checkoutShowError('Please enter a valid UAE mobile (05x xxx xxxx).');
+  if (nationality.length < 2) return checkoutShowError('Please enter your nationality.');
   if (!city) return checkoutShowError('Please select your city.');
   if (address.length < 5) return checkoutShowError('Please enter your delivery address.');
   if (!slotDate || !slotTime) return checkoutShowError('Please pick a date and time for your verification call.');
@@ -2661,7 +2676,7 @@ checkoutForm.addEventListener('submit', function(e) {
   // so a failed/rate-limited POST must never block the customer.
   var payload = {
     number: _checkout.num, category: _checkout.cat,
-    name: name, phone: localPhone, city: city, address: address,
+    name: name, phone: localPhone, nationality: nationality, city: city, address: address,
     slot_date: slotDate, slot_time: slotTime,
     token: token, ref: buildRefCode('CHECKOUT', token),
     company: document.getElementById('coCompany').value || ''
@@ -2682,13 +2697,15 @@ checkoutForm.addEventListener('submit', function(e) {
 
   // WhatsApp handoff — order summary prefilled; "Checkout Order" header + the CHECKOUT
   // ref slot are BOTH worker-detection markers (waIsCheckoutMessage in bilal-sales).
+  var slotLabel = slotTime === 'now' ? '📞 CALL ME NOW' : slotDate + ', ' + slotTime;
   var waMsg = '🛒 New Checkout Order — goldennummbers.com\n\n' +
     'Number: ' + _checkout.num + ' (' + _checkout.cat + ')\n' +
     'Name: ' + name + '\n' +
     'Mobile: ' + localPhone + '\n' +
+    'Nationality: ' + nationality + '\n' +
     'City: ' + city + '\n' +
     'Delivery: ' + address + '\n' +
-    'Verification call: ' + slotDate + ', ' + slotTime;
+    'Verification call: ' + slotLabel;
   document.getElementById('coWaBtn').setAttribute('href', buildWhatsAppHref(waMsg, 'CHECKOUT', token));
   document.getElementById('coSuccessNum').textContent = _checkout.num + ' · ' + _checkout.cat;
 
@@ -2742,6 +2759,9 @@ loadNumbers();
         <label for="coPhone">Mobile Number (UAE)</label>
         <input type="tel" id="coPhone" name="phone" autocomplete="tel" inputmode="tel" placeholder="05x xxx xxxx" maxlength="17" required>
 
+        <label for="coNationality">Nationality</label>
+        <input type="text" id="coNationality" name="nationality" autocomplete="country-name" maxlength="40" placeholder="e.g. Indian, Pakistani, Emirati" required>
+
         <label for="coCity">City</label>
         <select id="coCity" name="city" required>
           <option value="">Select city…</option>
@@ -2767,6 +2787,7 @@ loadNumbers();
             <label for="coTime">Time</label>
             <select id="coTime" name="slot_time" required>
               <option value="">Select…</option>
+              <option value="now">📞 Call me NOW</option>
               <option value="9am-1pm">9 AM – 1 PM</option>
               <option value="1pm-5pm">1 PM – 5 PM</option>
               <option value="5pm-9pm">5 PM – 9 PM</option>

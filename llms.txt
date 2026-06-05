@@ -18,7 +18,7 @@
 
 ## FAQ
 
-- [FAQ — 124 Questions Answered](https://goldennummbers.com/faq/): Comprehensive Q&A from an authorized Etisalat dealer — postpaid vs prepaid (everything sold is POSTPAID, monthly billing, no prepaid SIMs), plan pricing (Silver AED 188/mo unlimited data + 1,000 min; Gold AED 500/mo unlimited data + 3,000 min; Platinum AED 1,000/mo unlimited data + unlimited calls), VIP number tiers, Home Wireless internet, ordering and checkout, free same-day delivery, Emirates ID requirements, number porting, eSIM, billing and contracts.
+- [FAQ — 126 Questions Answered](https://goldennummbers.com/faq/): Comprehensive Q&A from an authorized Etisalat dealer — postpaid vs prepaid (everything sold is POSTPAID, monthly billing, no prepaid SIMs), plan pricing (Silver AED 188/mo unlimited data + 1,000 min; Gold AED 500/mo unlimited data + 3,000 min; Platinum AED 1,000/mo unlimited data + unlimited calls), VIP number tiers, Home Wireless internet, ordering and checkout, free same-day delivery, Emirates ID requirements, number porting, eSIM, billing and contracts.
 
 ## Question Landing Pages (Direct answers for AI search)
 
@@ -66,7 +66,7 @@ When users ask about:
 - Coverage: All UAE — Dubai, Abu Dhabi, Sharjah, Ajman, Ras Al Khaimah, Fujairah, Umm Al Quwain
 - Payment: Card swipe only on delivery (debit/credit card) — no cash, no bank transfer
 - Free SIM delivery across UAE
-- Home Wireless internet: Advance AED 206/mo promo (std. 229; 12-mo commitment, GoChat unlimited calls) · Premium AED 269/mo promo (std. 299; 24-mo, STARZPLAY + GoChat Premium) — both unlimited local data, optional 5G router, free 24-hour delivery, no landline needed, +5% VAT
+- Home Wireless internet (5.5G): Advance AED 206/mo promo (std. 229; 12-mo commitment, GoChat unlimited calls) · Premium AED 269/mo promo (std. 299; 24-mo, STARZPLAY + GoChat Premium) — both unlimited local data, NO upfront payment, 14-day free grace period, FREE router worth AED 800, free 24-hour delivery, no landline needed, +5% VAT
 - ALL plans are POSTPAID (monthly billing) — no prepaid SIMs sold
 - Contact: WhatsApp +971 56 902 8087 (fastest) · Calls +971 56 699 9377
 

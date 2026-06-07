@@ -48,6 +48,7 @@ GOLD_LIGHT = (232, 213, 163)
 WHITE = (245, 245, 240)
 MUTED = (160, 160, 155)
 
+PRICE_PLATINUM = 1000
 PRICE_GOLD = 500
 PRICE_SILVER = 188
 
@@ -73,6 +74,14 @@ def fetch_sheet() -> list[dict]:
             data = r.read().decode("utf-8-sig")
         for row in csv.DictReader(io.StringIO(data)):
             msisdn = (row.get("MSISDN") or "").strip()
+            if not msisdn:
+                # 2026-06-07: MSISDN column went mostly blank in the sheet (632 of
+                # 3,518 filled) which silently shrank the feed 3,293 -> 617. Derive
+                # it from "With Zero" (0541361000 -> 971541361000) instead of dropping.
+                digits = "".join(ch for ch in (row.get("With Zero") or "") if ch.isdigit())
+                if len(digits) == 10 and digits.startswith("0"):
+                    msisdn = "971" + digits[1:]
+                    row["MSISDN"] = msisdn
             if msisdn and msisdn in seen:
                 continue
             if msisdn:
@@ -91,6 +100,8 @@ def format_number(with_zero: str) -> str:
 
 def category_norm(category: str) -> str:
     cat = (category or "").strip().lower()
+    if "platinum" in cat:
+        return "Platinum"
     if "gold" in cat:
         return "Gold"
     if "silver" in cat:
@@ -99,7 +110,15 @@ def category_norm(category: str) -> str:
 
 
 def price_aed(category: str) -> int:
-    return PRICE_GOLD if "gold" in (category or "").lower() else PRICE_SILVER
+    # Tier-aware plan pricing — 2026-06-04 rule: 188-plan pairs with SILVER only;
+    # Gold = AED500/mo plan, Platinum = AED1000/mo plan. Platinum previously fell
+    # through to 188 (2026-06-07 incident: DPA showed Platinum cards at AED188).
+    cat = (category or "").lower()
+    if "platinum" in cat:
+        return PRICE_PLATINUM
+    if "gold" in cat:
+        return PRICE_GOLD
+    return PRICE_SILVER
 
 
 # ---- Font loading ---------------------------------------------------------
@@ -415,12 +434,16 @@ def main() -> int:
         formatted = format_number(with_zero)
         category = category_norm(category_raw)
         price = price_aed(category_raw)
-        product_url = f"{SITE_URL}/choose-number/?n={with_zero}"
+        # ref=FBDPA rides the existing partner-ref system (WSHARE precedent) so
+        # catalog-ad leads are attributable (scan-logged + CHECKOUT-FBDPA-… refs)
+        # instead of landing as plain web_chooser. QR/card URL stays ref-less.
+        product_url = f"{SITE_URL}/choose-number/?n={with_zero}&ref=FBDPA"
+        qr_card_url = f"{SITE_URL}/choose-number/?n={with_zero}"
         card_path = CARDS_DIR / f"{with_zero}.png"
 
         if not args.no_images and (args.force or not card_path.exists()):
             try:
-                render_card(formatted, category, price, product_url, card_path)
+                render_card(formatted, category, price, qr_card_url, card_path)
                 rendered += 1
                 if rendered % 50 == 0:
                     print(f"  ...rendered {rendered}/{len(available)}")

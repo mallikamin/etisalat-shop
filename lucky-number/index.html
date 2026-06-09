@@ -668,40 +668,61 @@ var READINGS={
        'Protect the weak and guard your words in the heat of the moment; that is your real strength.']}
 };
 
-/* pattern strength so we hand back an attractive number, not a random one */
-function patternScore(d){
-  var s=0,tier={Silver:1,Gold:2,Platinum:3};
-  s+=(tier[d.category]||1)*8;
+/* Score a number FOR THIS PERSON. A number is lucky not only when its digits total
+   to a lucky number, but when it is built from the person's lucky digits and avoids
+   their unlucky ones. So we reward each lucky digit (best lucky weighted most), reward
+   repeating runs of LUCKY digits (999, 333 for a Mars person) and penalise avoid digits
+   and runs of avoid digits — instead of rewarding any repeat regardless of digit. */
+function numberScore(d,lucky,avoid){
   var digits=d.digits;
-  var run=1,best=1;
-  for(var i=1;i<digits.length;i++){if(digits[i]===digits[i-1]){run++;if(run>best)best=run;}else run=1;}
-  s+=best*best*3;                                  // reward repeating runs (777, 8888)
-  var seq=0;for(var j=1;j<digits.length;j++){if(+digits[j]===(+digits[j-1]+1))seq++;}
-  s+=seq*2;
-  if(/(786|111|222|333|444|555|666|777|888|999|000)/.test(digits))s+=10;
+  var tier={Silver:1,Gold:2,Platinum:3};
+  var s=(tier[d.category]||1)*4;                    // mild tier preference, never dominant
+  var lw={};                                        // lucky digit -> weight (best lucky highest)
+  for(var i=0;i<lucky.length;i++){ lw[lucky[i]]=lucky.length-i; }
+  var av={};
+  for(var k=0;k<avoid.length;k++){ av[avoid[k]]=1; }
+  var luckyCount=0,avoidCount=0;
+  for(var j=0;j<digits.length;j++){
+    var dd=+digits[j];
+    if(lw[dd]){ s+=8*lw[dd]; luckyCount++; }
+    if(av[dd]){ s-=40; avoidCount++; }              // heavy penalty: keep avoid digits out
+  }
+  // repeating runs: reward ONLY when the repeated digit is lucky; penalise avoid runs
+  var run=1;
+  for(var m=1;m<digits.length;m++){
+    if(digits[m]===digits[m-1]){ run++; } else { run=1; }
+    if(run>=2){
+      var rd=+digits[m];
+      if(lw[rd]) s+=run*run*7*lw[rd];               // 999 / 333 strongly rewarded
+      else if(av[rd]) s-=run*run*15;                // 444 strongly penalised
+    }
+  }
+  if(/786/.test(digits)) s+=6;                       // light cultural bonus
+  d._luckyCount=luckyCount; d._avoidCount=avoidCount;
   return s;
 }
 
-/* Pick a number tuned to the person's BEST available lucky number: try lucky[0],
-   then lucky[1], etc. Among matches, rank by pattern strength and pick by seed so
-   the result is strong, personal and stable. Returns {num, lucky}. */
-function pickForLuckySet(inventory,luckyArr,seed){
-  for(var k=0;k<luckyArr.length;k++){
-    var L=luckyArr[k];
-    var pool=inventory.filter(function(d){return reduceToRoot(sumDigits(d.digits))===L;});
-    if(pool.length){
-      pool.sort(function(a,b){return patternScore(b)-patternScore(a);});
-      var topN=Math.min(pool.length,24);
-      return {num:pool[seed%topN],lucky:L};
-    }
-  }
-  if(inventory.length){
-    var any=inventory.slice().sort(function(a,b){return patternScore(b)-patternScore(a);});
-    var tn=Math.min(any.length,24);
-    var chosen=any[seed%tn];
-    return {num:chosen,lucky:reduceToRoot(sumDigits(chosen.digits))};
-  }
-  return null;
+/* Pool every available number whose digit-total reduces to ANY of the person's lucky
+   numbers, then rank by numberScore so the pick is genuinely built from their lucky
+   digits. Seed picks among the strongest few for personal, stable variety.
+   Returns {num, lucky, luckyCount, avoidCount}. */
+function pickForLuckySet(inventory,luckyArr,avoidArr,seed){
+  var totals={}; luckyArr.forEach(function(L){ totals[L]=1; });
+  var av={}; avoidArr.forEach(function(A){ av[A]=1; });
+  var base=inventory.filter(function(d){ return totals[reduceToRoot(sumDigits(d.digits))]; });
+  if(!base.length) base=inventory.slice();
+  if(!base.length) return null;
+  // Prefer numbers that contain NONE of the avoid digits; only fall back if none exist.
+  var clean=base.filter(function(d){
+    for(var i=0;i<d.digits.length;i++){ if(av[+d.digits[i]]) return false; }
+    return true;
+  });
+  var pool=clean.length?clean:base;
+  pool.forEach(function(d){ d._score=numberScore(d,luckyArr,avoidArr); });
+  pool.sort(function(a,b){ return b._score-a._score; });
+  var topN=Math.min(pool.length,12);
+  var chosen=pool[seed%topN];
+  return {num:chosen,lucky:reduceToRoot(sumDigits(chosen.digits)),luckyCount:chosen._luckyCount,avoidCount:chosen._avoidCount};
 }
 
 /* ---- Form handling ---- */
@@ -748,7 +769,7 @@ form.addEventListener('submit',function(ev){
   try{gtag('event','lucky_number_calc',{ruling_number:ruling});}catch(e){}
 
   warmInventory().then(function(inv){
-    var pick=pickForLuckySet(inv,reading.lucky,seed);
+    var pick=pickForLuckySet(inv,reading.lucky,reading.avoid,seed);
     renderResult(name,ruling,reading,pick,inv&&inv.length);
   }).catch(function(){
     renderResult(name,ruling,reading,null,0);
@@ -798,7 +819,11 @@ function renderResult(name,ruling,reading,pick,invCount){
     html+='<div class="mb-title">Your lucky Etisalat number — available now</div>';
     html+='<div class="match-num">'+esc(pick.num.formatted)+'</div>';
     html+='<span class="tier-badge tier-'+pick.num.category+'">'+pick.num.category+' &middot; Postpaid</span>';
-    html+='<p class="match-why">The digits of this number add up to <b>'+pick.lucky+'</b> — one of your lucky numbers — so it is tuned to your energy and steers clear of the numbers you should avoid. It is in stock and ready to reserve with free UAE delivery.</p>';
+    var why='The digits of this number add up to <b>'+pick.lucky+'</b> — one of your lucky numbers';
+    if(pick.luckyCount>=2){ why+=', and it is built mostly from your lucky digits ('+reading.lucky.join(', ')+')'; }
+    if(pick.avoidCount===0&&reading.avoid&&reading.avoid.length){ why+=', with none of the '+reading.avoid.join('/')+' you should avoid'; }
+    why+='. It is tuned to your energy, in stock and ready to reserve with free UAE delivery.';
+    html+='<p class="match-why">'+why+'</p>';
     html+='<div class="result-cta">';
     html+='<a class="cta-reserve" href="'+reserveUrl+'" data-cta="lucky_reserve">Reserve This Number</a>';
     html+='<a class="cta-wa" href="'+waUrl+'" target="_blank" rel="noopener noreferrer" data-cta="lucky_wa">'+waSvg+'Reserve on WhatsApp</a>';

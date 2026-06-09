@@ -1771,8 +1771,29 @@ function buildRefCode(source, leadToken) {
   return ['GN1', cls, ch, campaign, partner, cleanSrc, leadToken].join('-');
 }
 
+// The number the visitor arrived on via a catalog/share deep link (?n=05xxxxxxxx).
+function gnDeepLinkNumber() {
+  try {
+    var n = (new URLSearchParams(location.search).get('n') || '').replace(/\D/g, '');
+    return /^0\d{9}$/.test(n) ? n : '';
+  } catch (e) { return ''; }
+}
+function gnFormatNumber(d) {
+  return (d && d.length === 10) ? (d.slice(0, 3) + ' ' + d.slice(3, 6) + ' ' + d.slice(6)) : (d || '');
+}
+
 function buildTrackedMessage(baseMessage, source, leadToken) {
-  return baseMessage + '\n\nRef: ' + buildRefCode(source, leadToken);
+  var msg = baseMessage;
+  // 2026-06-08 fix: when the visitor landed on a SPECIFIC number (DPA/share deep link ?n=)
+  // and clicks a NON-card CTA (floating FAB, hero, footer), embed the number in the message
+  // so it isn't lost — both Bilal and the WA bot read it. Without this, a DPA lead's chosen
+  // number vanished and the bot dumped "closest" guesses. Card CTAs already carry the number
+  // in SOURCE=CARD<digits>, so skip those (don't double-state) and skip if it's already in text.
+  var n = gnDeepLinkNumber();
+  if (n && String(source || '').toUpperCase().indexOf('CARD') === -1 && msg.replace(/\D/g, '').indexOf(n) === -1) {
+    msg += '\n\nNumber: ' + gnFormatNumber(n);
+  }
+  return msg + '\n\nRef: ' + buildRefCode(source, leadToken);
 }
 
 function buildWhatsAppHref(baseMessage, source, leadToken) {

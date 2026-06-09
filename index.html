@@ -1130,14 +1130,19 @@
       -webkit-text-fill-color: transparent;
       background-clip: text;
       letter-spacing: 0.5px;
+      white-space: nowrap;
+      flex: none;
     }
 
     .navbar-links {
       display: flex;
       align-items: center;
-      gap: 2rem;
+      flex-wrap: nowrap;
+      gap: 1.6rem;
       list-style: none;
     }
+
+    .navbar-links li { flex: none; }
 
     .navbar-links a {
       color: var(--text-muted);
@@ -1146,6 +1151,7 @@
       letter-spacing: 0.3px;
       transition: color 0.2s ease;
       position: relative;
+      white-space: nowrap;
     }
 
     .navbar-links a::after {
@@ -1185,6 +1191,37 @@
       color: #0D1117;
       box-shadow: 0 4px 15px rgba(201, 169, 98, 0.35);
       transform: translateY(-1px);
+    }
+
+    /* Tighten the horizontal bar on laptops so the items never wrap */
+    @media (max-width: 1320px) {
+      .navbar-links { gap: 1.05rem; }
+      .navbar-links a { font-size: 0.82rem; }
+      .navbar-links a.nav-cta { padding: 0.4rem 0.7rem; }
+    }
+
+    /* Collapse to the hamburger menu before the bar can overflow (tablets) */
+    @media (max-width: 1080px) {
+      .navbar-links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 260px;
+        height: 100vh;
+        background: rgba(13, 17, 23, 0.98);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        flex-direction: column;
+        justify-content: center;
+        gap: 1.75rem;
+        transition: right 0.35s ease;
+        border-left: 1px solid var(--surface-border);
+        z-index: 1001;
+      }
+      .navbar-links.open { right: 0; }
+      .navbar-links a { font-size: 1.1rem; }
+      .navbar-links a.nav-cta { padding: 0.55rem 1.2rem; }
+      .menu-toggle { display: flex; }
     }
 
     /* Mobile menu toggle */
@@ -2045,6 +2082,7 @@
         <li><a href="#vip" onclick="closeNav()">VIP Numbers</a></li>
         <li><a href="choose-number/" onclick="closeNav()" class="nav-cta">Choose Your Number</a></li>
         <li><a href="numbers/" onclick="closeNav()">All VIP Numbers</a></li>
+        <li><a href="lucky-number/" onclick="closeNav()">Lucky Number</a></li>
         <li><a href="emirati/" onclick="closeNav()">Emirati Plan</a></li>
         <li><a href="home-wireless/" onclick="closeNav()">Home Internet</a></li>
         <li><a href="#contact" onclick="closeNav()">Contact</a></li>
@@ -2120,6 +2158,22 @@
       </div>
     </div>
   </section>
+  <!-- ============ LUCKY NUMBER PROMO ============ -->
+  <section style="padding:2.5rem 0;background:var(--bg);border-bottom:1px solid var(--surface-border);">
+    <div class="container">
+      <a href="lucky-number/" style="text-decoration:none;display:block;max-width:920px;margin:0 auto;">
+        <div style="display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;justify-content:center;background:linear-gradient(135deg,rgba(201,169,98,0.13),rgba(201,169,98,0.03));border:1px solid var(--gold);border-radius:16px;padding:1.8rem 1.6rem;">
+          <div style="font-size:2.6rem;line-height:1;" aria-hidden="true">🔮</div>
+          <div style="flex:1;min-width:240px;">
+            <h2 style="font-size:clamp(1.3rem,2.4vw,1.7rem);margin:0 0 0.35rem;color:var(--gold-light);">Find Your Lucky Mobile Number</h2>
+            <p style="color:var(--text-muted);margin:0;font-size:0.95rem;">Enter your name &amp; date of birth — we calculate your lucky number with numerology and match it to a real, available Etisalat VIP number you can reserve.</p>
+          </div>
+          <span class="btn btn-gold" style="white-space:nowrap;">Get My Lucky Number</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
   <!-- ============ PLANS SECTION ============ -->
   <section id="plans">
     <div class="container">

@@ -80,12 +80,12 @@
     {
       "@type": "Question",
       "name": "How do I find my lucky mobile number?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Enter your full name and date of birth in the calculator. We use numerology — reducing the letters of your name and the digits of your birth date to a single root number (1–9) — to find your personal lucky number. We then match it to an available Etisalat VIP number whose digits add up to the same root, so the number you receive is real and ready to reserve." }
+      "acceptedAnswer": { "@type": "Answer", "text": "Enter your name and date of birth in the calculator. We work out your ruling number (Moolank) from your birth date and its ruling planet, read your lucky numbers from it, then match an available Etisalat VIP number whose digits add up to your strongest lucky number — so the number you receive is real and ready to reserve." }
     },
     {
       "@type": "Question",
       "name": "What is mobile number numerology?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Mobile number numerology adds together all the digits of a phone number and reduces them to a single root number from 1 to 9. Each root number carries a meaning. A number is considered lucky for you when its root number harmonises with the lucky number derived from your name and date of birth." }
+      "acceptedAnswer": { "@type": "Answer", "text": "Mobile number numerology adds together all the digits of a phone number and reduces them to a single root number from 1 to 9. A number is considered lucky for you when its root is one of the lucky numbers of your ruling planet, and unlucky when it matches a number you should avoid." }
     },
     {
       "@type": "Question",
@@ -104,13 +104,13 @@
     },
     {
       "@type": "Question",
-      "name": "What is my lucky number based on my date of birth?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Your birth (life-path) number is found by adding every digit of your date of birth and reducing the total to a single digit from 1 to 9. Our calculator combines this with your name number to give your final lucky number, then matches it to an available mobile number." }
+      "name": "What is my ruling number, and how is it found?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Your ruling number (Moolank or psychic number) is the day of your birth reduced to a single digit from 1 to 9 — for example, born on the 15th gives 1+5 = 6. It is governed by a planet (Sun, Moon, Jupiter, Rahu, Mercury, Venus, Ketu, Saturn or Mars) that shapes your personality and your lucky numbers." }
     },
     {
       "@type": "Question",
-      "name": "Does my name affect my lucky number?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Yes. We map every letter of your full name to a value (A=1, B=2 … I=9, J=1 …), total it, and reduce it to a root number. Your name number and your birth number are combined to produce your personal lucky number, so two people born on the same day can have different lucky numbers." }
+      "name": "Why is the Moon linked to mother and water in numerology?",
+      "acceptedAnswer": { "@type": "Answer", "text": "In numerology the Moon rules number 2 and represents emotion, the mother and water. That is why people ruled by the Moon are advised to honour and serve their mother above all, as her blessings shape their career, and to never waste water." }
     },
     {
       "@type": "Question",
@@ -227,6 +227,25 @@ a{color:inherit;text-decoration:none}
 .lucky-label{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-soft)}
 .lucky-meaning{max-width:540px;margin:14px auto 0;color:var(--text);font-size:15.5px}
 .lucky-meaning b{color:var(--gold-soft)}
+/* Reading: emotional traits + lucky/avoid + advice */
+.traits{max-width:560px;margin:14px auto 0;text-align:left}
+.traits p{position:relative;color:var(--text);font-size:15px;margin:0 0 10px;padding-left:26px}
+.traits p:before{content:'';position:absolute;left:6px;top:9px;width:7px;height:7px;border-radius:50%;background:var(--gold)}
+.traits p b{color:var(--gold-soft)}
+.luck-row{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin:20px auto 0;max-width:560px}
+.luck-block{flex:1 1 200px;background:#11161D;border:1px solid var(--line);border-radius:13px;padding:13px 14px;text-align:center}
+.luck-h{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:9px}
+.chips{display:flex;gap:7px;justify-content:center;flex-wrap:wrap}
+.chip{width:34px;height:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:15px}
+.chip-lucky{background:radial-gradient(circle at 35% 30%,#F3D98B,#C9A962 75%);color:#1A1206}
+.chip-best{box-shadow:0 0 0 3px rgba(201,169,98,.28);position:relative}
+.chip-best:after{content:'BEST';position:absolute;bottom:-15px;left:50%;transform:translateX(-50%);font-size:8px;letter-spacing:.1em;color:var(--gold-soft)}
+.chip-avoid{background:rgba(255,90,90,.14);color:#ff8a8a;border:1px solid rgba(255,90,90,.45)}
+.luck-block.avoid{flex:0 1 130px}
+.advice{max-width:560px;margin:22px auto 0;text-align:left}
+.advice p{position:relative;color:#D8DEE7;font-size:14.5px;margin:0 0 12px;padding-left:30px;line-height:1.6}
+.advice p:before{content:'💫';position:absolute;left:0;top:0}
+.advice em{color:var(--gold-soft);font-style:italic}
 .match-block{margin-top:26px;border-top:1px solid var(--line);padding-top:24px}
 .match-block .mb-title{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
 .match-num{font-family:'Playfair Display',serif;font-weight:800;font-size:clamp(30px,7vw,44px);letter-spacing:.04em;color:#fff}
@@ -314,7 +333,7 @@ a{color:inherit;text-decoration:none}
   <div class="container">
     <span class="badge">Free Numerology Calculator</span>
     <h1>Find Your <span>Lucky Mobile Number</span></h1>
-    <p class="sub">Enter your name and date of birth to discover your personal lucky number — then reserve a real, available Etisalat VIP postpaid number matched to it.</p>
+    <p class="sub">Enter your name and date of birth to reveal your ruling number, your true nature and your lucky numbers — then reserve a real, available Etisalat VIP number tuned to them.</p>
   </div>
 </section>
 
@@ -323,7 +342,7 @@ a{color:inherit;text-decoration:none}
   <div class="container">
     <div class="calc">
       <h2>Check Your Mobile Number Numerology</h2>
-      <p class="lede">Your lucky number is calculated from your name and birth date, then matched to an available VIP number.</p>
+      <p class="lede">Discover your ruling planet, your emotional nature and your lucky numbers — then get a real available VIP number tuned to them.</p>
       <form id="luckyForm" novalidate>
         <div class="field-grid">
           <div class="field full" id="f-name">
@@ -384,39 +403,39 @@ a{color:inherit;text-decoration:none}
 <section class="seo">
   <div class="container">
     <h2>How the Lucky Mobile Number Calculator Works</h2>
-    <p>Numerology is the belief that numbers carry vibrations that influence the people and things attached to them. A <strong>lucky mobile number</strong> is one whose numerological value harmonises with your own — the number derived from your name and date of birth.</p>
-    <p>Our calculator does this in three steps:</p>
+    <p>Numerology is the belief that numbers carry vibrations that shape our nature and our luck. In Vedic and Chaldean numerology your <strong>ruling number</strong> (the Moolank or psychic number) comes from your date of birth, and it is governed by a planet that colours your personality, your emotions and the numbers that are lucky — or unlucky — for you.</p>
+    <p>Our calculator works in three steps:</p>
     <ul>
-      <li><strong>Name number</strong> — each letter of your full name is mapped to a value (A=1, B=2 … I=9, J=1 …) and the total is reduced to a single root digit from 1 to 9.</li>
-      <li><strong>Birth number</strong> — every digit of your date of birth is added together and reduced to a single root digit, giving your life-path number.</li>
-      <li><strong>Your lucky number</strong> — the name and birth numbers are combined and reduced to one final lucky digit (1–9).</li>
+      <li><strong>Your ruling number</strong> — the day of your birth is reduced to a single digit from 1 to 9, which sets your ruling planet (for example, number 2 is ruled by the Moon).</li>
+      <li><strong>Your reading</strong> — every ruling number carries its own emotional nature, its lucky numbers, a number to avoid, and a piece of life advice.</li>
+      <li><strong>Your lucky number</strong> — we then search our live inventory and reveal an available Etisalat VIP number whose digits add up to your strongest lucky number, so it is tuned to you.</li>
     </ul>
-    <p>We then search our live inventory of available Etisalat VIP numbers and reveal one whose digits add up to the same lucky root — so the number you receive is real, available today, and ready to reserve.</p>
+    <p>The number you receive is real, available today, and ready to reserve — not just a number to dream about.</p>
 
-    <h2>What Each Lucky Number Means</h2>
+    <h2>The Nine Numbers &amp; Their Ruling Planets</h2>
     <div class="num-meanings">
-      <div class="nm"><b>1</b><span>Leadership, ambition, fresh starts</span></div>
-      <div class="nm"><b>2</b><span>Balance, partnership, harmony</span></div>
-      <div class="nm"><b>3</b><span>Creativity, expression, joy</span></div>
-      <div class="nm"><b>4</b><span>Stability, discipline, foundations</span></div>
-      <div class="nm"><b>5</b><span>Freedom, change, opportunity</span></div>
-      <div class="nm"><b>6</b><span>Family, care, responsibility</span></div>
-      <div class="nm"><b>7</b><span>Wisdom, intuition, fortune</span></div>
-      <div class="nm"><b>8</b><span>Wealth, power, business success</span></div>
-      <div class="nm"><b>9</b><span>Compassion, completion, vision</span></div>
+      <div class="nm"><b>1 · Sun</b><span>Leadership, confidence, independence</span></div>
+      <div class="nm"><b>2 · Moon</b><span>Emotion, peace, a caring heart</span></div>
+      <div class="nm"><b>3 · Jupiter</b><span>Wisdom, learning, optimism</span></div>
+      <div class="nm"><b>4 · Rahu</b><span>Originality, resilience, a rebel mind</span></div>
+      <div class="nm"><b>5 · Mercury</b><span>Sharp mind, communication, change</span></div>
+      <div class="nm"><b>6 · Venus</b><span>Love, beauty, harmony, family</span></div>
+      <div class="nm"><b>7 · Ketu</b><span>Intuition, spirituality, depth</span></div>
+      <div class="nm"><b>8 · Saturn</b><span>Patience, discipline, late but big success</span></div>
+      <div class="nm"><b>9 · Mars</b><span>Courage, energy, drive</span></div>
     </div>
 
     <h2>Why a Lucky VIP Number from Golden Numbers UAE</h2>
     <p>As an <strong>authorized Etisalat dealer in the UAE</strong>, every number we reveal comes on an Etisalat postpaid plan with unlimited data — Silver, Gold and Platinum tiers — with free delivery across the Emirates. Unlike generic calculators, we don't just give you a number to dream about: we hand you a real, available number you can reserve in seconds.</p>
 
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-item"><h3>How do I find my lucky mobile number?</h3><p>Enter your full name and date of birth above. We reduce both to a single root number (1–9) using numerology, then match it to an available Etisalat VIP number whose digits add up to the same root.</p></div>
-    <div class="faq-item"><h3>What is mobile number numerology?</h3><p>It adds all the digits of a phone number and reduces them to a single root from 1 to 9. A number is lucky for you when that root harmonises with the lucky number from your name and birth date.</p></div>
+    <div class="faq-item"><h3>How do I find my lucky mobile number?</h3><p>Enter your name and date of birth above. We work out your ruling number from your birth date, read your lucky numbers from it, then match an available Etisalat VIP number whose digits add up to your strongest lucky number.</p></div>
+    <div class="faq-item"><h3>What is mobile number numerology?</h3><p>It adds all the digits of a phone number and reduces them to a single root from 1 to 9. A number is lucky for you when that root is one of the lucky numbers of your ruling planet.</p></div>
     <div class="faq-item"><h3>Is the calculator free?</h3><p>Yes — calculating your lucky number is completely free. The matched Etisalat VIP postpaid number is then available to reserve with free UAE delivery.</p></div>
     <div class="faq-item"><h3>Can I buy the number you suggest?</h3><p>Yes. Every revealed number is from our live inventory of available numbers. Tap Reserve, or message us on WhatsApp and a specialist completes your order.</p></div>
     <div class="faq-item"><h3>Are these prepaid or postpaid numbers?</h3><p>All numbers come on Etisalat postpaid plans (monthly billing) with unlimited data. They are not prepaid SIMs.</p></div>
-    <div class="faq-item"><h3>What is my lucky number based on my date of birth?</h3><p>Your birth (life-path) number is found by adding every digit of your date of birth and reducing it to a single digit, 1–9. We combine that with your name number to give your final lucky number, then match it to an available mobile number.</p></div>
-    <div class="faq-item"><h3>Does my name affect my lucky number?</h3><p>Yes. Each letter of your name maps to a value (A=1, B=2 … I=9, J=1 …); we total and reduce it, then combine it with your birth number. So two people born on the same day can have different lucky numbers.</p></div>
+    <div class="faq-item"><h3>What is my ruling number, and how is it found?</h3><p>Your ruling number (Moolank or psychic number) is the day of your birth reduced to a single digit, 1–9. For example, born on the 15th → 1+5 = 6. It is governed by a planet — Sun, Moon, Jupiter, Rahu, Mercury, Venus, Ketu, Saturn or Mars — which shapes your nature and your lucky numbers.</p></div>
+    <div class="faq-item"><h3>Why is the Moon linked to mother and water?</h3><p>In numerology the Moon rules number 2 and represents emotion, the mother and water. That is why Moon people are advised to honour their mother — <em>jitni apni mummy ki seva karoge, utni tarakki hogi</em> — and to never waste water.</p></div>
     <div class="faq-item"><h3>Which numbers are lucky for wealth and business?</h3><p>In numerology, <b>8</b> is most linked to wealth and business success, <b>6</b> to comfort, and <b>9</b> to growth. Culturally in the UAE, 786, 999 and triple-repeat digits (777, 888) are prized. The calculator shows what is lucky for <em>you</em>.</p></div>
     <div class="faq-item"><h3>Can I get a mobile number that matches my lucky number?</h3><p>Yes — that is exactly what this tool does. We reveal an available Etisalat VIP number whose digits add up to your lucky number, so you can carry a number aligned with your numerology and reserve it instantly.</p></div>
     <div class="faq-item"><h3>Are 786, 777 and 999 numbers considered lucky?</h3><p>Yes — 786 holds special meaning for many customers, and repeating patterns like 777, 888 and 999 are among our most requested VIP numbers. You can <a href="../choose-number/" style="color:var(--gold-soft);">search these patterns directly</a> on our choose-number page.</p></div>
@@ -551,27 +570,102 @@ function reduceToRoot(n){n=Math.abs(n);while(n>9){var s=0;String(n).split('').fo
 function sumDigits(str){var s=0;String(str).replace(/\D/g,'').split('').forEach(function(d){s+=+d;});return s;}
 var LMAP={a:1,b:2,c:3,d:4,e:5,f:6,g:7,h:8,i:9,j:1,k:2,l:3,m:4,n:5,o:6,p:7,q:8,r:9,s:1,t:2,u:3,v:4,w:5,x:6,y:7,z:8};
 function nameNumber(name){var s=0;String(name).toLowerCase().split('').forEach(function(ch){if(LMAP[ch])s+=LMAP[ch];});return s;}
-function luckyNumber(name,dob){
-  var nameSum=nameNumber(name);                 // raw letter sum
-  var dobSum=sumDigits(dob);                     // raw digit sum (yyyy-mm-dd)
-  var lucky=reduceToRoot(reduceToRoot(nameSum)+reduceToRoot(dobSum));
-  if(lucky===0)lucky=reduceToRoot(nameSum+dobSum)||9;
-  return {lucky:lucky,nameRoot:reduceToRoot(nameSum)||9,dobRoot:reduceToRoot(dobSum)||9};
+/* Ruling number (Moolank / psychic number) = the day of birth reduced to 1-9.
+   This sets the ruling planet, emotional nature, lucky/avoid numbers and advice
+   — the authentic basis of "you rule with the Moon". */
+function rulingNumber(dob){
+  var day=+String(dob).slice(8,10);              // yyyy-mm-dd -> day of month
+  if(!day){ day=sumDigits(dob); }
+  return reduceToRoot(day)||9;
 }
 /* deterministic seed from the user's inputs so the same person gets a stable
    pick, and different people with the same lucky number get different numbers */
 function seedFrom(str){var h=0;str=String(str);for(var i=0;i<str.length;i++){h=((h<<5)-h+str.charCodeAt(i))|0;}return Math.abs(h);}
 
-var MEANINGS={
-  1:{word:'leadership & new beginnings',line:'a number of ambition, independence and fresh starts'},
-  2:{word:'balance & partnership',line:'a number of harmony, diplomacy and strong relationships'},
-  3:{word:'creativity & expression',line:'a number of joy, communication and self-expression'},
-  4:{word:'stability & foundations',line:'a number of discipline, hard work and lasting security'},
-  5:{word:'freedom & opportunity',line:'a number of change, adventure and new opportunity'},
-  6:{word:'family & care',line:'a number of love, responsibility and nurturing'},
-  7:{word:'wisdom & good fortune',line:'a number of intuition, insight and inner luck'},
-  8:{word:'wealth & success',line:'a number of power, business success and material abundance'},
-  9:{word:'vision & completion',line:'a number of compassion, wisdom and fulfilment'}
+/* Per-number reading: ruling planet, emotional nature, lucky/avoid numbers, life advice.
+   Number 2 (Moon) uses Malik's exact words. The rest follow the same planetary logic. */
+var READINGS={
+  1:{planet:'Sun',emoji:'☀️',word:'leadership & confidence',
+     traits:[
+       'You are a natural leader — confident, independent and happiest steering your own path.',
+       'You carry a quiet authority; people look up to you even when you say little.',
+       'Your will is strong, and so is your sense of dignity and fair play.'],
+     lucky:[1,3,5],avoid:[8],
+     advice:[
+       'Respect your father and the elders who guide you, and start your day with the rising Sun — it lifts everything that follows.',
+       'Help others rise with you; a leader is judged by how he treats those below him.']},
+  2:{planet:'Moon',emoji:'🌙',word:'emotion & peace',
+     traits:[
+       'You are far more emotional than your siblings, your colleagues and your friends — you feel everything deeply.',
+       'You avoid fights and clashes; you love peace, because you are ruled by the Moon.',
+       'You think with your heart, not just your head — the Moon is always cool and calm, and so are you.'],
+     lucky:[5,1,3],avoid:[4],
+     advice:[
+       'Love and serve your mother even more than your father — her blessings will shape and adorn your career. (Respect your father too, but give your mother that little extra.) <em>Jitni apni mummy ki seva karoge, utni tarakki hogi.</em>',
+       'Never waste water. <em>Jitna possible ho, paani jeevan mein kabhi bhi waste mat karna.</em>']},
+  3:{planet:'Jupiter',emoji:'🌟',word:'wisdom & growth',
+     traits:[
+       'You are wise beyond your years — knowledge, learning and big ideas attract you naturally.',
+       'You are optimistic and generous, a teacher and guide to the people around you.',
+       'Faith and discipline run deep in you; you respect tradition and your elders.'],
+     lucky:[3,9,1],avoid:[6],
+     advice:[
+       'Keep sharing your knowledge and give a little in charity — what you give comes back to you multiplied.',
+       'Respect your teachers and mentors; their blessings open doors that money cannot.']},
+  4:{planet:'Rahu',emoji:'🌀',word:'originality & resilience',
+     traits:[
+       'You think differently from everyone around you — unconventional, original, a quiet rebel.',
+       'Your mind never switches off; you are restless, hardworking and often misunderstood.',
+       'Life brings you sudden highs and lows, but you are always stronger than your struggles.'],
+     lucky:[5,1,7],avoid:[9],
+     advice:[
+       'Stay disciplined and avoid shortcuts — steady, honest effort beats luck for you every time.',
+       'Help the underprivileged whenever you can; quiet good deeds settle your stars.']},
+  5:{planet:'Mercury',emoji:'⚡',word:'intelligence & change',
+     traits:[
+       'You have a sharp, quick mind — a born communicator, trader and problem-solver.',
+       'You adapt to anything and anyone; change excites you rather than scaring you.',
+       'You stay young at heart — curious, restless and always on the move.'],
+     lucky:[5,6,1],avoid:[],
+     advice:[
+       'Use your words wisely — your tongue is your greatest asset, so let it build and never wound.',
+       'Keep learning something new; a still mind dulls your luck. You harmonise with almost every number — 5 is your power number.']},
+  6:{planet:'Venus',emoji:'💖',word:'love & harmony',
+     traits:[
+       'You are loving and warm, drawn to beauty, comfort and harmony in all things.',
+       'Relationships, family and a peaceful home matter to you more than anything else.',
+       'You have natural charm and an eye for art, style and the finer things in life.'],
+     lucky:[6,5,8],avoid:[1],
+     advice:[
+       'Nurture your relationships and respect the women in your life — they are your real luck.',
+       'Keep your home calm and beautiful; your peace and prosperity live there.']},
+  7:{planet:'Ketu',emoji:'🔱',word:'intuition & depth',
+     traits:[
+       'You are deeply intuitive and spiritual — a dreamer with an old soul.',
+       'You sense things others miss; your inner voice is usually right.',
+       'You value solitude and meaning over noise and show.'],
+     lucky:[2,1,5],avoid:[9],
+     advice:[
+       'Trust your intuition and make time to pray or meditate — that is where your real power lives.',
+       'Do not fear being different; your path is quieter, but it runs far deeper.']},
+  8:{planet:'Saturn',emoji:'⏳',word:'patience & success',
+     traits:[
+       'You are patient, disciplined and built for the long game — your success comes late but big.',
+       'You carry responsibility well; people trust you with what truly matters.',
+       'Justice and honesty are in your bones; you respect hard work over shortcuts.'],
+     lucky:[5,6,1],avoid:[4],
+     advice:[
+       'Be patient and stay honest — Saturn rewards the steady and tests the ones in a hurry.',
+       'Serve workers and the needy; their prayers quietly lighten your load.']},
+  9:{planet:'Mars',emoji:'🔴',word:'courage & energy',
+     traits:[
+       'You are full of energy, courage and drive — a warrior who hates giving up.',
+       'You are passionate and fiercely protective of the people you love.',
+       'Your temper can run hot, but so does your loyalty.'],
+     lucky:[3,9,1],avoid:[4],
+     advice:[
+       'Channel your fire into discipline, sport or a clear goal — never into anger.',
+       'Protect the weak and guard your words in the heat of the moment; that is your real strength.']}
 };
 
 /* pattern strength so we hand back an attractive number, not a random one */
@@ -588,27 +682,26 @@ function patternScore(d){
   return s;
 }
 
-function pickLuckyNumber(inventory,lucky,seed){
-  // exact matches: number's reduced digit-sum === user's lucky root
-  var matches=inventory.filter(function(d){return reduceToRoot(sumDigits(d.digits))===lucky;});
-  var pool=matches;
-  if(!pool.length){
-    // fallback: nearest root on the 1-9 cycle
-    var best=null,bestDist=99;
-    inventory.forEach(function(d){
-      var r=reduceToRoot(sumDigits(d.digits));
-      var dist=Math.min(Math.abs(r-lucky),9-Math.abs(r-lucky));
-      if(dist<bestDist){bestDist=dist;best=r;}
-    });
-    pool=inventory.filter(function(d){return reduceToRoot(sumDigits(d.digits))===best;});
+/* Pick a number tuned to the person's BEST available lucky number: try lucky[0],
+   then lucky[1], etc. Among matches, rank by pattern strength and pick by seed so
+   the result is strong, personal and stable. Returns {num, lucky}. */
+function pickForLuckySet(inventory,luckyArr,seed){
+  for(var k=0;k<luckyArr.length;k++){
+    var L=luckyArr[k];
+    var pool=inventory.filter(function(d){return reduceToRoot(sumDigits(d.digits))===L;});
+    if(pool.length){
+      pool.sort(function(a,b){return patternScore(b)-patternScore(a);});
+      var topN=Math.min(pool.length,24);
+      return {num:pool[seed%topN],lucky:L};
+    }
   }
-  if(!pool.length)pool=inventory.slice();
-  if(!pool.length)return null;
-  // rank by attractiveness, then pick deterministically among the strongest few
-  pool.sort(function(a,b){return patternScore(b)-patternScore(a);});
-  var topN=Math.min(pool.length,24);
-  var idx=seed%topN;
-  return pool[idx];
+  if(inventory.length){
+    var any=inventory.slice().sort(function(a,b){return patternScore(b)-patternScore(a);});
+    var tn=Math.min(any.length,24);
+    var chosen=any[seed%tn];
+    return {num:chosen,lucky:reduceToRoot(sumDigits(chosen.digits))};
+  }
+  return null;
 }
 
 /* ---- Form handling ---- */
@@ -645,19 +738,20 @@ form.addEventListener('submit',function(ev){
   var gender=document.getElementById('gender').value;
   var nationality=document.getElementById('nationality').value;
 
-  var calc=luckyNumber(name,dob);
+  var ruling=rulingNumber(dob);
+  var reading=READINGS[ruling]||READINGS[9];
   var seed=seedFrom(name.toLowerCase()+'|'+dob+'|'+gender+'|'+nationality);
 
   revealBtn.disabled=true;
   revealLabel.innerHTML='<span class="spinner"></span>';
 
-  try{gtag('event','lucky_number_calc',{lucky_number:calc.lucky});}catch(e){}
+  try{gtag('event','lucky_number_calc',{ruling_number:ruling});}catch(e){}
 
   warmInventory().then(function(inv){
-    var pick=pickLuckyNumber(inv,calc.lucky,seed);
-    renderResult(name,calc,pick,inv&&inv.length);
+    var pick=pickForLuckySet(inv,reading.lucky,seed);
+    renderResult(name,ruling,reading,pick,inv&&inv.length);
   }).catch(function(){
-    renderResult(name,calc,null,0);
+    renderResult(name,ruling,reading,null,0);
   }).then(function(){
     revealBtn.disabled=false;
     revealLabel.textContent='Reveal My Lucky Number';
@@ -666,39 +760,60 @@ form.addEventListener('submit',function(ev){
 
 function firstName(full){return String(full).trim().split(/\s+/)[0]||'there';}
 
-function renderResult(name,calc,pick,invCount){
-  var m=MEANINGS[calc.lucky]||MEANINGS[9];
+function renderResult(name,ruling,reading,pick,invCount){
   var html='<div class="result-card">';
-  html+='<div class="greet">'+esc(firstName(name))+', your lucky number is</div>';
-  html+='<div class="lucky-orb">'+calc.lucky+'</div>';
-  html+='<div class="lucky-label">Number '+calc.lucky+' &middot; '+m.word+'</div>';
-  html+='<p class="lucky-meaning">For you, <b>'+calc.lucky+'</b> is '+m.line+'. A mobile number that vibrates to <b>'+calc.lucky+'</b> is in tune with your personal energy.</p>';
+  html+='<div class="greet">'+esc(firstName(name))+', here is your numerology reading</div>';
+  html+='<div class="lucky-orb">'+ruling+'</div>';
+  var artcl=(reading.planet==='Sun'||reading.planet==='Moon')?'the ':'';
+  html+='<div class="lucky-label">Number '+ruling+' &middot; Ruled by '+artcl+reading.planet+' '+reading.emoji+'</div>';
+
+  // emotional traits
+  html+='<div class="traits">';
+  reading.traits.forEach(function(t){ html+='<p>'+t+'</p>'; });
+  html+='</div>';
+
+  // lucky + avoid numbers
+  html+='<div class="luck-row">';
+  html+='<div class="luck-block"><span class="luck-h">Your lucky numbers</span><span class="chips">';
+  reading.lucky.forEach(function(L,i){ html+='<span class="chip chip-lucky'+(i===0?' chip-best':'')+'">'+L+'</span>'; });
+  html+='</span></div>';
+  if(reading.avoid&&reading.avoid.length){
+    html+='<div class="luck-block avoid"><span class="luck-h">Avoid</span><span class="chips">';
+    reading.avoid.forEach(function(A){ html+='<span class="chip chip-avoid">'+A+'</span>'; });
+    html+='</span></div>';
+  }
+  html+='</div>';
+
+  // life advice
+  html+='<div class="advice">';
+  reading.advice.forEach(function(a){ html+='<p>'+a+'</p>'; });
+  html+='</div>';
 
   if(pick){
-    var waText='Hi, my lucky number is '+calc.lucky+'. I want to reserve the lucky Etisalat number '+pick.formatted+' ('+pick.category+'). My name is '+name+'.';
+    var waText='Hi, my numerology number is '+ruling+' (ruled by the '+reading.planet+'), and my lucky number is '+pick.lucky+'. I want to reserve the lucky Etisalat number '+pick.num.formatted+' ('+pick.num.category+'). My name is '+name+'.';
     var waUrl='https://wa.me/'+WA_NUMBER+'?text='+encodeURIComponent(waText);
-    var reserveUrl='../choose-number/?n='+pick.digits+'&go=reserve&ref=LUCKY';
+    var reserveUrl='../choose-number/?n='+pick.num.digits+'&go=reserve&ref=LUCKY';
     var waSvg='<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>';
     html+='<div class="match-block">';
     html+='<div class="mb-title">Your lucky Etisalat number — available now</div>';
-    html+='<div class="match-num">'+esc(pick.formatted)+'</div>';
-    html+='<span class="tier-badge tier-'+pick.category+'">'+pick.category+' &middot; Postpaid</span>';
-    html+='<p class="match-why">The digits of this number reduce to <b>'+calc.lucky+'</b> — your lucky number — so it carries '+m.word+' for you. It is in stock and ready to reserve with free UAE delivery.</p>';
+    html+='<div class="match-num">'+esc(pick.num.formatted)+'</div>';
+    html+='<span class="tier-badge tier-'+pick.num.category+'">'+pick.num.category+' &middot; Postpaid</span>';
+    html+='<p class="match-why">The digits of this number add up to <b>'+pick.lucky+'</b> — one of your lucky numbers — so it is tuned to your energy and steers clear of the numbers you should avoid. It is in stock and ready to reserve with free UAE delivery.</p>';
     html+='<div class="result-cta">';
     html+='<a class="cta-reserve" href="'+reserveUrl+'" data-cta="lucky_reserve">Reserve This Number</a>';
     html+='<a class="cta-wa" href="'+waUrl+'" target="_blank" rel="noopener noreferrer" data-cta="lucky_wa">'+waSvg+'Reserve on WhatsApp</a>';
     html+='</div></div>';
   }else{
-    var waUrl2='https://wa.me/'+WA_NUMBER+'?text='+encodeURIComponent('Hi, my lucky number is '+calc.lucky+'. Please help me find a matching lucky Etisalat number.');
-    html+='<div class="match-block"><p class="result-err">We couldn’t load live numbers right now. Message us on WhatsApp and we’ll hand-pick a number that matches your lucky number '+calc.lucky+'.</p>';
+    var waUrl2='https://wa.me/'+WA_NUMBER+'?text='+encodeURIComponent('Hi, my numerology number is '+ruling+' and my lucky numbers are '+reading.lucky.join(', ')+'. Please help me find a matching lucky Etisalat number.');
+    html+='<div class="match-block"><p class="result-err">We couldn’t load live numbers right now. Message us on WhatsApp and we’ll hand-pick a number tuned to your lucky numbers ('+reading.lucky.join(', ')+').</p>';
     html+='<div class="result-cta"><a class="cta-wa" href="'+waUrl2+'" target="_blank" rel="noopener noreferrer" data-cta="lucky_wa_fallback">Get My Lucky Number on WhatsApp</a></div></div>';
   }
 
-  html+='<div class="again"><button type="button" id="againBtn">Try another name</button></div>';
+  html+='<div class="again"><button type="button" id="againBtn">Try another date of birth</button></div>';
   html+='</div>';
   resultEl.innerHTML=html;
   resultEl.classList.add('show');
-  try{resultEl.scrollIntoView({behavior:'smooth',block:'center'});}catch(e){}
+  try{resultEl.scrollIntoView({behavior:'smooth',block:'start'});}catch(e){}
 
   var ab=document.getElementById('againBtn');
   if(ab)ab.addEventListener('click',function(){
@@ -707,7 +822,7 @@ function renderResult(name,calc,pick,invCount){
     try{form.scrollIntoView({behavior:'smooth',block:'center'});}catch(e){}
   });
 
-  if(pick){try{gtag('event','lucky_number_reveal',{lucky_number:calc.lucky,number:pick.digits,tier:pick.category});}catch(e){}}
+  if(pick){try{gtag('event','lucky_number_reveal',{ruling_number:ruling,lucky_number:pick.lucky,number:pick.num.digits,tier:pick.num.category});}catch(e){}}
 }
 
 /* GA4: track reserve / WA clicks from the result */

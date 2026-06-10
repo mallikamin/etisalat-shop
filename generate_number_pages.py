@@ -98,8 +98,9 @@ SITES = {
         "domain": "uaepremiumnumbers.com",
         "base_url": "https://uaepremiumnumbers.com",
         "project_dir": r"C:\ST\Sitara Infotech\uae-premium-numbers",
-        "wa_number": "971566999377",
-        "phone_display": "+971 56 699 9377",
+        # WhatsApp = 8087 (WABA line) on ALL sister sites per Malik 2026-05-25; 9377 is voice-only
+        "wa_number": "971569028087",
+        "phone_display": "+971 56 902 8087",
         "ga4": "__GA4_PLACEHOLDER__",
         "fb_pixel": "__FB_PIXEL_PLACEHOLDER__",
         "support_email": "support@uaepremiumnumbers.com",

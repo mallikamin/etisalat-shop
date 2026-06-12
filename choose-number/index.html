@@ -851,6 +851,33 @@ a { color: inherit; }
 .plan-list li strong { color: #fff; font-size: 0.9rem; }
 .plan-list .plan-price { color: var(--gold); font-size: 0.82rem; font-weight: 600; }
 .plan-list .plan-detail { color: #8B949E; font-size: 0.78rem; line-height: 1.5; }
+.plan-ctx-num { font-size: 0.8rem; color: #C9D1D9; margin-top: 0.45rem; }
+.plan-ctx-num b { color: var(--gold); font-variant-numeric: tabular-nums; }
+.plan-row-actions { display: flex; gap: 0.5rem; margin-top: 0.55rem; flex-wrap: wrap; }
+.plan-reserve-btn {
+  background: linear-gradient(135deg, var(--gold), #B8954F);
+  color: #0D1117;
+  border: none;
+  border-radius: 6px;
+  padding: 0.45rem 0.8rem;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.plan-reserve-btn:hover { transform: translateY(-1px); }
+.plan-wa-btn {
+  background: var(--green);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.45rem 0.8rem;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.plan-wa-btn:hover { background: #1ebe57; }
 
 .btn-wa {
   display: inline-flex;
@@ -2390,7 +2417,7 @@ function createCard(num) {
     '</div>' +
     '<div class="' + priceClass + '">' + priceText + '</div>' +
     '<div class="card-plan-line"><span class="card-plan-summary">' + escapeHtml(tier.summary) + '</span>' +
-      '<button type="button" class="plan-details-link" data-cat="' + escapeHtml(num.category) + '" aria-label="View plan options for the ' + escapeHtml(num.category) + ' tier">Plan options ▸</button></div>' +
+      '<button type="button" class="plan-details-link" data-cat="' + escapeHtml(num.category) + '" data-num="' + escapeHtml(num.formatted) + '" data-msisdn="' + escapeHtml(num.msisdn || '') + '" aria-label="View plan options for the ' + escapeHtml(num.category) + ' tier">Plan options ▸</button></div>' +
     '<div class="card-actions">' +
     '<button type="button" class="btn-reserve" data-num="' + escapeHtml(num.formatted) + '" data-msisdn="' + escapeHtml(num.msisdn || '') + '" data-cat="' + escapeHtml(num.category) + '" aria-label="Reserve ' + escapeHtml(num.formatted) + '">🛒 Reserve</button>' +
     '<button type="button" class="btn-share" data-digits="' + escapeHtml(num.digits || '') + '" data-num="' + escapeHtml(num.formatted) + '" aria-label="Share a reserve link for ' + escapeHtml(num.formatted) + '">🔗 Share</button>' +
@@ -2728,11 +2755,24 @@ function loadTurnstileWidget() {
 function checkoutPlanValue(cat) { return tierInfo(cat).value; }
 function checkoutPlanLabel(cat) { return tierInfo(cat).label; }
 
-function openCheckout(num, msisdn, cat) {
+function openCheckout(num, msisdn, cat, plan) {
   _checkout = { num: num, msisdn: msisdn || '', cat: cat || 'Silver', token: createLeadToken() };
   document.getElementById('coNum').textContent = num;
   document.getElementById('coMeta').textContent = _checkout.cat + ' · ' + checkoutPlanLabel(_checkout.cat);
   checkoutForm.reset();
+  // Plan selector — tier-specific options. Preselect a plan chosen in the plan-options
+  // modal (explicit arg beats the page-level remembered choice). Runs AFTER reset().
+  var planSel = document.getElementById('coPlan');
+  var tplans = tierInfo(_checkout.cat).plans;
+  var prePlan = plan || (window._gnPendingPlan || {})[_checkout.cat] || '';
+  planSel.innerHTML = '<option value="">Recommended — let our specialist advise</option>';
+  for (var pi = 0; pi < tplans.length; pi++) {
+    var po = document.createElement('option');
+    po.value = tplans[pi].name;
+    po.textContent = tplans[pi].name + ' — ' + tplans[pi].price;
+    if (tplans[pi].name === prePlan) po.selected = true;
+    planSel.appendChild(po);
+  }
   coErr.classList.remove('show');
   coSubmit.disabled = false;
   document.getElementById('coDate').disabled = false; // reset() doesn't undo the call-now lock
@@ -2778,6 +2818,8 @@ function closeCheckout() {
   checkoutOverlay.classList.remove('open');
   document.body.style.overflow = '';
 }
+// Exposed for the plan-options modal (separate closure) — "Reserve with this plan".
+window._gnOpenCheckout = openCheckout;
 
 function checkoutShowError(msg) {
   coErr.textContent = msg;
@@ -2843,6 +2885,7 @@ checkoutForm.addEventListener('submit', function(e) {
   var slotTime = document.getElementById('coTime').value;
   if (slotTime === 'now') document.getElementById('coDate').value = new Date().toISOString().slice(0, 10);
   var slotDate = document.getElementById('coDate').value;
+  var planChoice = document.getElementById('coPlan').value; // '' = specialist advises
 
   if (name.length < 2) return checkoutShowError('Please enter your full name.');
   var pm = phoneDigits.match(/^(?:971|0)?(5\d{8})$/);
@@ -2867,17 +2910,20 @@ checkoutForm.addEventListener('submit', function(e) {
   if (typeof gtag === 'function') {
     gtag('event', 'checkout_submit', {
       number_id: _checkout.num, number_category: _checkout.cat,
+      plan_name: planChoice || '(advise)',
       lead_token: token, event_id: token
     });
     gtag('event', 'generate_lead', {
       currency: 'AED', value: v, lead_source: 'web_checkout',
-      number_id: _checkout.num, number_category: _checkout.cat, event_id: token
+      number_id: _checkout.num, number_category: _checkout.cat,
+      plan_name: planChoice || '(advise)', event_id: token
     });
   }
   if (typeof fbq === 'function') {
     fbq('track', 'Lead', {
       content_name: 'Website Checkout', content_category: _checkout.cat,
       content_type: 'product', content_ids: [_checkout.msisdn || _checkout.num],
+      plan_name: planChoice || '(advise)',
       value: v, currency: 'AED'
     }, { eventID: token });
   }
@@ -2888,7 +2934,7 @@ checkoutForm.addEventListener('submit', function(e) {
   // API backup — fire-and-continue. The WhatsApp handoff below is the primary lead path,
   // so a failed/rate-limited POST must never block the customer.
   var payload = {
-    number: _checkout.num, category: _checkout.cat,
+    number: _checkout.num, category: _checkout.cat, plan: planChoice || '',
     name: name, phone: localPhone, nationality: nationality, city: city, address: address,
     slot_date: slotDate, slot_time: slotTime,
     token: token, ref: buildRefCode('CHECKOUT', token),
@@ -2913,6 +2959,7 @@ checkoutForm.addEventListener('submit', function(e) {
   var slotLabel = slotTime === 'now' ? '📞 CALL ME NOW' : slotDate + ', ' + slotTime;
   var waMsg = '🛒 New Checkout Order — goldennummbers.com\n\n' +
     'Number: ' + _checkout.num + ' (' + _checkout.cat + ')\n' +
+    (planChoice ? 'Plan: ' + planChoice + '\n' : '') +
     'Name: ' + name + '\n' +
     'Mobile: ' + localPhone + '\n' +
     'Nationality: ' + nationality + '\n' +
@@ -2966,6 +3013,11 @@ loadNumbers();
         <span class="co-meta" id="coMeta"></span>
       </div>
       <form class="checkout-form" id="checkoutForm" novalidate>
+        <label for="coPlan">Preferred Plan</label>
+        <select id="coPlan" name="plan">
+          <option value="">Recommended — let our specialist advise</option>
+        </select>
+
         <label for="coName">Full Name</label>
         <input type="text" id="coName" name="name" autocomplete="name" maxlength="60" required>
 
@@ -3048,33 +3100,86 @@ loadNumbers();
   </div>
 </div>
 <script>
-/* Plan-options modal logic — delegated so it works for card links and legend links alike. */
+/* Plan-options modal logic — delegated so it works for card links and legend links alike.
+   Plans are SELECTABLE: every row has "Reserve with this plan" (→ checkout, plan preselected)
+   and "WhatsApp" (→ inquiry carrying number+plan). The chosen plan rides into the checkout
+   API payload, the WA prefill, and GA4/Meta events so every lead carries plan attribution. */
 document.addEventListener('DOMContentLoaded', function() {
   var planOverlay = document.getElementById('planOverlay');
   var planTitle = document.getElementById('planTitle');
   var planBody = document.getElementById('planBody');
   if (!planOverlay) return;
-  function openPlanModal(cat) {
+  window._gnPendingPlan = window._gnPendingPlan || {}; // tier → plan remembered for checkout preselect
+  var _planCtx = null; // { cat, num, msisdn } — num empty when opened from the legend
+  function openPlanModal(cat, num, msisdn) {
     var tier = tierInfo(cat);
+    _planCtx = { cat: cat, num: num || '', msisdn: msisdn || '' };
     planTitle.textContent = cat + ' — Included Plan Options';
-    var html = '<div class="plan-tier-head">' + escapeHtml(tier.label) + ' · ' + escapeHtml(tier.summary) + '</div><ul class="plan-list">';
+    var html = '<div class="plan-tier-head">' + escapeHtml(tier.label) + ' · ' + escapeHtml(tier.summary) + '</div>';
+    if (_planCtx.num) html += '<div class="plan-ctx-num">For number <b>' + escapeHtml(_planCtx.num) + '</b></div>';
+    html += '<ul class="plan-list">';
     for (var i = 0; i < tier.plans.length; i++) {
       var p = tier.plans[i];
-      html += '<li><strong>' + escapeHtml(p.name) + '</strong><span class="plan-price">' + escapeHtml(p.price) + '</span><span class="plan-detail">' + escapeHtml(p.detail) + '</span></li>';
+      html += '<li><strong>' + escapeHtml(p.name) + '</strong><span class="plan-price">' + escapeHtml(p.price) + '</span><span class="plan-detail">' + escapeHtml(p.detail) + '</span>' +
+        '<span class="plan-row-actions">' +
+        '<button type="button" class="plan-reserve-btn" data-plan="' + escapeHtml(p.name) + '">🛒 Reserve with this plan</button>' +
+        '<button type="button" class="plan-wa-btn" data-plan="' + escapeHtml(p.name) + '" data-price="' + escapeHtml(p.price) + '">WhatsApp</button>' +
+        '</span></li>';
     }
     html += '</ul>';
     planBody.innerHTML = html;
     planOverlay.classList.add('open');
     document.body.style.overflow = 'hidden';
-    if (typeof gtag === 'function') { try { gtag('event', 'view_plan_options', { number_category: cat }); } catch (e) {} }
+    if (typeof gtag === 'function') { try { gtag('event', 'view_plan_options', { number_category: cat, number_id: _planCtx.num || '(none)' }); } catch (e) {} }
   }
   function closePlanModal() {
     planOverlay.classList.remove('open');
     document.body.style.overflow = '';
   }
+  function trackSelectPlan(plan) {
+    if (typeof gtag === 'function') { try { gtag('event', 'select_plan', { number_category: _planCtx.cat, plan_name: plan, number_id: _planCtx.num || '(none)' }); } catch (e) {} }
+  }
   document.addEventListener('click', function(e) {
-    var btn = e.target.closest ? e.target.closest('.plan-details-link') : null;
-    if (btn) { openPlanModal(btn.getAttribute('data-cat') || 'Silver'); return; }
+    if (!e.target.closest) return;
+    var link = e.target.closest('.plan-details-link');
+    if (link) { openPlanModal(link.getAttribute('data-cat') || 'Silver', link.getAttribute('data-num') || '', link.getAttribute('data-msisdn') || ''); return; }
+    var rbtn = e.target.closest('.plan-reserve-btn');
+    if (rbtn && _planCtx) {
+      var plan = rbtn.getAttribute('data-plan');
+      window._gnPendingPlan[_planCtx.cat] = plan;
+      trackSelectPlan(plan);
+      closePlanModal();
+      if (_planCtx.num && typeof window._gnOpenCheckout === 'function') {
+        window._gnOpenCheckout(_planCtx.num, _planCtx.msisdn, _planCtx.cat, plan);
+      } else {
+        // Opened from the legend (no number yet): filter the grid to this tier so the
+        // customer picks a number — checkout will preselect the remembered plan.
+        var tab = document.querySelector('.cat-tab[data-category="' + _planCtx.cat.toLowerCase().replace(/\s+/g, '-') + '"]');
+        if (tab) tab.click();
+        var grid = document.getElementById('numbersGrid');
+        if (grid) { try { grid.scrollIntoView({ behavior: 'smooth' }); } catch (err) {} }
+      }
+      return;
+    }
+    var wbtn = e.target.closest('.plan-wa-btn');
+    if (wbtn && _planCtx) {
+      var plan2 = wbtn.getAttribute('data-plan');
+      var price2 = wbtn.getAttribute('data-price') || '';
+      var leadToken = createLeadToken();
+      var digits = (_planCtx.num || '').replace(/\D/g, '');
+      var msg = _planCtx.num
+        ? 'Hi, I\'m interested in the ' + _planCtx.cat + ' number ' + _planCtx.num + ' with ' + plan2 + ' (' + price2 + ') from goldennummbers.com'
+        : 'Hi, I\'m looking for a ' + _planCtx.cat + ' VIP number with ' + plan2 + ' (' + price2 + ') from goldennummbers.com. Please share available options.';
+      var href = buildWhatsAppHref(msg, digits ? 'PLAN-' + digits : 'PLAN', leadToken);
+      trackSelectPlan(plan2);
+      var v = tierInfo(_planCtx.cat).value;
+      try {
+        if (typeof gtag === 'function') gtag('event', 'generate_lead', { currency: 'AED', value: v, lead_source: 'plan_modal', number_category: _planCtx.cat, plan_name: plan2, number_id: _planCtx.num || '(none)', event_id: leadToken });
+        if (typeof fbq === 'function') fbq('track', 'Contact', { content_name: 'Plan Inquiry — ' + plan2, content_category: _planCtx.cat, content_type: 'product', content_ids: [_planCtx.msisdn || _planCtx.cat], value: v, currency: 'AED' }, { eventID: leadToken });
+      } catch (e2) {}
+      window.open(href, '_blank', 'noopener');
+      return;
+    }
     if (e.target === planOverlay) closePlanModal();
   });
   document.getElementById('planClose').addEventListener('click', closePlanModal);

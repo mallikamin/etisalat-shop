@@ -170,6 +170,16 @@
   // the pixel reports all 6 funnel steps TikTok optimizer expects. Same event_id
   // is used for the server-side CAPI call so TikTok dedupes the pair.
   // Returns the lead token so the caller can use it as eventID for pixel dedup.
+  function deepLinkNumber() {
+    try {
+      var n = (new URLSearchParams(location.search).get('n') || '').replace(/[^0-9]/g, '');
+      return /^0[0-9]{9}$/.test(n) ? n : '';
+    } catch (e) { return ''; }
+  }
+  function formatUaeNum(d) {
+    return (d && d.length === 10) ? (d.slice(0, 3) + ' ' + d.slice(3, 6) + ' ' + d.slice(6)) : (d || '');
+  }
+
   function rewriteWaHref(link, sourceCtx) {
     var leadToken = createLeadTokenShort();
     var source = sourceCtx || link.getAttribute('data-cta') || (link.textContent || '').trim().slice(0, 30);
@@ -180,6 +190,13 @@
       var existing = qIdx >= 0
         ? decodeURIComponent(href.substring(qIdx + 6))
         : 'Hi, I\'m interested in an Etisalat VIP number from goldennummbers.com';
+      // 2026-06-08 fix: if the visitor came in on a specific number (?n= deep link) and this
+      // is a NON-card CTA, embed the number so it isn't lost on the WhatsApp handoff. Card
+      // CTAs already carry it in SOURCE=CARD<digits>. Skip if already present in the text.
+      var pageNum = deepLinkNumber();
+      if (pageNum && String(source || '').toUpperCase().indexOf('CARD') === -1 && existing.replace(/[^0-9]/g, '').indexOf(pageNum) === -1) {
+        existing += '\n\nNumber: ' + formatUaeNum(pageNum);
+      }
       var tracked = existing + '\n\nRef: ' + buildRefCode(source, leadToken);
       link.setAttribute('href', base + '?text=' + encodeURIComponent(tracked));
     } catch (e) {}

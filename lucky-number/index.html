@@ -253,6 +253,8 @@ a{color:inherit;text-decoration:none}
 .tier-Silver{background:rgba(192,192,192,.16);color:#D6D6D6;border:1px solid rgba(192,192,192,.4)}
 .tier-Gold{background:rgba(201,169,98,.18);color:var(--gold-soft);border:1px solid var(--gold)}
 .tier-Platinum{background:rgba(180,200,230,.16);color:#CFE0F5;border:1px solid rgba(180,200,230,.5)}
+.tier-SilverPlus{background:rgba(168,199,221,.14);color:#A8C7DD;border:1px solid rgba(168,199,221,.4)}
+.tier-GoldPlus{background:rgba(232,199,106,.16);color:#E8C76A;border:1px solid rgba(232,199,106,.45)}
 .match-why{color:var(--muted);font-size:14px;margin-top:14px;max-width:520px;margin-left:auto;margin-right:auto}
 .result-cta{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:24px}
 .result-cta a{flex:1 1 240px;max-width:320px;display:flex;align-items:center;justify-content:center;gap:9px;padding:16px 18px;border-radius:13px;font-size:16px;font-weight:700;transition:filter .2s,transform .08s}
@@ -500,7 +502,7 @@ function buildCsvUrls(sheet){
     base+'/gviz/tq?tqx=out:csv&headers=1'
   ];
 }
-var CACHE_KEY='gn_numbers_cache_v5'; // shared with choose-number (same schema)
+var CACHE_KEY='gn_numbers_cache_v6'; // shared with choose-number (same schema; v6 2026-06-12: + Silver Plus / Gold Plus)
 var CACHE_TTL=60*60*1000;
 var WA_NUMBER='971569028087';
 
@@ -531,7 +533,9 @@ function parseCSV(csv){
     if(!msisdn){if(woz)msisdn='971'+woz;else if(wz.length===10&&wz.charAt(0)==='0')msisdn='971'+wz.substring(1);}
     if(!msisdn)continue;
     var cl=category.toLowerCase(),cat=category;
-    if(cl==='gold')cat='Gold';else if(cl==='silver')cat='Silver';else if(cl==='platinum')cat='Platinum';else continue;
+    if(cl==='gold')cat='Gold';else if(cl==='silver')cat='Silver';else if(cl==='platinum')cat='Platinum';
+    else if(cl==='silver plus')cat='Silver Plus';else if(cl==='gold plus'||cl==='gold plus+')cat='Gold Plus';
+    else continue;
     if(!wz&&woz)wz='0'+woz;
     if(!wz)continue;
     var disp=wz;
@@ -675,7 +679,7 @@ var READINGS={
    and runs of avoid digits — instead of rewarding any repeat regardless of digit. */
 function numberScore(d,lucky,avoid){
   var digits=d.digits;
-  var tier={Silver:1,Gold:2,Platinum:3};
+  var tier={'Silver':1,'Silver Plus':1.5,'Gold':2,'Gold Plus':2.5,'Platinum':3};
   var s=(tier[d.category]||1)*4;                    // mild tier preference, never dominant
   var lw={};                                        // lucky digit -> weight (best lucky highest)
   for(var i=0;i<lucky.length;i++){ lw[lucky[i]]=lucky.length-i; }
@@ -818,7 +822,7 @@ function renderResult(name,ruling,reading,pick,invCount){
     html+='<div class="match-block">';
     html+='<div class="mb-title">Your lucky Etisalat number — available now</div>';
     html+='<div class="match-num">'+esc(pick.num.formatted)+'</div>';
-    html+='<span class="tier-badge tier-'+pick.num.category+'">'+pick.num.category+' &middot; Postpaid</span>';
+    html+='<span class="tier-badge tier-'+pick.num.category.replace(/\s+/g,'')+'">'+pick.num.category+' &middot; Postpaid</span>';
     var why='The digits of this number add up to <b>'+pick.lucky+'</b> — one of your lucky numbers';
     if(pick.luckyCount>=2){ why+=', and it is built mostly from your lucky digits ('+reading.lucky.join(', ')+')'; }
     if(pick.avoidCount===0&&reading.avoid&&reading.avoid.length){ why+=', with none of the '+reading.avoid.join('/')+' you should avoid'; }

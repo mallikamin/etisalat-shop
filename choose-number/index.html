@@ -110,7 +110,7 @@
       "name": "How do I choose an Etisalat VIP number online?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Visit goldennummbers.com/choose-number to browse 2500+ available VIP postpaid numbers. Search by entering 3-7 digits, filter by category (Silver, Gold, Platinum), and inquire instantly via WhatsApp."
+        "text": "Visit goldennummbers.com/choose-number to browse 2500+ available VIP postpaid numbers. Search by entering 3-7 digits, filter by category (Silver, Silver Plus, Gold, Gold Plus, Platinum), and inquire instantly via WhatsApp."
       }
     },
     {
@@ -118,7 +118,7 @@
       "name": "What categories of Etisalat VIP numbers are available?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Etisalat VIP numbers come in three categories, each paired with an Etisalat postpaid plan: Silver (memorable repeating patterns, AED 188/month plan with unlimited data and 1,000 minutes), Gold (ultra-premium vanity numbers, AED 500/month plan with unlimited data and 3,000 minutes), and Platinum (hand-picked elite numbers, AED 1,000/month plan with unlimited data and unlimited calls)."
+        "text": "Etisalat VIP numbers come in five categories, each paired with an Etisalat postpaid plan: Silver (memorable repeating patterns, AED 188/month plan with unlimited data and 1,000 minutes), Silver Plus (stronger patterns, AED 400/month plan with 40 GB data and unlimited local minutes), Gold (ultra-premium vanity numbers, AED 500/month plan with unlimited data and 3,000 minutes), Gold Plus (rare elite patterns, AED 1,000/month plan with unlimited data and unlimited local minutes), and Platinum (hand-picked elite numbers, AED 1,000/month plan with unlimited data and unlimited calls)."
       }
     },
     {
@@ -716,6 +716,11 @@ a { color: inherit; }
 }
 
 .number-card.gold-card { border-left-color: var(--gold); }
+.number-card.silver-plus-card { border-left-color: #A8C7DD; }
+.number-card.gold-plus-card {
+  border-left-color: #E8C76A;
+  border-left-width: 4px;
+}
 .number-card.platinum-card {
   border-left-color: var(--platinum);
   border-left-width: 4px;
@@ -778,6 +783,74 @@ a { color: inherit; }
   border: 1px solid rgba(229, 228, 226, 0.35);
   box-shadow: 0 0 8px rgba(229, 228, 226, 0.15);
 }
+
+.badge-silver-plus {
+  background: rgba(168, 199, 221, 0.12);
+  color: #A8C7DD;
+  border: 1px solid rgba(168, 199, 221, 0.3);
+}
+
+.badge-gold-plus {
+  background: rgba(232, 199, 106, 0.14);
+  color: #E8C76A;
+  border: 1px solid rgba(232, 199, 106, 0.35);
+  box-shadow: 0 0 8px rgba(232, 199, 106, 0.12);
+}
+
+/* Per-card plan summary + details trigger (tier-level — opens the shared plan modal) */
+.card-plan-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: -0.35rem;
+}
+.card-plan-summary {
+  font-size: 0.72rem;
+  color: #8B949E;
+  line-height: 1.4;
+}
+.plan-details-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--gold);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.plan-details-link:hover { text-decoration: underline; }
+
+/* Plan-options modal body */
+.plan-tier-head {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--gold);
+  margin-top: 0.25rem;
+}
+.plan-list {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.plan-list li {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--surface-border);
+  border-radius: 8px;
+  padding: 0.7rem 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.plan-list li strong { color: #fff; font-size: 0.9rem; }
+.plan-list .plan-price { color: var(--gold); font-size: 0.82rem; font-weight: 600; }
+.plan-list .plan-detail { color: #8B949E; font-size: 0.78rem; line-height: 1.5; }
 
 .btn-wa {
   display: inline-flex;
@@ -864,7 +937,9 @@ a { color: inherit; }
   inset: 0;
   background: rgba(5, 8, 13, 0.82);
   backdrop-filter: blur(4px);
-  z-index: 1200;
+  /* Above the consultant bar (2147483000) and wa-fab (9998) — an open modal must cover
+     everything; before this the bar overlapped the close X on mobile (bar wraps taller). */
+  z-index: 2147483100;
   display: none;
   align-items: flex-start;
   justify-content: center;
@@ -1033,6 +1108,10 @@ a { color: inherit; }
 .tier-info h3.silver-text { color: var(--silver); }
 .tier-info h3.gold-text { color: var(--gold); }
 .tier-info h3.platinum-text { color: var(--platinum); }
+.tier-info h3.silver-plus-text { color: #A8C7DD; }
+.tier-info h3.gold-plus-text { color: #E8C76A; }
+.tier-icon.silver-plus-icon { background: rgba(168, 199, 221, 0.15); color: #A8C7DD; }
+.tier-icon.gold-plus-icon { background: rgba(232, 199, 106, 0.15); color: #E8C76A; }
 
 .tier-info p {
   color: var(--text-muted);
@@ -1055,6 +1134,8 @@ a { color: inherit; }
 .tier-price.silver-price { color: var(--silver); }
 .tier-price.gold-price { color: var(--gold); }
 .tier-price.platinum-price { color: var(--platinum); }
+.tier-price.silver-plus-price { color: #A8C7DD; }
+.tier-price.gold-plus-price { color: #E8C76A; }
 
 .card-price {
   font-size: 0.85rem;
@@ -1071,6 +1152,8 @@ a { color: inherit; }
 .card-price.silver-card-price { color: var(--silver); }
 .card-price.gold-card-price { color: var(--gold); }
 .card-price.platinum-card-price { color: var(--platinum); }
+.card-price.silver-plus-card-price { color: #A8C7DD; }
+.card-price.gold-plus-card-price { color: #E8C76A; }
 
 /* ========================================
    ERROR & EMPTY STATES
@@ -1289,7 +1372,7 @@ a { color: inherit; }
 <!-- ============ HERO ============ -->
 <section class="hero">
   <h1>Choose Your <span>Etisalat Number</span></h1>
-  <p class="hero-sub">The live Etisalat special numbers list — browse 2,500+ available VIP <strong>postpaid</strong> numbers online from an authorized Etisalat dealer in UAE. Every number comes with an Etisalat postpaid plan (monthly billing) — these are not prepaid SIMs. Search by digits (050, 054, 056), filter by Silver, Gold or Platinum tier, and reserve instantly on WhatsApp.</p>
+  <p class="hero-sub">The live Etisalat special numbers list — browse 2,500+ available VIP <strong>postpaid</strong> numbers online from an authorized Etisalat dealer in UAE. Every number comes with an Etisalat postpaid plan (monthly billing) — these are not prepaid SIMs. Search by digits (050, 054, 056), filter by Silver, Silver Plus, Gold, Gold Plus or Platinum tier, and reserve instantly on WhatsApp.</p>
   <div class="hero-cta-row">
     <a class="hero-cta-wa" href="https://wa.me/971569028087?text=Hi%2C%20I%20want%20to%20reserve%20a%20postpaid%20number%20from%20goldennummbers.com" target="_blank" rel="noopener noreferrer" data-cta="hero_wa" aria-label="Chat on WhatsApp now">
       <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
@@ -1320,7 +1403,17 @@ a { color: inherit; }
         <div class="tier-info">
           <h3 class="silver-text">Silver</h3>
           <div class="tier-price silver-price">AED 188<span>/mo postpaid</span></div>
-          <p>Postpaid plan — unlimited data + 1,000 minutes. Memorable repeating patterns, number included free.</p>
+          <p>Postpaid plan — unlimited data + 1,000 minutes. Memorable repeating patterns, number included free. <button type="button" class="plan-details-link" data-cat="Silver">Plan options ▸</button></p>
+        </div>
+      </div>
+      <div class="tier-item">
+        <div class="tier-icon silver-plus-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <div class="tier-info">
+          <h3 class="silver-plus-text">Silver Plus</h3>
+          <div class="tier-price silver-plus-price">AED 400<span>/mo postpaid</span></div>
+          <p>Postpaid plan — 40 GB data + unlimited local minutes. Stronger patterns than Silver. <button type="button" class="plan-details-link" data-cat="Silver Plus">Plan options ▸</button></p>
         </div>
       </div>
       <div class="tier-item">
@@ -1330,7 +1423,17 @@ a { color: inherit; }
         <div class="tier-info">
           <h3 class="gold-text">Gold</h3>
           <div class="tier-price gold-price">AED 500<span>/mo postpaid</span></div>
-          <p>Postpaid plan — unlimited data + 3,000 minutes. Ultra-premium vanity numbers included.</p>
+          <p>Postpaid plan — unlimited data + 3,000 minutes. Ultra-premium vanity numbers included. <button type="button" class="plan-details-link" data-cat="Gold">Plan options ▸</button></p>
+        </div>
+      </div>
+      <div class="tier-item">
+        <div class="tier-icon gold-plus-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <div class="tier-info">
+          <h3 class="gold-plus-text">Gold Plus</h3>
+          <div class="tier-price gold-plus-price">AED 1,000<span>/mo postpaid</span></div>
+          <p>Postpaid plan — unlimited data + unlimited local minutes + 40 GB roaming. Rare elite patterns. <button type="button" class="plan-details-link" data-cat="Gold Plus">Plan options ▸</button></p>
         </div>
       </div>
       <div class="tier-item">
@@ -1340,7 +1443,7 @@ a { color: inherit; }
         <div class="tier-info">
           <h3 class="platinum-text">Platinum</h3>
           <div class="tier-price platinum-price">AED 1,000<span>/mo postpaid</span></div>
-          <p>Postpaid plan — unlimited data + unlimited calls. Hand-picked elite numbers.</p>
+          <p>Postpaid plan — unlimited data + unlimited calls. Hand-picked elite numbers. <button type="button" class="plan-details-link" data-cat="Platinum">Plan options ▸</button></p>
         </div>
       </div>
     </div>
@@ -1362,7 +1465,9 @@ a { color: inherit; }
       <div class="category-tabs" role="tablist">
         <button class="cat-tab active" data-category="all" role="tab" aria-selected="true">All Numbers</button>
         <button class="cat-tab" data-category="silver" role="tab" aria-selected="false">Silver</button>
+        <button class="cat-tab" data-category="silver-plus" role="tab" aria-selected="false">Silver Plus</button>
         <button class="cat-tab" data-category="gold" role="tab" aria-selected="false">Gold</button>
+        <button class="cat-tab" data-category="gold-plus" role="tab" aria-selected="false">Gold Plus</button>
         <button class="cat-tab" data-category="platinum" role="tab" aria-selected="false">Platinum</button>
       </div>
 
@@ -1495,6 +1600,49 @@ function buildCsvUrls(sheet) {
 var WA_NUMBER = '971569028087';
 var ATTR_STORAGE_KEY = 'es_partner_ref';
 var ATTR_DAYS = 90;
+
+/* Tier catalog — single source for per-tier price, card styling and the Etisalat
+   postpaid plan options bundled with each tier. Core tier specs Malik-verified
+   2026-06-04; Plus tiers + contract/roaming detail from the house plan catalog
+   (2026-06-12). Plans marked "UAE Nationals" are Emirati Freedom — eligibility
+   restricted, the modal footnote sends buyers to the specialist to confirm. */
+var TIERS = {
+  'Silver': { value: 188, cls: 'silver', label: 'AED 188/mo postpaid plan',
+    summary: 'Unlimited data · 1,000 local mins · 12-mo contract',
+    plans: [
+      { name: 'Plan 250 Local', price: 'AED 188/mo — 25% off AED 250 (6-mo promo rate)', detail: 'Non-Stop unlimited data · 1,000 local mins · 200 MB roaming · 12-month contract' },
+      { name: 'Plan 250 Flexi', price: 'AED 188/mo — 25% off AED 250 (6-mo promo rate)', detail: 'Non-Stop unlimited data · 500 flexi mins · 200 MB roaming · 12-month contract' },
+      { name: 'Plan 325 Local', price: 'AED 228/mo — 25% off AED 325 (6-mo promo rate)', detail: 'Non-Stop unlimited data · 1,800 local mins · 1 GB roaming · 12-month contract' },
+      { name: 'Plan 325 Flexi', price: 'AED 228/mo — 25% off AED 325 (6-mo promo rate)', detail: 'Non-Stop unlimited data · 900 flexi mins · 1 GB roaming · 12-month contract' }
+    ] },
+  'Silver Plus': { value: 400, cls: 'silver-plus', label: 'AED 400/mo postpaid plan',
+    summary: '40 GB data · Unlimited local mins · 12-mo contract',
+    plans: [
+      { name: 'Emirati Freedom 400 Local', price: 'AED 400/mo', detail: '40 GB data · Unlimited local mins · 1 GB roaming + Roam Like Home GCC · 40,000 Smiles points · 12-month contract · UAE Nationals plan' }
+    ] },
+  'Gold': { value: 500, cls: 'gold', label: 'AED 500/mo postpaid plan',
+    summary: 'Unlimited data · 3,000 local mins · 24-mo contract',
+    plans: [
+      { name: 'Freedom Unlimited Gold 500 Local', price: 'AED 500/mo', detail: 'Unlimited data · 3,000 local mins · 10 GB roaming · 24-month contract' },
+      { name: 'Freedom Unlimited Gold 500 Flexi', price: 'AED 500/mo', detail: 'Unlimited data · 1,500 flexi mins · 10 GB roaming · 24-month contract' },
+      { name: 'Gold Plan 500 Local', price: 'AED 500/mo', detail: '100 GB data · Unlimited local mins · 24-month contract' },
+      { name: 'Gold Plan 500 Flexi', price: 'AED 500/mo', detail: '100 GB data · 3,500 flexi mins · 24-month contract' }
+    ] },
+  'Gold Plus': { value: 1000, cls: 'gold-plus', label: 'AED 1,000/mo postpaid plan',
+    summary: 'Unlimited data · Unlimited local mins · 40 GB roaming',
+    plans: [
+      { name: 'Platinum Plan 1000 Local', price: 'AED 1,000/mo', detail: 'Unlimited data · Unlimited local mins · 40 GB roaming · 24-month contract' },
+      { name: 'Platinum Plan 1000 Flexi', price: 'AED 1,000/mo', detail: 'Unlimited data · 5,000 flexi mins · 40 GB roaming · 24-month contract' },
+      { name: 'Emirati Freedom 1500 Flexi', price: 'AED 1,500/mo', detail: 'Unlimited data · Unlimited flexi mins · Roam Like Home Global · 200,000 Smiles points · UAE Nationals plan' }
+    ] },
+  'Platinum': { value: 1000, cls: 'platinum', label: 'AED 1,000/mo postpaid plan',
+    summary: 'Unlimited data · Unlimited calls · 40 GB roaming',
+    plans: [
+      { name: 'Platinum Plan 1000 Local', price: 'AED 1,000/mo', detail: 'Unlimited data · Unlimited local mins · 40 GB roaming · 24-month contract' },
+      { name: 'Platinum Plan 1000 Flexi', price: 'AED 1,000/mo', detail: 'Unlimited data · 5,000 flexi mins · 40 GB roaming · 24-month contract' }
+    ] }
+};
+function tierInfo(cat) { return TIERS[cat] || TIERS['Silver']; }
 var PARTNER_API = 'https://script.google.com/macros/s/AKfycbyH1KBC63S7yB3wSpHw-s5bZHH1Rwqta4Fsd6hIz8NCe0GqiaZZx13VdOsDALenWbqW/exec';
 
 /* ========================================
@@ -1822,7 +1970,7 @@ function trackScanOnce(refCode) {
    - Cache key versioned (v2) — bump when parser/schema changes so old caches
      get invalidated automatically.
    ======================================== */
-var NUMBERS_CACHE_KEY = 'gn_numbers_cache_v5';
+var NUMBERS_CACHE_KEY = 'gn_numbers_cache_v6'; // v6 2026-06-12: Silver Plus + Gold Plus tiers added
 var NUMBERS_CACHE_TTL_MS = 60 * 60 * 1000;
 
 function readCachedNumbers() {
@@ -2027,7 +2175,9 @@ function parseCSV(csv) {
     if (catLower === 'gold') cat = 'Gold';
     else if (catLower === 'silver') cat = 'Silver';
     else if (catLower === 'platinum') cat = 'Platinum';
-    else continue; // Skip Silver Plus and any other categories
+    else if (catLower === 'silver plus') cat = 'Silver Plus';
+    else if (catLower === 'gold plus' || catLower === 'gold plus+') cat = 'Gold Plus';
+    else continue; // Skip Standard and any other categories
 
     if (!withZero && withoutZero) withZero = '0' + withoutZero;
     if (!withZero) continue;
@@ -2061,7 +2211,9 @@ function applyFilters() {
     var catMap = {
       'gold': 'Gold',
       'silver': 'Silver',
-      'platinum': 'Platinum'
+      'platinum': 'Platinum',
+      'silver-plus': 'Silver Plus',
+      'gold-plus': 'Gold Plus'
     };
     var target = catMap[activeCategory];
     if (target) {
@@ -2162,7 +2314,7 @@ function attachCardViewContentObserver() {
         if (!msisdn || _viewedMsisdns[msisdn]) { _cardObserver.unobserve(card); continue; }
         _viewedMsisdns[msisdn] = true;
         var cat = card.getAttribute('data-cat') || 'Silver';
-        var v = cat === 'Platinum' ? 1000 : (cat === 'Gold' ? 500 : 188);
+        var v = tierInfo(cat).value;
         try {
           fbq('track', 'ViewContent', {
             content_name: 'VIP Number Card',
@@ -2213,9 +2365,9 @@ function applyDeepLinkHighlight() {
 function createCard(num) {
   var card = document.createElement('div');
 
+  var tier = tierInfo(num.category);
   var cardClass = 'number-card';
-  if (num.category === 'Gold') cardClass += ' gold-card';
-  else if (num.category === 'Platinum') cardClass += ' platinum-card';
+  if (tier.cls !== 'silver') cardClass += ' ' + tier.cls + '-card';
   card.className = cardClass;
   // Catalog match keys — MSISDN matches feed.xml g:id, with-zero matches deep-link ?n= param
   card.setAttribute('data-msisdn', num.msisdn || '');
@@ -2223,22 +2375,9 @@ function createCard(num) {
   card.setAttribute('data-cat', num.category || '');
   card.setAttribute('data-with-zero', num.digits || '');
 
-  var badgeClass = 'number-badge ';
-  var priceClass = 'card-price ';
-  var priceText = '';
-  if (num.category === 'Platinum') {
-    badgeClass += 'badge-platinum';
-    priceClass += 'platinum-card-price';
-    priceText = 'AED 1,000<span>/mo postpaid plan</span>';
-  } else if (num.category === 'Gold') {
-    badgeClass += 'badge-gold';
-    priceClass += 'gold-card-price';
-    priceText = 'AED 500<span>/mo postpaid plan</span>';
-  } else {
-    badgeClass += 'badge-silver';
-    priceClass += 'silver-card-price';
-    priceText = 'AED 188<span>/mo postpaid plan</span>';
-  }
+  var badgeClass = 'number-badge badge-' + tier.cls;
+  var priceClass = 'card-price ' + tier.cls + '-card-price';
+  var priceText = 'AED ' + (tier.value >= 1000 ? '1,000' : tier.value) + '<span>/mo postpaid plan</span>';
 
   var waMessage = num.category === 'Platinum'
     ? 'Hi, I\'m interested in the Platinum postpaid number ' + num.formatted + ' (AED 1,000/mo plan) from goldennummbers.com'
@@ -2250,6 +2389,8 @@ function createCard(num) {
       '<span class="' + badgeClass + '">' + escapeHtml(num.category) + '</span>' +
     '</div>' +
     '<div class="' + priceClass + '">' + priceText + '</div>' +
+    '<div class="card-plan-line"><span class="card-plan-summary">' + escapeHtml(tier.summary) + '</span>' +
+      '<button type="button" class="plan-details-link" data-cat="' + escapeHtml(num.category) + '" aria-label="View plan options for the ' + escapeHtml(num.category) + ' tier">Plan options ▸</button></div>' +
     '<div class="card-actions">' +
     '<button type="button" class="btn-reserve" data-num="' + escapeHtml(num.formatted) + '" data-msisdn="' + escapeHtml(num.msisdn || '') + '" data-cat="' + escapeHtml(num.category) + '" aria-label="Reserve ' + escapeHtml(num.formatted) + '">🛒 Reserve</button>' +
     '<button type="button" class="btn-share" data-digits="' + escapeHtml(num.digits || '') + '" data-num="' + escapeHtml(num.formatted) + '" aria-label="Share a reserve link for ' + escapeHtml(num.formatted) + '">🔗 Share</button>' +
@@ -2353,7 +2494,7 @@ function fireWhatsAppClick(link) {
   var source = num ? ('CARD-' + String(num).replace(/\D/g, '')) : 'CARD';
   var trackedHref = buildWhatsAppHref(baseMsg, source, leadToken);
   link.setAttribute('href', trackedHref);
-  var planValue = cat === 'Platinum' ? 1000 : (cat === 'Gold' ? 500 : 188);
+  var planValue = tierInfo(cat).value;
 
   if (typeof gtag === 'function') {
     gtag('event', 'number_inquiry', {
@@ -2392,7 +2533,7 @@ function fireWhatsAppClick(link) {
   // Fires all 6 TikTok expected funnel events; closes the "missing vertical funnel
   // events" diagnostic flagged in TikTok Ads Manager.
   if (typeof ttq !== 'undefined') {
-    var numValue = cat === 'Platinum' ? 1000 : (cat === 'Gold' ? 500 : 188);
+    var numValue = tierInfo(cat).value;
     ttq.track('AddToWishlist', {
       content_id: num,
       content_name: num,
@@ -2584,11 +2725,8 @@ function loadTurnstileWidget() {
   document.head.appendChild(s);
 }
 
-function checkoutPlanValue(cat) { return cat === 'Platinum' ? 1000 : (cat === 'Gold' ? 500 : 188); }
-function checkoutPlanLabel(cat) {
-  return cat === 'Platinum' ? 'AED 1,000/mo postpaid plan'
-       : cat === 'Gold' ? 'AED 500/mo postpaid plan' : 'AED 188/mo postpaid plan';
-}
+function checkoutPlanValue(cat) { return tierInfo(cat).value; }
+function checkoutPlanLabel(cat) { return tierInfo(cat).label; }
 
 function openCheckout(num, msisdn, cat) {
   _checkout = { num: num, msisdn: msisdn || '', cat: cat || 'Silver', token: createLeadToken() };
@@ -2897,6 +3035,52 @@ loadNumbers();
     </div>
   </div>
 </div>
+
+<!-- Plan-options modal — tier-level Etisalat postpaid plan bundles, shared by every card's
+     "Plan options" link (one modal instead of per-card markup keeps the 3,000+-card grid lean).
+     Content is built from the TIERS catalog on open. -->
+<div class="checkout-overlay" id="planOverlay" role="dialog" aria-modal="true" aria-labelledby="planTitle">
+  <div class="checkout-modal">
+    <button type="button" class="checkout-close" id="planClose" aria-label="Close plan options">&times;</button>
+    <h2 class="checkout-title" id="planTitle">Plan Options</h2>
+    <div id="planBody"></div>
+    <p class="checkout-note">Prices exclude 5% VAT. The number itself is FREE — it comes with the Etisalat <strong>postpaid</strong> plan. Plans marked "UAE Nationals" have eligibility conditions — our specialist confirms the right plan for you on WhatsApp.</p>
+  </div>
+</div>
+<script>
+/* Plan-options modal logic — delegated so it works for card links and legend links alike. */
+document.addEventListener('DOMContentLoaded', function() {
+  var planOverlay = document.getElementById('planOverlay');
+  var planTitle = document.getElementById('planTitle');
+  var planBody = document.getElementById('planBody');
+  if (!planOverlay) return;
+  function openPlanModal(cat) {
+    var tier = tierInfo(cat);
+    planTitle.textContent = cat + ' — Included Plan Options';
+    var html = '<div class="plan-tier-head">' + escapeHtml(tier.label) + ' · ' + escapeHtml(tier.summary) + '</div><ul class="plan-list">';
+    for (var i = 0; i < tier.plans.length; i++) {
+      var p = tier.plans[i];
+      html += '<li><strong>' + escapeHtml(p.name) + '</strong><span class="plan-price">' + escapeHtml(p.price) + '</span><span class="plan-detail">' + escapeHtml(p.detail) + '</span></li>';
+    }
+    html += '</ul>';
+    planBody.innerHTML = html;
+    planOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    if (typeof gtag === 'function') { try { gtag('event', 'view_plan_options', { number_category: cat }); } catch (e) {} }
+  }
+  function closePlanModal() {
+    planOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest ? e.target.closest('.plan-details-link') : null;
+    if (btn) { openPlanModal(btn.getAttribute('data-cat') || 'Silver'); return; }
+    if (e.target === planOverlay) closePlanModal();
+  });
+  document.getElementById('planClose').addEventListener('click', closePlanModal);
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && planOverlay.classList.contains('open')) closePlanModal(); });
+});
+</script>
 
 <!-- Floating WhatsApp FAB — always-visible primary CTA for ad-landing traffic -->
 <a class="wa-fab" href="https://wa.me/971569028087?text=Hi%2C%20I%20want%20to%20reserve%20a%20postpaid%20number%20from%20goldennummbers.com" target="_blank" rel="noopener noreferrer" data-cta="floating_fab" aria-label="Chat on WhatsApp">

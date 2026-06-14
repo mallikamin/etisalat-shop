@@ -17,6 +17,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://goldennummbers.com/sell-your-number/</loc>
+    <lastmod>2026-06-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://goldennummbers.com/ar/</loc>
     <xhtml:link rel="alternate" hreflang="ar" href="https://goldennummbers.com/ar/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://goldennummbers.com/"/>

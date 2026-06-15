@@ -2870,6 +2870,19 @@ function openCheckout(num, msisdn, cat, plan) {
     if (tplans[pi].name === prePlan) po.selected = true;
     planSel.appendChild(po);
   }
+  // If a phone was carried over from /mobile-phone-installments/ (?phone=), preselect it here.
+  try {
+    var ip = getInstallmentPhone();
+    var dsel = document.getElementById('coDevice');
+    if (ip && dsel) {
+      var ipl = ip.toLowerCase();
+      for (var di = 0; di < dsel.options.length; di++) {
+        if (dsel.options[di].value && dsel.options[di].value.toLowerCase().indexOf(ipl) === 0) { dsel.selectedIndex = di; break; }
+      }
+    }
+    var dnote = document.getElementById('coDeviceNote');
+    if (dnote && dsel) dnote.style.display = dsel.value ? 'block' : 'none';
+  } catch (e) {}
   coErr.classList.remove('show');
   coSubmit.disabled = false;
   document.getElementById('coDate').disabled = false; // reset() doesn't undo the call-now lock
@@ -2968,6 +2981,12 @@ document.getElementById('coTime').addEventListener('change', function() {
 });
 document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && checkoutOverlay.classList.contains('open')) closeCheckout(); });
 
+// Show the Etisalat-approval note only when an optional phone is chosen.
+document.getElementById('coDevice').addEventListener('change', function() {
+  var note = document.getElementById('coDeviceNote');
+  if (note) note.style.display = this.value ? 'block' : 'none';
+});
+
 checkoutForm.addEventListener('submit', function(e) {
   e.preventDefault();
   if (!_checkout) return;
@@ -2983,6 +3002,7 @@ checkoutForm.addEventListener('submit', function(e) {
   if (slotTime === 'now') document.getElementById('coDate').value = new Date().toISOString().slice(0, 10);
   var slotDate = document.getElementById('coDate').value;
   var planChoice = document.getElementById('coPlan').value; // '' = specialist advises
+  var deviceChoice = document.getElementById('coDevice').value; // '' = number only; optional phone on installments
 
   if (name.length < 2) return checkoutShowError('Please enter your full name.');
   var pm = phoneDigits.match(/^(?:971|0)?(5\d{8})$/);
@@ -3032,6 +3052,7 @@ checkoutForm.addEventListener('submit', function(e) {
   // so a failed/rate-limited POST must never block the customer.
   var payload = {
     number: _checkout.num, category: _checkout.cat, plan: planChoice || '',
+    device: deviceChoice || '',
     name: name, phone: localPhone, nationality: nationality, city: city, address: address,
     slot_date: slotDate, slot_time: slotTime,
     token: token, ref: buildRefCode('CHECKOUT', token),
@@ -3057,6 +3078,7 @@ checkoutForm.addEventListener('submit', function(e) {
   var waMsg = '🛒 New Checkout Order — goldennummbers.com\n\n' +
     'Number: ' + _checkout.num + ' (' + _checkout.cat + ')\n' +
     (planChoice ? 'Plan: ' + planChoice + '\n' : '') +
+    (deviceChoice ? 'Phone on installments: ' + deviceChoice + ' (subject to Etisalat approval)\n' : '') +
     'Name: ' + name + '\n' +
     'Mobile: ' + localPhone + '\n' +
     'Nationality: ' + nationality + '\n' +
@@ -3115,6 +3137,21 @@ loadNumbers();
         <select id="coPlan" name="plan">
           <option value="">Recommended — let our specialist advise</option>
         </select>
+
+        <label for="coDevice">Add a phone on installments <span style="font-weight:400;opacity:.7;font-size:.85em">(optional)</span></label>
+        <select id="coDevice" name="device">
+          <option value="">No phone — reserve the number only</option>
+          <option value="iPhone 17 Pro (from AED 198/mo)">iPhone 17 Pro · from AED 198/mo</option>
+          <option value="iPhone Air (from AED 149/mo)">iPhone Air · from AED 149/mo</option>
+          <option value="iPhone 17e (from AED 119/mo)">iPhone 17e · from AED 119/mo</option>
+          <option value="Samsung Galaxy S26 Ultra (from AED 186/mo)">Samsung Galaxy S26 Ultra · from AED 186/mo</option>
+          <option value="Samsung Galaxy S26 (from AED 131/mo)">Samsung Galaxy S26 · from AED 131/mo</option>
+          <option value="Samsung Galaxy Z Fold7 (AED 250/mo)">Samsung Galaxy Z Fold7 · AED 250/mo</option>
+          <option value="Huawei Mate X7 (from AED 295/mo)">Huawei Mate X7 · from AED 295/mo</option>
+          <option value="Huawei Mate 80 Pro (from AED 163/mo)">Huawei Mate 80 Pro · from AED 163/mo</option>
+          <option value="Another phone (advise me)">Another phone · ask the specialist</option>
+        </select>
+        <p class="checkout-note" id="coDeviceNote" style="display:none">📱 Monthly installments run through e&amp; SmartPay and need an active Etisalat postpaid line (this number). Prices are indicative starting prices set by Etisalat. Phone issuance and the installment plan are <strong>subject to approval by Etisalat</strong> (credit check and verification).</p>
 
         <label for="coName">Full Name</label>
         <input type="text" id="coName" name="name" autocomplete="name" maxlength="60" required>

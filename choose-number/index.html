@@ -1471,6 +1471,14 @@ a { color: inherit; }
   </a>
 </section>
 
+<!-- ============ INSTALLMENTS PHONE CARRY-THROUGH (revealed by JS when ?phone= is present; shared GN + PPP via sync) ============ -->
+<section id="installPhoneBanner" style="display:none;padding:0 1.5rem;margin:0 auto 0.5rem;max-width:1100px">
+  <div style="display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap;background:rgba(201,169,98,0.12);border:1px dashed var(--gold);border-radius:12px;padding:0.8rem 1.15rem;font-size:0.92rem;color:var(--text);line-height:1.45">
+    <span style="font-size:1.1rem" aria-hidden="true">📱</span>
+    <span>Adding the <strong id="installPhoneName" style="color:var(--gold)"></strong> on monthly installments to your inquiry. Pick your number below and it rides along to WhatsApp.</span>
+  </div>
+</section>
+
 <!-- ============ SEARCH & RESULTS ============ -->
 <section class="search-section">
   <div class="container">
@@ -2019,6 +2027,32 @@ function gnFormatNumber(d) {
   return (d && d.length === 10) ? (d.slice(0, 3) + ' ' + d.slice(3, 6) + ' ' + d.slice(6)) : (d || '');
 }
 
+// The phone the visitor chose on /mobile-phone-installments/ ("Choose a number" → ?phone=<device name>).
+// Carried into the per-number WhatsApp inquiry so Bilal sees they want the number WITH a phone on installments.
+var _installPhoneCached = null;
+function getInstallmentPhone() {
+  if (_installPhoneCached !== null) return _installPhoneCached;
+  try {
+    var raw = (new URLSearchParams(location.search || '').get('phone') || '').trim();
+    // Keep it to a sane device-name shape; strip anything that could break the WA text or HTML.
+    raw = raw.replace(/[<>"'\\\n\r\t]/g, ' ').replace(/\s+/g, ' ').trim();
+    _installPhoneCached = raw.slice(0, 40);
+  } catch (e) { _installPhoneCached = ''; }
+  return _installPhoneCached;
+}
+// The clause appended to a number inquiry when a phone was carried over (empty when none).
+function installmentClause() {
+  var p = getInstallmentPhone();
+  return p ? (' with the ' + p + ' on monthly installments') : '';
+}
+function revealInstallPhoneBanner() {
+  var p = getInstallmentPhone();
+  if (!p) return;
+  var el = document.getElementById('installPhoneBanner');
+  var nm = document.getElementById('installPhoneName');
+  if (el && nm) { nm.textContent = p; el.style.display = ''; }
+}
+
 function buildTrackedMessage(baseMessage, source, leadToken) {
   var msg = baseMessage;
   // 2026-06-08 fix: when the visitor landed on a SPECIFIC number (DPA/share deep link ?n=)
@@ -2468,9 +2502,10 @@ function createCard(num) {
   var priceClass = 'card-price ' + tier.cls + '-card-price';
   var priceText = 'AED ' + (tier.value >= 1000 ? '1,000' : tier.value) + '<span>/mo postpaid plan</span>';
 
+  var _ic = installmentClause();
   var waMessage = num.category === 'Platinum'
-    ? 'Hi, I\'m interested in the Platinum postpaid number ' + num.formatted + ' (AED 1,000/mo plan) from goldennummbers.com'
-    : 'Hi, I\'m interested in the ' + num.category + ' postpaid number ' + num.formatted + ' from goldennummbers.com';
+    ? 'Hi, I\'m interested in the Platinum postpaid number ' + num.formatted + ' (AED 1,000/mo plan)' + _ic + ' from goldennummbers.com'
+    : 'Hi, I\'m interested in the ' + num.category + ' postpaid number ' + num.formatted + _ic + ' from goldennummbers.com';
 
   card.innerHTML =
     '<div class="card-top">' +
@@ -3059,6 +3094,7 @@ document.getElementById('coWaBtn').addEventListener('click', function() {
 /* ========================================
    INIT
    ======================================== */
+revealInstallPhoneBanner();
 loadNumbers();
 </script>
 

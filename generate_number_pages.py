@@ -46,7 +46,7 @@ ACCEPTED_CATEGORIES = {"gold": "Gold", "silver": "Silver", "platinum": "Platinum
 TIER_PRICE = {
     "Silver":   {"display": "AED 188", "unit": "/mo plan",      "raw": 188},
     "Gold":     {"display": "AED 500", "unit": "/mo plan",      "raw": 500},
-    "Platinum": {"display": "AED 1,000","unit": " · one-time",  "raw": 1000},
+    "Platinum": {"display": "AED 1,000","unit": "/mo plan",     "raw": 1000},
 }
 
 # Etisalat-assigned prefix families. Used for the "Number breakdown" SEO copy.
@@ -349,35 +349,51 @@ def wa_link(site, num):
     return f"https://wa.me/{site['wa_number']}?text={urllib.parse.quote(msg)}", msg
 
 
+def reserve_link(num):
+    """Pick-first path: deep-link into /choose-number/ with this exact number,
+    auto-opening the structured reserve form. CRM shows this reserve flow closes
+    far better than a cold WhatsApp chat, so it is the primary CTA on number pages."""
+    return f"/choose-number/?n={num['digits']}&go=reserve&ref=NUMPAGE"
+
+
+def _variant(digits, n):
+    """Deterministic 0..n-1 per number — varies page structure/wording without
+    randomness, so re-runs are stable and pages aren't identical scaffolding."""
+    return sum(int(c) for c in digits if c.isdigit()) % n
+
+
 def seo_intro(num, info):
-    """Compose a unique introductory paragraph from detected patterns."""
+    """Factual, feature-driven intro — no numerology/hype (no AI bluff). States only
+    what is literally true: tier, prefix, and the concrete digit pattern detected.
+    Three framings chosen per-number so pages don't share identical copy scaffolding."""
+    fmt = num["formatted"]
+    cat = num["category"]
+    prefix = info["prefix"]
+    pat = info["patterns"][0] if info["patterns"] else ""
+    prefix_meta = PREFIX_INFO.get(prefix)
     parts = []
-    parts.append(
-        f"Etisalat number <strong>{num['formatted']}</strong> is currently available as a "
-        f"{num['category']} VIP listing in the UAE."
-    )
-
-    prefix_meta = PREFIX_INFO.get(info["prefix"])
-    if prefix_meta:
-        parts.append(f"The <strong>{info['prefix']}</strong> prefix — {prefix_meta}")
-
-    if info["patterns"]:
-        # Take up to 2 strongest patterns
-        focus = info["patterns"][:2]
-        if len(focus) == 1:
-            parts.append(f"This number {focus[0]}, which makes it instantly memorable in voice and on a business card.")
+    v = _variant(num["digits"], 3)
+    if v == 0:
+        parts.append(f"<strong>{fmt}</strong> is an Etisalat {cat} VIP number listed as available in the UAE.")
+        if pat:
+            parts.append(f"It {pat}, so it is easy to say out loud and to remember.")
+        if prefix_meta:
+            parts.append(f"The {prefix} prefix is {prefix_meta}")
+    elif v == 1:
+        if pat:
+            parts.append(f"This Etisalat {cat} number {pat}.")
         else:
-            parts.append(f"This number {focus[0]}, and also {focus[1]} — a pattern combination that is unusually scarce in active Etisalat ranges.")
+            parts.append(f"This is an Etisalat {cat} VIP number with a clean, easy-to-recall layout.")
+        parts.append(f"<strong>{fmt}</strong> runs on the {prefix} prefix and is currently available.")
+        if prefix_meta:
+            parts.append(f"That series is {prefix_meta}")
     else:
-        parts.append(
-            "It carries a clean, easy-to-recall structure that lifts it out of the standard pool — "
-            "the kind of number you only have to say once."
-        )
-
-    parts.append(
-        f"Its digit-sum reduces to <strong>{info['digit_sum_root']}</strong>, "
-        f"a detail customers from numerology-conscious markets often consider when choosing a personal number."
-    )
+        if prefix_meta:
+            parts.append(f"<strong>{fmt}</strong> sits on the {prefix} prefix — {prefix_meta}")
+        else:
+            parts.append(f"<strong>{fmt}</strong> is an available Etisalat {cat} VIP number.")
+        if pat:
+            parts.append(f"It {pat}, the kind of pattern that places a number in the {cat} VIP pool rather than the standard range.")
     return " ".join(parts)
 
 
@@ -385,16 +401,17 @@ def tier_block(num, site):
     cat = num["category"]
     tier = TIER_PRICE[cat]
     if cat == "Silver":
-        copy = ("Silver numbers are released with Etisalat's entry postpaid plan. You keep the number, "
-                "the SIM is delivered the same day inside Dubai, Abu Dhabi and Sharjah, and the plan covers "
-                "unlimited UAE local minutes plus a high monthly data allowance.")
+        copy = ("Silver numbers are issued on Etisalat's entry postpaid plan from AED 188/month — "
+                "unlimited UAE data and 1,000 local minutes, with the number included. The SIM is "
+                "delivered the same day across Dubai, Abu Dhabi and Sharjah, or activated on eSIM where supported.")
     elif cat == "Gold":
-        copy = ("Gold numbers come with Etisalat's Gold postpaid plan — international minutes are included, "
-                "data is uncapped, and the number itself is reserved against your Emirates ID at the point of sale. "
-                "Most Gold numbers move within 48 hours of being listed.")
+        copy = ("Gold numbers are issued on Etisalat's Gold postpaid plan from AED 500/month — "
+                "unlimited UAE data and 3,000 local minutes. The number is registered against your "
+                "Emirates ID at the point of sale.")
     else:
-        copy = ("Platinum numbers are released individually as a one-time premium purchase. You can attach them to "
-                "any active Etisalat postpaid plan, and ownership transfers under your Emirates ID with full Etisalat backing.")
+        copy = ("Platinum numbers are issued on Etisalat's top postpaid plan at AED 1,000/month — "
+                "unlimited UAE data and unlimited local calls. The number is registered against your "
+                "Emirates ID at the point of sale.")
     return tier, copy
 
 
@@ -408,39 +425,46 @@ def faq_for(num, info):
     ))
     if num["category"] == "Platinum":
         qs.append((
-            f"How much does the Platinum number {num['formatted']} cost?",
-            (f"Platinum numbers are priced from AED 1,000 as a one-time premium on top of the underlying Etisalat postpaid plan. "
-             f"Final pricing depends on pattern strength — message us on WhatsApp at {info['phone_display']} for the live quote."),
-        )) if False else qs.append((
-            f"How much does the Platinum number {num['formatted']} cost?",
-            ("Platinum numbers are priced from AED 1,000 as a one-time premium on top of the underlying Etisalat postpaid plan. "
-             "Final pricing depends on pattern strength — message us on WhatsApp for the live quote."),
+            f"What plan comes with Platinum number {num['formatted']}?",
+            ("This number is issued on Etisalat's top postpaid plan at AED 1,000/month — unlimited UAE data and "
+             "unlimited local calls. It is a monthly postpaid plan, not a prepaid SIM or a one-time fee. "
+             "Message us on WhatsApp for the live quote on this specific number."),
         ))
     elif num["category"] == "Gold":
         qs.append((
             f"What plan comes with Gold number {num['formatted']}?",
-            ("This number is released with Etisalat's Gold postpaid plan at AED 500/month. The plan includes uncapped UAE data, "
-             "international minutes, and the number is held under your Emirates ID."),
+            ("This number is issued on Etisalat's Gold postpaid plan at AED 500/month — unlimited UAE data and "
+             "3,000 local minutes. It is a monthly postpaid plan, and the number is held under your Emirates ID."),
         ))
     else:
         qs.append((
             f"What plan comes with Silver number {num['formatted']}?",
-            ("This number is released with Etisalat's entry postpaid plan from AED 188/month. The plan covers UAE local "
-             "minutes, generous data, and the SIM is delivered the same day."),
+            ("This number is issued on Etisalat's entry postpaid plan from AED 188/month — unlimited UAE data and "
+             "1,000 local minutes. It is a monthly postpaid plan, and the SIM is delivered the same day."),
         ))
 
+    # Eligibility FAQ — honest framing of Etisalat's credit/visa policy (cuts wasted
+    # inquiries from buyers who can't be approved; aligns with the site-wide framing).
+    qs.append((
+        f"Who can get the Etisalat number {num['formatted']}?",
+        ("Etisalat postpaid plans are subject to Etisalat's own eligibility policy — a valid Emirates ID plus "
+         "residency and salary criteria. Our specialist confirms your approval before the SIM is delivered, so "
+         "it suits residents and businesses who can be activated on a postpaid line."),
+    ))
+
     if info["patterns"]:
-        qs.append((
-            f"Why is {num['formatted']} considered a VIP number?",
-            (f"Because it {info['patterns'][0]}. Pattern-rich numbers are easier to remember, project status, and are "
-             f"traditionally chosen as business contact lines across the UAE."),
-        ))
-    else:
-        qs.append((
-            f"Why is {num['formatted']} considered a VIP number?",
-            ("It sits inside Etisalat's curated VIP catalogue — a small, hand-picked pool that Etisalat releases "
-             "alongside premium postpaid plans rather than at random allocation."),
-        ))
+        if _variant(num["digits"], 2) == 0:
+            qs.append((
+                f"What makes {num['formatted']} a VIP number?",
+                (f"It {info['patterns'][0]} — a pattern that is easy to remember and read out, which is why it sits in "
+                 "the VIP pool rather than the standard range."),
+            ))
+        else:
+            qs.append((
+                f"Why is {num['formatted']} priced above a standard Etisalat number?",
+                (f"Because it {info['patterns'][0]}. Patterned numbers are scarcer and are commonly chosen as business "
+                 "and personal contact lines across the UAE."),
+            ))
     return qs
 
 
@@ -468,6 +492,7 @@ def page_html(site, num, all_numbers):
     tier, tier_copy = tier_block(num, site)
     rel_tier, rel_prefix = find_related(num, all_numbers)
     wa_href, wa_msg = wa_link(site, num)
+    res_href = reserve_link(num)
     page_url = url_for(site, num)
     faqs = faq_for(num, info)
 
@@ -524,6 +549,11 @@ def page_html(site, num, all_numbers):
                  color:var(--text);padding:0.95rem 1.4rem;border-radius:999px;
                  border:1px solid var(--border);font-weight:600;font-size:1.05rem}
   .btn-secondary:hover{text-decoration:none;border-color:var(--gold);color:var(--gold)}
+  .btn-reserve{display:inline-flex;align-items:center;gap:0.55rem;background:var(--gold);
+               color:#0D1117;padding:0.95rem 1.6rem;border-radius:999px;font-weight:700;font-size:1.05rem;
+               box-shadow:0 8px 22px rgba(201,169,98,0.28)}
+  .btn-reserve:hover{text-decoration:none;transform:translateY(-1px);background:var(--gold2)}
+  .eligibility{font-size:0.85rem;color:var(--muted);max-width:640px;margin:0.75rem auto 0;line-height:1.5}
 
   /* sections */
   .section{padding:2rem 0;border-top:1px solid var(--border)}
@@ -683,7 +713,7 @@ def page_html(site, num, all_numbers):
         f'  <div class="fact"><div class="k">Tier</div><div class="v">{num["category"]}</div></div>'
         f'  <div class="fact"><div class="k">Prefix</div><div class="v">{info["prefix"]}</div></div>'
         f'  <div class="fact"><div class="k">Plan from</div><div class="v">{tier["display"]}</div></div>'
-        f'  <div class="fact"><div class="k">Digit-sum root</div><div class="v">{info["digit_sum_root"]}</div></div>'
+        f'  <div class="fact"><div class="k">Delivery</div><div class="v">Same-day</div></div>'
         f'</div>'
     )
 
@@ -791,12 +821,13 @@ def page_html(site, num, all_numbers):
     <p class="sub">An authorized Etisalat dealer listing. {site['tagline']}.</p>
     <div class="price">{tier['display']}<small>{tier['unit']}</small></div>
     <div class="cta-row">
+      <a class="btn-reserve" href="{res_href}" data-cta="hero_reserve">Reserve {html.escape(num['formatted'])}</a>
       <a class="btn-primary" href="{wa_href}" target="_blank" rel="noopener noreferrer" data-cta="hero_wa">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        Contact Now on WhatsApp
+        Ask on WhatsApp
       </a>
-      <a class="btn-secondary" href="tel:{site['wa_number']}" data-cta="call">Call {site['phone_display']}</a>
     </div>
+    <p class="eligibility">Issued on an Etisalat postpaid plan — approval follows Etisalat's eligibility policy (valid Emirates ID, residency &amp; salary criteria), confirmed by our specialist before delivery.</p>
   </header>
 
   {facts_html}
@@ -816,12 +847,13 @@ def page_html(site, num, all_numbers):
   <section class="section">
     <h2>How to buy {html.escape(num['formatted'])}</h2>
     <ol class="steps">
-      <li><strong>Tap “Contact Now”</strong> — your WhatsApp opens with this exact number already in the message.</li>
-      <li><strong>Share your Emirates ID</strong> — we reserve the number in your name with Etisalat the same day.</li>
+      <li><strong>Tap “Reserve {html.escape(num['formatted'])}”</strong> — the reservation form opens with this exact number already filled in.</li>
+      <li><strong>Share your Emirates ID</strong> — our specialist confirms Etisalat eligibility and reserves the number in your name, usually the same day.</li>
       <li><strong>Same-day delivery</strong> — your SIM is hand-delivered across Dubai, Abu Dhabi and Sharjah, or activated on eSIM where supported.</li>
     </ol>
     <div class="cta-row" style="margin-top:1rem">
-      <a class="btn-primary" href="{wa_href}" target="_blank" rel="noopener noreferrer" data-cta="midpage_wa">Contact Now on WhatsApp</a>
+      <a class="btn-reserve" href="{res_href}" data-cta="midpage_reserve">Reserve {html.escape(num['formatted'])}</a>
+      <a class="btn-secondary" href="{wa_href}" target="_blank" rel="noopener noreferrer" data-cta="midpage_wa">Ask on WhatsApp</a>
     </div>
   </section>
 
@@ -842,10 +874,11 @@ def page_html(site, num, all_numbers):
 
   <section class="section">
     <h2>Reserve {html.escape(num['formatted'])} now</h2>
-    <p>Inventory is shared with the live Etisalat dealer system — VIP numbers can be reserved by another buyer at any time. The fastest way to lock in {html.escape(num['formatted'])} is to message us now.</p>
+    <p>Inventory is shared with the live Etisalat dealer system — VIP numbers can be reserved by another buyer at any time. The fastest way to lock in {html.escape(num['formatted'])} is to reserve it online; our specialist then confirms eligibility and delivery.</p>
     <div class="cta-row">
-      <a class="btn-primary" href="{wa_href}" target="_blank" rel="noopener noreferrer" data-cta="footer_wa">Contact Now on WhatsApp</a>
-      <a class="btn-secondary" href="/numbers/">Browse more numbers</a>
+      <a class="btn-reserve" href="{res_href}" data-cta="footer_reserve">Reserve {html.escape(num['formatted'])}</a>
+      <a class="btn-secondary" href="{wa_href}" target="_blank" rel="noopener noreferrer" data-cta="footer_wa">Ask on WhatsApp</a>
+      <a class="btn-secondary" href="/choose-number/">Browse more numbers</a>
     </div>
   </section>
 </div>
@@ -859,7 +892,7 @@ def page_html(site, num, all_numbers):
 
 <div class="sticky-cta">
   <div class="meta"><span>Etisalat · {num['category']}</span><strong>{html.escape(num['formatted'])}</strong></div>
-  <a class="btn-primary" href="{wa_href}" target="_blank" rel="noopener noreferrer" data-cta="sticky_wa">Contact Now</a>
+  <a class="btn-reserve" href="{res_href}" data-cta="sticky_reserve">Reserve</a>
 </div>
 
 </body>
@@ -1222,9 +1255,10 @@ def write_sitemap_numbers(site, numbers, hubs=None):
 # ===========================================================================
 # 7. ORCHESTRATION
 # ===========================================================================
-def generate_for_site(site, numbers):
+def generate_for_site(site, numbers, additive=False, dry=False):
     global CURRENT_HUBS
-    print(f"\n=== {site['label']} -> {len(numbers)} numbers ===")
+    print(f"\n=== {site['label']} -> {len(numbers)} numbers "
+          f"({'ADDITIVE' if additive else 'FULL'}{' / DRY' if dry else ''}) ===")
     out_root = os.path.join(site["project_dir"], "numbers")
     os.makedirs(out_root, exist_ok=True)
 
@@ -1232,18 +1266,29 @@ def generate_for_site(site, numbers):
     hubs = build_hubs(numbers)
     CURRENT_HUBS = hubs
 
-    # Per-number pages
-    written = 0
+    # Per-number pages. In ADDITIVE mode we only write pages for NEW numbers
+    # (no existing /numbers/<slug>/ dir) — existing pages are never overwritten.
+    written = skipped = 0
     for num in numbers:
         slug = slug_for(num)
         out_dir = os.path.join(out_root, slug)
+        if additive and os.path.isdir(out_dir):
+            skipped += 1
+            continue
+        if dry:
+            written += 1
+            continue
         os.makedirs(out_dir, exist_ok=True)
         html_out = page_html(site, num, numbers)
         with open(os.path.join(out_dir, "index.html"), "w", encoding="utf-8") as f:
             f.write(html_out)
         written += 1
         if written % 200 == 0:
-            print(f"  ...{written} pages written")
+            print(f"  ...{written} new pages written")
+    print(f"  {'would add' if dry else 'added'} {written} new number pages; skipped {skipped} existing")
+    if dry:
+        print("  [DRY] no files written, hubs/sitemap untouched")
+        return
 
     # Category hub pages
     for h in hubs:
@@ -1265,7 +1310,10 @@ def generate_for_site(site, numbers):
 
 
 def main():
-    targets = sys.argv[1:] or list(SITES.keys())
+    args = sys.argv[1:]
+    additive = "--additive" in args
+    dry = "--dry" in args
+    targets = [a for a in args if not a.startswith("--")] or list(SITES.keys())
     print(f"Loading numbers from {len(SHEETS)} sheets...")
     numbers = load_all_numbers()
     print(f"  -> {len(numbers)} Available numbers across all tiers")
@@ -1281,7 +1329,7 @@ def main():
         if not site:
             print(f"Unknown site key '{key}'  — valid: {list(SITES)}")
             continue
-        generate_for_site(site, numbers)
+        generate_for_site(site, numbers, additive=additive, dry=dry)
     return 0
 
 

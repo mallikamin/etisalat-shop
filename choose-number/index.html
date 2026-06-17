@@ -1683,8 +1683,7 @@ a { color: inherit; }
    sheets are merged and deduped by digits.
    ======================================== */
 var SHEETS = [
-  { id: '1qAw1YQkKEbq-R3LullCBNr0MweGfC2KEO-rot9ff8dw', gid: '0' },
-  { id: '1Lmfsc-0H0R0hXv0wddktRwisHI74yu9JfrtxPajm9hk', gid: '0' }
+  { id: '1YVzDy7ZE5yQ8e46yiPciPYYMyIk2Dog6pUH8GRsABPA', gid: '0' }
 ];
 function buildCsvUrls(sheet) {
   var base = 'https://docs.google.com/spreadsheets/d/' + sheet.id;
@@ -2093,7 +2092,7 @@ function trackScanOnce(refCode) {
    - Cache key versioned (v2) — bump when parser/schema changes so old caches
      get invalidated automatically.
    ======================================== */
-var NUMBERS_CACHE_KEY = 'gn_numbers_cache_v6'; // v6 2026-06-12: Silver Plus + Gold Plus tiers added
+var NUMBERS_CACHE_KEY = 'gn_numbers_cache_v7'; // v7 2026-06-17: migrated to new master sheet (1YVz…, single source)
 var NUMBERS_CACHE_TTL_MS = 60 * 60 * 1000;
 
 function readCachedNumbers() {

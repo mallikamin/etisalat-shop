@@ -32,10 +32,10 @@ from PIL import Image, ImageDraw, ImageFont
 
 # ---- Config ---------------------------------------------------------------
 
-# Both inventory sheets — same pair the /choose-number/ pages + generate_number_pages.py consume.
+# Inventory sheet — same source the /choose-number/ pages + generate_number_pages.py consume.
+# 2026-06-17: migrated to the new consolidated master sheet (single source).
 SHEETS = [
-    {"id": "1qAw1YQkKEbq-R3LullCBNr0MweGfC2KEO-rot9ff8dw", "gid": "0"},
-    {"id": "1Lmfsc-0H0R0hXv0wddktRwisHI74yu9JfrtxPajm9hk", "gid": "0"},
+    {"id": "1YVzDy7ZE5yQ8e46yiPciPYYMyIk2Dog6pUH8GRsABPA", "gid": "0"},
 ]
 SITE_URL = "https://goldennummbers.com"
 ROOT = Path(__file__).resolve().parent

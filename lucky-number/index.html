@@ -500,7 +500,7 @@ function buildCsvUrls(sheet){
     base+'/gviz/tq?tqx=out:csv&headers=1'
   ];
 }
-var CACHE_KEY='gn_numbers_cache_v7'; // shared with choose-number (same schema; v7 2026-06-17: migrated to new master sheet 1YVz…)
+var CACHE_KEY='gn_numbers_cache_v8'; // shared with choose-number (same schema; v8 2026-06-23: Gold Plus hidden site-wide)
 var CACHE_TTL=60*60*1000;
 var WA_NUMBER='971569028087';
 
@@ -532,7 +532,7 @@ function parseCSV(csv){
     if(!msisdn)continue;
     var cl=category.toLowerCase(),cat=category;
     if(cl==='gold')cat='Gold';else if(cl==='silver')cat='Silver';else if(cl==='platinum')cat='Platinum';
-    else if(cl==='silver plus')cat='Silver Plus';else if(cl==='gold plus'||cl==='gold plus+')cat='Gold Plus';
+    else if(cl==='silver plus')cat='Silver Plus';else if(cl==='gold plus'||cl==='gold plus+')continue; // Gold Plus hidden site-wide — same AED 1,000/mo as Platinum, worse value (Malik 2026-06-23)
     else continue;
     if(!wz&&woz)wz='0'+woz;
     if(!wz)continue;

@@ -111,7 +111,7 @@
       "name": "How do I choose an Etisalat VIP number online?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Visit goldennummbers.com/choose-number to browse 2500+ available VIP postpaid numbers. Search by entering 3-7 digits, filter by category (Silver, Silver Plus, Gold, Gold Plus, Platinum), and inquire instantly via WhatsApp."
+        "text": "Visit goldennummbers.com/choose-number to browse 2500+ available VIP postpaid numbers. Search by entering 3-7 digits, filter by category (Silver, Silver Plus, Gold, Platinum), and inquire instantly via WhatsApp."
       }
     },
     {
@@ -119,7 +119,7 @@
       "name": "What categories of Etisalat VIP numbers are available?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Etisalat VIP numbers come in five categories, each paired with an Etisalat postpaid plan: Silver (memorable repeating patterns, AED 188/month plan with unlimited data and 1,000 minutes), Silver Plus (stronger patterns, AED 400/month plan with 40 GB data and unlimited local minutes), Gold (ultra-premium vanity numbers, AED 500/month plan with unlimited data and 3,000 minutes), Gold Plus (rare elite patterns, AED 1,000/month plan with unlimited data and unlimited local minutes), and Platinum (hand-picked elite numbers, AED 1,000/month plan with unlimited data and unlimited calls)."
+        "text": "Etisalat VIP numbers come in four categories, each paired with an Etisalat postpaid plan: Silver (memorable repeating patterns, AED 188/month plan with unlimited data and 1,000 minutes), Silver Plus (stronger patterns, AED 400/month plan with 40 GB data and unlimited local minutes), Gold (ultra-premium vanity numbers, AED 500/month plan with unlimited data and 3,000 minutes), and Platinum (hand-picked elite numbers, AED 1,000/month plan with unlimited data and unlimited calls)."
       }
     },
     {
@@ -1532,16 +1532,6 @@ a { color: inherit; }
         </div>
       </div>
       <div class="tier-item">
-        <div class="tier-icon gold-plus-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        </div>
-        <div class="tier-info">
-          <h3 class="gold-plus-text">Gold Plus</h3>
-          <div class="tier-price gold-plus-price">AED 1,000<span>/mo postpaid</span></div>
-          <p>Postpaid plan — unlimited data + unlimited local minutes + 40 GB roaming. Rare elite patterns. <button type="button" class="plan-details-link" data-cat="Gold Plus">Plan options ▸</button></p>
-        </div>
-      </div>
-      <div class="tier-item">
         <div class="tier-icon platinum-icon">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
         </div>
@@ -1573,7 +1563,6 @@ a { color: inherit; }
         <button class="cat-tab" data-category="silver" role="tab" aria-selected="false">Silver</button>
         <button class="cat-tab" data-category="silver-plus" role="tab" aria-selected="false">Silver Plus</button>
         <button class="cat-tab" data-category="gold" role="tab" aria-selected="false">Gold</button>
-        <button class="cat-tab" data-category="gold-plus" role="tab" aria-selected="false">Gold Plus</button>
         <button class="cat-tab" data-category="platinum" role="tab" aria-selected="false">Platinum</button>
       </div>
 
@@ -1661,7 +1650,7 @@ a { color: inherit; }
     <!-- ===== Below-grid supporting content (relocated 2026-06-22 so the picker is what lands; ordered via .cn-* flex order) ===== -->
     <div class="cn-about">
       <h2 class="cn-about-h">About these Etisalat golden &amp; VIP numbers</h2>
-      <p>The live Etisalat golden &amp; VIP mobile numbers list — browse 3,000+ available special <strong>postpaid</strong> numbers online in Dubai &amp; across the UAE, from an authorized Etisalat dealer. Every golden number comes with an Etisalat postpaid plan (monthly billing) — these are not prepaid SIMs. Search by digits (050, 054, 056), filter by Silver, Silver Plus, Gold, Gold Plus or Platinum tier, and reserve instantly on WhatsApp.</p>
+      <p>The live Etisalat golden &amp; VIP mobile numbers list — browse 3,000+ available special <strong>postpaid</strong> numbers online in Dubai &amp; across the UAE, from an authorized Etisalat dealer. Every golden number comes with an Etisalat postpaid plan (monthly billing) — these are not prepaid SIMs. Search by digits (050, 054, 056), filter by Silver, Silver Plus, Gold or Platinum tier, and reserve instantly on WhatsApp.</p>
     </div>
 
     <!-- Phone-on-installments upsell (relocated below the grid; shared GN + PPP via sync; root-relative link resolves per domain) -->
@@ -1772,6 +1761,40 @@ var PARTNER_API = 'https://script.google.com/macros/s/AKfycbyH1KBC63S7yB3wSpHw-s
 var allNumbers = [];
 var filteredNumbers = [];
 var activeCategory = 'all';
+// Fisher-Yates shuffle (used per-tier below).
+function shuffleInPlace(arr) {
+  for (var i = arr.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+  }
+  return arr;
+}
+// Round-robin across tiers (Silver → Platinum), each tier's pool shuffled, so the default
+// "All Numbers" view shows a varied MIX of tiers — not one category block. Random per load,
+// and guarantees the top of the grid spans every tier. (Malik 2026-06-23)
+function interleaveByTier(arr) {
+  var order = ['Silver', 'Silver Plus', 'Gold', 'Platinum'];
+  var groups = {};
+  for (var i = 0; i < arr.length; i++) {
+    var c = arr[i].category || 'Silver';
+    (groups[c] = groups[c] || []).push(arr[i]);
+  }
+  var rot = [];
+  for (var o = 0; o < order.length; o++) if (groups[order[o]] && groups[order[o]].length) rot.push(order[o]);
+  for (var key in groups) if (groups.hasOwnProperty(key) && rot.indexOf(key) === -1) rot.push(key);
+  for (var r = 0; r < rot.length; r++) shuffleInPlace(groups[rot[r]]);
+  var out = [], pos = {};
+  for (var r2 = 0; r2 < rot.length; r2++) pos[rot[r2]] = 0;
+  while (out.length < arr.length) {
+    var pushed = false;
+    for (var r3 = 0; r3 < rot.length; r3++) {
+      var t = rot[r3], g = groups[t];
+      if (pos[t] < g.length) { out.push(g[pos[t]++]); pushed = true; }
+    }
+    if (!pushed) break;
+  }
+  return out;
+}
 var searchQuery = '';
 var searchPosition = 'anywhere';
 var searchTimer = null;
@@ -2117,7 +2140,7 @@ function trackScanOnce(refCode) {
    - Cache key versioned (v2) — bump when parser/schema changes so old caches
      get invalidated automatically.
    ======================================== */
-var NUMBERS_CACHE_KEY = 'gn_numbers_cache_v7'; // v7 2026-06-17: migrated to new master sheet (1YVz…, single source)
+var NUMBERS_CACHE_KEY = 'gn_numbers_cache_v8'; // v8 2026-06-23: Gold Plus hidden site-wide (drop stale cached Gold-Plus rows); v7 was the 1YVz master-sheet migration
 var NUMBERS_CACHE_TTL_MS = 60 * 60 * 1000;
 
 function readCachedNumbers() {
@@ -2142,7 +2165,7 @@ function loadNumbers() {
   var renderedFromCache = false;
 
   if (cached && cached.length) {
-    allNumbers = cached;
+    allNumbers = interleaveByTier(cached);
     loadingState.style.display = 'none';
     errorState.style.display = 'none';
     emptyState.style.display = 'none';
@@ -2182,7 +2205,7 @@ function loadNumbers() {
       if (merged.length === 0) throw new Error('No numbers parsed');
 
       var prevLen = renderedFromCache ? allNumbers.length : -1;
-      allNumbers = merged;
+      allNumbers = interleaveByTier(merged);
       writeCachedNumbers(merged);
 
       if (!renderedFromCache) {
@@ -2323,7 +2346,7 @@ function parseCSV(csv) {
     else if (catLower === 'silver') cat = 'Silver';
     else if (catLower === 'platinum') cat = 'Platinum';
     else if (catLower === 'silver plus') cat = 'Silver Plus';
-    else if (catLower === 'gold plus' || catLower === 'gold plus+') cat = 'Gold Plus';
+    else if (catLower === 'gold plus' || catLower === 'gold plus+') continue; // Gold Plus hidden site-wide — same AED 1,000/mo as Platinum but worse value (Malik 2026-06-23)
     else continue; // Skip Standard and any other categories
 
     if (!withZero && withoutZero) withZero = '0' + withoutZero;

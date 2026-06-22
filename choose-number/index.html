@@ -1367,14 +1367,27 @@ a { color: inherit; }
    ============================================================ */
 .search-section > .container { display: flex; flex-direction: column; }
 .search-section .search-controls { order: 1; }
-.search-section .tier-legend-acc { order: 2; }
 .search-section .results-header,
 .search-section .loading-container,
 .search-section #errorState,
 .search-section #emptyState,
-.search-section .numbers-grid { order: 3; }
-.search-section .mid-cta { order: 4; }
-/* the postpaid-disambiguation banner has no class -> stays order:0 (top) */
+.search-section .numbers-grid { order: 2; }
+.search-section .mid-cta { order: 3; }
+/* Supporting content pulled BELOW the grid so the picker is what lands (2026-06-22).
+   Notices (.cn-note) were above the search before; moved below per Malik's explicit choice. */
+.search-section .tier-legend-acc { order: 4; }
+.search-section .cn-note { order: 5; }
+.search-section .cn-about { order: 6; }
+.search-section .cn-upsell { order: 7; }
+.cn-about { margin: 1.75rem 0 0.5rem; padding-top: 1.25rem; border-top: 1px solid var(--surface-border); }
+.cn-about-h { font-family: var(--font-heading); font-size: 1.15rem; color: var(--text); margin: 0 0 0.5rem; }
+.cn-about p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.65; margin: 0; }
+.cn-upsell { margin: 0.25rem 0 0.5rem; }
+/* Slim hero so the search picker is the lead action (2026-06-22) */
+.hero { padding-bottom: 1rem; }
+.hero .hero-cta-row { margin-top: 1rem; }
+.hero .hero-cta-row .hero-cta-wa,
+.hero .hero-cta-row .hero-cta-call { padding: 0.55rem 1.15rem; font-size: 0.9rem; box-shadow: none; }
 
 /* Tier legend rendered as a collapsed accordion */
 .tier-legend-acc { margin-bottom: 1.5rem; border: 1px solid var(--surface-border);
@@ -1449,9 +1462,7 @@ a { color: inherit; }
 <section class="hero">
   <div style="text-align:center;font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#C9A962;margin:0 0 .5rem">📶 Postpaid Listings · Golden &amp; VIP numbers + plan</div>
   <h1>Choose Your Etisalat <span>Golden &amp; VIP Number</span></h1>
-  <input type="checkbox" id="heroMoreToggle" class="hero-more-toggle" aria-hidden="true">
-  <p class="hero-sub">The live Etisalat golden &amp; VIP mobile numbers list — browse 3,000+ available special <strong>postpaid</strong> numbers online in Dubai &amp; across the UAE, from an authorized Etisalat dealer. Every golden number comes with an Etisalat postpaid plan (monthly billing) — these are not prepaid SIMs. Search by digits (050, 054, 056), filter by Silver, Silver Plus, Gold, Gold Plus or Platinum tier, and reserve instantly on WhatsApp.</p>
-  <label for="heroMoreToggle" class="hero-more">Read more ›</label>
+  <p class="hero-sub">3,000+ live Etisalat golden &amp; VIP <strong>postpaid</strong> numbers in Dubai &amp; across the UAE — search by digits, filter by tier, and reserve instantly.</p>
   <div class="hero-cta-row">
     <a class="hero-cta-wa" href="https://wa.me/971569028087?text=Hi%2C%20I%20want%20to%20reserve%20a%20postpaid%20number%20from%20goldennummbers.com" target="_blank" rel="noopener noreferrer" data-cta="hero_wa" aria-label="Chat on WhatsApp now">
       <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
@@ -1462,14 +1473,6 @@ a { color: inherit; }
       Call
     </a>
   </div>
-</section>
-
-<!-- ============ PHONE-ON-INSTALLMENTS UPSELL (shared GN + PPP via sync; root-relative link resolves per domain) ============ -->
-<section style="padding:0 1.5rem;margin:0 auto 0.5rem;max-width:1100px">
-  <a href="/mobile-phone-installments/" data-cta="installments_upsell" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;background:linear-gradient(90deg, rgba(201,169,98,0.14), rgba(201,169,98,0.04));border:1px solid var(--gold);border-radius:12px;padding:0.95rem 1.25rem;text-decoration:none">
-    <span style="color:var(--text);font-size:0.95rem;line-height:1.45"><strong style="color:var(--gold)">📱 Want the latest phone too?</strong> Pick your number, then get the newest iPhone, Galaxy or Huawei on monthly installments through e&amp; SmartPay with your Etisalat postpaid plan.</span>
-    <span style="white-space:nowrap;color:var(--bg);background:var(--gold-gradient);padding:0.6rem 1.1rem;border-radius:8px;font-weight:700;font-size:0.9rem">See phones on installments &rarr;</span>
-  </a>
 </section>
 
 <!-- ============ INSTALLMENTS PHONE CARRY-THROUGH (revealed by JS when ?phone= is present; shared GN + PPP via sync) ============ -->
@@ -1484,13 +1487,13 @@ a { color: inherit; }
 <section class="search-section">
   <div class="container">
 
-    <!-- Postpaid disambiguation — customers were inquiring for prepaid (Malik 2026-06-04) -->
-    <div style="text-align:center;margin-bottom:1.25rem;padding:0.6rem 1rem;background:rgba(201,169,98,0.08);border:1px solid rgba(201,169,98,0.3);border-radius:8px;font-size:0.88rem;color:#C9D1D9;">
+    <!-- Postpaid disambiguation — customers were inquiring for prepaid (Malik 2026-06-04). Relocated below the grid 2026-06-22 (search-first), via .cn-note flex order. -->
+    <div class="cn-note" style="text-align:center;margin-bottom:1.25rem;padding:0.6rem 1rem;background:rgba(201,169,98,0.08);border:1px solid rgba(201,169,98,0.3);border-radius:8px;font-size:0.88rem;color:#C9D1D9;">
       📋 All numbers are <strong style="color:var(--gold);">Etisalat POSTPAID</strong> — monthly-billing plans with unlimited data. <span style="color:#8B949E;">Not available as prepaid.</span>
     </div>
 
-    <!-- Eligibility / who-qualifies framing — premium positioning + Etisalat credit policy. Attracts white-collar buyers & sets approval expectations upfront to cut credit-rejections (Malik 2026-06-17, grounded in CRM rejection data). -->
-    <div style="text-align:center;margin-bottom:1.25rem;padding:0.6rem 1rem;background:rgba(201,169,98,0.08);border:1px solid rgba(201,169,98,0.3);border-radius:8px;font-size:0.88rem;color:#C9D1D9;">
+    <!-- Eligibility / who-qualifies framing — premium positioning + Etisalat credit policy. Attracts white-collar buyers & sets approval expectations (Malik 2026-06-17, CRM rejection data). Relocated below the grid 2026-06-22 (search-first) via .cn-note flex order. -->
+    <div class="cn-note" style="text-align:center;margin-bottom:1.25rem;padding:0.6rem 1rem;background:rgba(201,169,98,0.08);border:1px solid rgba(201,169,98,0.3);border-radius:8px;font-size:0.88rem;color:#C9D1D9;">
       💼 <strong style="color:var(--gold);">Premium numbers for professionals &amp; businesses.</strong> Issued on an Etisalat postpaid plan — final approval follows Etisalat's eligibility policy (valid Emirates ID, residency &amp; salary criteria). <span style="color:#8B949E;">Our specialist confirms your approval before delivery.</span>
     </div>
 
@@ -1654,6 +1657,20 @@ a { color: inherit; }
 
     <!-- Numbers Grid -->
     <div class="numbers-grid" id="numbersGrid"></div>
+
+    <!-- ===== Below-grid supporting content (relocated 2026-06-22 so the picker is what lands; ordered via .cn-* flex order) ===== -->
+    <div class="cn-about">
+      <h2 class="cn-about-h">About these Etisalat golden &amp; VIP numbers</h2>
+      <p>The live Etisalat golden &amp; VIP mobile numbers list — browse 3,000+ available special <strong>postpaid</strong> numbers online in Dubai &amp; across the UAE, from an authorized Etisalat dealer. Every golden number comes with an Etisalat postpaid plan (monthly billing) — these are not prepaid SIMs. Search by digits (050, 054, 056), filter by Silver, Silver Plus, Gold, Gold Plus or Platinum tier, and reserve instantly on WhatsApp.</p>
+    </div>
+
+    <!-- Phone-on-installments upsell (relocated below the grid; shared GN + PPP via sync; root-relative link resolves per domain) -->
+    <div class="cn-upsell">
+      <a href="/mobile-phone-installments/" data-cta="installments_upsell" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;background:linear-gradient(90deg, rgba(201,169,98,0.14), rgba(201,169,98,0.04));border:1px solid var(--gold);border-radius:12px;padding:0.95rem 1.25rem;text-decoration:none">
+        <span style="color:var(--text);font-size:0.95rem;line-height:1.45"><strong style="color:var(--gold)">📱 Want the latest phone too?</strong> Pick your number, then get the newest iPhone, Galaxy or Huawei on monthly installments through e&amp; SmartPay with your Etisalat postpaid plan.</span>
+        <span style="white-space:nowrap;color:var(--bg);background:var(--gold-gradient);padding:0.6rem 1.1rem;border-radius:8px;font-weight:700;font-size:0.9rem">See phones on installments &rarr;</span>
+      </a>
+    </div>
 
   </div>
 </section>

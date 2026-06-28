@@ -536,6 +536,17 @@ export default {
       return handlePinterestOAuthCallback(request, env);
     }
 
+    // Trustpilot domain verification — serve the token file at a direct 200.
+    // Static .html assets get 308-redirected to extensionless by Cloudflare's
+    // default html_handling, which breaks Trustpilot's fetch of the exact .html
+    // URL; this route returns the token body without a redirect.
+    if (url.pathname === "/7cc945c5-a3bb-4ca1-8db4-0e568ddbd4a4.html") {
+      return new Response("7cc945c5-a3bb-4ca1-8db4-0e568ddbd4a4", {
+        status: 200,
+        headers: { "Content-Type": "text/html; charset=utf-8" },
+      });
+    }
+
     // Fall through to static assets binding for everything else
     return env.ASSETS.fetch(request);
   },

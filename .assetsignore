@@ -91,6 +91,8 @@ CREDENTIALS*.md
 TEST-LOG-*.md
 INCIDENT_*.md
 TIKTOK_*.md
+BACKLINK_*.md
+*_QUEUE.md
 *.bak
 *.bak_*
 

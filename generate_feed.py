@@ -274,7 +274,7 @@ def render_card(
     draw.text(((CARD_W - bw) // 2, book_y), book_text, fill=WHITE, font=f_book)
 
     f_wa_big = load_serif_font(38)
-    wa_text = "+971 56 699 9377"
+    wa_text = "+971 56 902 8087"
     bb = f_wa_big.getbbox(wa_text)
     ww = bb[2] - bb[0]
     draw.text(
@@ -329,7 +329,7 @@ def render_card(
     draw.text((70, foot_y), "goldennummbers.com", fill=GOLD, font=f_foot_main)
 
     label_text = "WHATSAPP"
-    main_text = "+971 56 699 9377"
+    main_text = "+971 56 902 8087"
     bb_label = f_foot_label.getbbox(label_text)
     bb_main = f_foot_main.getbbox(main_text)
     label_w = bb_label[2] - bb_label[0]

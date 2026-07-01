@@ -2381,6 +2381,12 @@ function parseCSV(csv) {
 function applyFilters() {
   var results = allNumbers;
 
+  // UAE Nationals (Silver Plus) numbers are restricted — only surfaced on their own tab,
+  // never in "All Numbers", the other tier tabs, or search done outside that tab.
+  if (activeCategory !== 'silver-plus') {
+    results = results.filter(function(n) { return n.category !== 'Silver Plus'; });
+  }
+
   // Category filter
   if (activeCategory !== 'all') {
     var catMap = {
@@ -2439,7 +2445,7 @@ function render() {
   emptyState.style.display = 'none';
   resultsHeader.style.display = 'flex';
 
-  var catLabel = activeCategory === 'all' ? '' : ' ' + activeCategory.replace('-', ' ');
+  var catLabel = activeCategory === 'all' ? '' : (activeCategory === 'silver-plus' ? ' UAE Nationals' : ' ' + activeCategory.replace('-', ' '));
   resultsCount.innerHTML = '<strong>' + filteredNumbers.length + '</strong>' + catLabel + ' numbers available';
 
   var token = ++_renderToken;

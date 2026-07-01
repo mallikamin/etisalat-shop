@@ -1331,6 +1331,46 @@
       flex-wrap: wrap;
     }
 
+    /* Hero "popular pattern" hooks — deep-link into the number picker with the search pre-applied */
+    .hero-hooks {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      max-width: 640px;
+      margin: 1.1rem auto 0;
+    }
+    .hero-hooks-label {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+    .hero-chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.5rem 0.95rem;
+      border: 1px solid rgba(201, 169, 98, 0.45);
+      border-radius: 999px;
+      background: rgba(201, 169, 98, 0.06);
+      color: var(--gold-light);
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    }
+    .hero-chip:hover {
+      background: rgba(201, 169, 98, 0.16);
+      border-color: var(--gold);
+      transform: translateY(-1px);
+    }
+    /* Mobile: label on its own line, chips wrap beneath as easy tap targets */
+    @media (max-width: 520px) {
+      .hero-hooks { gap: 0.4rem; }
+      .hero-hooks-label { flex-basis: 100%; text-align: center; margin-bottom: 0.1rem; }
+      .hero-chip { padding: 0.5rem 0.85rem; font-size: 0.88rem; }
+    }
+
     /* Animated gold line */
     .gold-line {
       width: 120px;
@@ -2103,6 +2143,15 @@
       <div class="hero-buttons">
         <a href="choose-number/" class="btn btn-gold">Choose Your Number</a>
         <a href="https://wa.me/971569028087?text=Hi%2C%20I%20want%20to%20reserve%20a%20number%20from%20goldennummbers.com" class="btn btn-outline" target="_blank" rel="noopener noreferrer">Get Best Plan on WhatsApp</a>
+      </div>
+      <div class="hero-hooks">
+        <span class="hero-hooks-label">Popular picks:</span>
+        <a href="choose-number/?q=786" class="hero-chip">786</a>
+        <a href="choose-number/?q=777" class="hero-chip">777</a>
+        <a href="choose-number/?q=888" class="hero-chip">888</a>
+        <a href="choose-number/?q=999" class="hero-chip">999</a>
+        <a href="choose-number/?q=8888" class="hero-chip">8888</a>
+        <a href="choose-number/?q=1234" class="hero-chip">1234</a>
       </div>
       <p style="max-width:640px;margin:0.75rem auto 0;font-size:0.8rem;color:var(--text-muted);line-height:1.5;">Issued on an Etisalat postpaid plan — approval follows Etisalat's eligibility policy (valid Emirates ID, residency &amp; salary criteria), confirmed by our specialist before delivery.</p>
       <div style="display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-top:1rem;color:var(--text-muted);font-size:0.85rem;"><span>500+ customers served</span><span>Same-day activation</span><span>Dubai, Abu Dhabi, Sharjah</span></div>

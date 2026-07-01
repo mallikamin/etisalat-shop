@@ -3165,6 +3165,17 @@ document.getElementById('coWaBtn').addEventListener('click', function() {
 /* ========================================
    INIT
    ======================================== */
+/* Deep link: ?q=<digits> — pre-fill the pattern search (used by the homepage "Popular picks" hooks).
+   Seed searchQuery BEFORE loadNumbers() so the very first render is already filtered. */
+(function(){
+  var qp;
+  try { qp = new URLSearchParams(location.search || ''); } catch (e) { return; }
+  var q = (qp.get('q') || '').replace(/\D/g, '').slice(0, 10);
+  if (q.length >= 3 && searchInput) {
+    searchInput.value = q;
+    searchQuery = q;
+  }
+})();
 revealInstallPhoneBanner();
 loadNumbers();
 </script>

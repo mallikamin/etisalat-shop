@@ -119,7 +119,7 @@
       "name": "What categories of Etisalat VIP numbers are available?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Etisalat VIP numbers come in four categories, each paired with an Etisalat postpaid plan: Silver (memorable repeating patterns, AED 188/month plan with unlimited data and 1,000 minutes), Silver Plus (stronger patterns, AED 400/month plan with 40 GB data and unlimited local minutes), Gold (ultra-premium vanity numbers, AED 500/month plan with unlimited data and 3,000 minutes), and Platinum (hand-picked elite numbers, AED 1,000/month plan with unlimited data and unlimited calls)."
+        "text": "Etisalat VIP numbers come in four categories, each paired with an Etisalat postpaid plan: Silver (memorable repeating patterns, AED 188/month plan with unlimited data and 1,000 minutes), Silver Plus / UAE Nationals (exclusive to Emiratis, AED 400/month plan with 40 GB data and unlimited local minutes), Gold (ultra-premium vanity numbers, AED 500/month plan with unlimited data and 3,000 minutes), and Platinum (hand-picked elite numbers, AED 1,000/month plan with unlimited data and unlimited calls)."
       }
     },
     {
@@ -1516,9 +1516,9 @@ a { color: inherit; }
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
         </div>
         <div class="tier-info">
-          <h3 class="silver-plus-text">Silver Plus</h3>
+          <h3 class="silver-plus-text">UAE Nationals</h3>
           <div class="tier-price silver-plus-price">AED 400<span>/mo postpaid</span></div>
-          <p>Postpaid plan — 40 GB data + unlimited local minutes. Stronger patterns than Silver. <button type="button" class="plan-details-link" data-cat="Silver Plus">Plan options ▸</button></p>
+          <p><strong style="color:#A8C7DD;">Exclusive to UAE Nationals (Emiratis) only.</strong> Emirati Freedom 400 postpaid plan — 40 GB data + unlimited local minutes. <button type="button" class="plan-details-link" data-cat="Silver Plus">Plan options ▸</button></p>
         </div>
       </div>
       <div class="tier-item">
@@ -1561,7 +1561,7 @@ a { color: inherit; }
       <div class="category-tabs" role="tablist">
         <button class="cat-tab active" data-category="all" role="tab" aria-selected="true">All Numbers</button>
         <button class="cat-tab" data-category="silver" role="tab" aria-selected="false">Silver</button>
-        <button class="cat-tab" data-category="silver-plus" role="tab" aria-selected="false">Silver Plus</button>
+        <button class="cat-tab" data-category="silver-plus" role="tab" aria-selected="false">UAE Nationals</button>
         <button class="cat-tab" data-category="gold" role="tab" aria-selected="false">Gold</button>
         <button class="cat-tab" data-category="platinum" role="tab" aria-selected="false">Platinum</button>
       </div>
@@ -1728,7 +1728,7 @@ var TIERS = {
       { name: 'New Freedom 375 Flexi', price: 'AED 263/mo — 30% off AED 375 (6-mo promo rate)', detail: 'Non-Stop data @50Mbps · 1,100 flexi mins (local & intl) · 5 GB roaming · 100 Wi-Fi hrs · Smiles + STARZPLAY + GoChat · 12-month contract' }
     ] },
   'Silver Plus': { value: 400, cls: 'silver-plus', label: 'AED 400/mo postpaid plan',
-    summary: '40 GB data · Unlimited local mins · 12-mo contract',
+    summary: 'UAE Nationals only · 40 GB data · Unlimited local mins',
     plans: [
       { name: 'Emirati Freedom 400 Local', price: 'AED 400/mo', detail: '40 GB data · Unlimited local mins · 1 GB roaming + Roam Like Home GCC · 40,000 Smiles points · 12-month contract · UAE Nationals plan' }
     ] },
@@ -1755,6 +1755,9 @@ var TIERS = {
     ] }
 };
 function tierInfo(cat) { return TIERS[cat] || TIERS['Silver']; }
+/* Silver Plus is the UAE-Nationals-only tier (AED 400 Emirati Freedom plan). Show that
+   label to users everywhere; the internal category key stays 'Silver Plus' for filtering. */
+function displayCategory(cat) { return cat === 'Silver Plus' ? 'UAE Nationals' : cat; }
 var PARTNER_API = 'https://script.google.com/macros/s/AKfycbyH1KBC63S7yB3wSpHw-s5bZHH1Rwqta4Fsd6hIz8NCe0GqiaZZx13VdOsDALenWbqW/exec';
 
 /* ========================================
@@ -2559,7 +2562,7 @@ function createCard(num) {
   card.innerHTML =
     '<div class="card-top">' +
       '<span class="number-display">' + escapeHtml(num.formatted) + '</span>' +
-      '<span class="' + badgeClass + '">' + escapeHtml(num.category) + '</span>' +
+      '<span class="' + badgeClass + '">' + escapeHtml(displayCategory(num.category)) + '</span>' +
     '</div>' +
     '<div class="' + priceClass + '">' + priceText + '</div>' +
     '<div class="card-plan-line"><span class="card-plan-summary">' + escapeHtml(tier.summary) + '</span>' +

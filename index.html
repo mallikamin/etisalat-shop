@@ -2222,7 +2222,7 @@
     <div class="container">
       <div style="max-width:900px;margin:0 auto;text-align:center;">
         <h2 style="font-size:clamp(1.4rem,2.4vw,2rem);margin-bottom:0.6rem;">Find Your Best Plan Fast</h2>
-        <p style="color:var(--text-muted);margin-bottom:1.2rem;">Tap your goal. We will prefill your inquiry and open the right plan options.</p>
+        <p style="color:var(--text-muted);margin-bottom:1.2rem;">Tap your goal — we'll take you straight to the right numbers and plans.</p>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0.8rem;">
           <button class="intent-btn" data-intent="VIP Number" data-tab="vip" style="padding:0.9rem 1rem;border:1px solid var(--surface-border);border-radius:10px;background:var(--surface);color:var(--text);cursor:pointer;font-weight:600;">I want VIP Number</button>
           <button class="intent-btn" data-intent="Freedom Unlimited Calling" data-tab="calling" style="padding:0.9rem 1rem;border:1px solid var(--surface-border);border-radius:10px;background:var(--surface);color:var(--text);cursor:pointer;font-weight:600;">Unlimited Calling</button>
@@ -3261,38 +3261,34 @@
 
     triggerFadeUp();
 
-    /* ---- Intent shortcuts for faster conversion ---- */
+    /* ---- Intent shortcuts: jump straight to the right options (no form) ---- */
     (function(){
+      // Goals that map to a dedicated page instead of an on-page plan tab.
+      var PAGE_DEST = { vip: 'choose-number/' };
       document.querySelectorAll('.intent-btn').forEach(function(btn){
         btn.addEventListener('click', function(){
           var tab = this.getAttribute('data-tab');
           var intent = this.getAttribute('data-intent');
-
-          var tabBtn = document.querySelector('.tab-btn[data-tab="' + tab + '"]');
-          if (tabBtn) tabBtn.click();
-
-          var interestEl = document.getElementById('interest');
-          if (interestEl) {
-            interestEl.value = intent;
-          }
-
-          var messageEl = document.getElementById('message');
-          if (messageEl && !messageEl.value.trim()) {
-            messageEl.value = 'Please recommend the best option for ' + intent + '.';
-          }
-
-          var contact = document.getElementById('contact');
-          if (contact) {
-            var navHeight = document.getElementById('navbar').offsetHeight;
-            var targetPos = contact.getBoundingClientRect().top + window.pageYOffset - navHeight - 20;
-            window.scrollTo({ top: targetPos, behavior: 'smooth' });
-          }
 
           if (typeof gtag === 'function') {
             gtag('event', 'select_content', {
               content_type: 'intent_shortcut',
               content_id: intent
             });
+          }
+
+          // "I want VIP Number" -> Postpaid Listings / Choose Your Number picker
+          if (PAGE_DEST[tab]) { window.location.href = PAGE_DEST[tab]; return; }
+
+          // Plan goals -> open the matching plan tab and scroll to the Plans section
+          var tabBtn = document.querySelector('.tab-btn[data-tab="' + tab + '"]');
+          if (tabBtn) tabBtn.click();
+
+          var plans = document.getElementById('plans');
+          if (plans) {
+            var navHeight = document.getElementById('navbar').offsetHeight;
+            var targetPos = plans.getBoundingClientRect().top + window.pageYOffset - navHeight - 20;
+            window.scrollTo({ top: targetPos, behavior: 'smooth' });
           }
         });
       });

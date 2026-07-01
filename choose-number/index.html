@@ -1512,16 +1512,6 @@ a { color: inherit; }
         </div>
       </div>
       <div class="tier-item">
-        <div class="tier-icon silver-plus-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        </div>
-        <div class="tier-info">
-          <h3 class="silver-plus-text">UAE Nationals</h3>
-          <div class="tier-price silver-plus-price">AED 400<span>/mo postpaid</span></div>
-          <p><strong style="color:#A8C7DD;">Exclusive to UAE Nationals (Emiratis) only.</strong> Emirati Freedom 400 postpaid plan — 40 GB data + unlimited local minutes. <button type="button" class="plan-details-link" data-cat="Silver Plus">Plan options ▸</button></p>
-        </div>
-      </div>
-      <div class="tier-item">
         <div class="tier-icon gold-icon">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
         </div>
@@ -1539,6 +1529,16 @@ a { color: inherit; }
           <h3 class="platinum-text">Platinum</h3>
           <div class="tier-price platinum-price">AED 1,000<span>/mo postpaid</span></div>
           <p>Postpaid plan — unlimited data + unlimited calls. Hand-picked elite numbers. <button type="button" class="plan-details-link" data-cat="Platinum">Plan options ▸</button></p>
+        </div>
+      </div>
+      <div class="tier-item">
+        <div class="tier-icon silver-plus-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <div class="tier-info">
+          <h3 class="silver-plus-text">UAE Nationals</h3>
+          <div class="tier-price silver-plus-price">AED 400<span>/mo postpaid</span></div>
+          <p><strong style="color:#A8C7DD;">Exclusive to UAE Nationals (Emiratis) only.</strong> Emirati Freedom 400 postpaid plan — 40 GB data + unlimited local minutes. <button type="button" class="plan-details-link" data-cat="Silver Plus">Plan options ▸</button></p>
         </div>
       </div>
     </div>
@@ -1561,9 +1561,9 @@ a { color: inherit; }
       <div class="category-tabs" role="tablist">
         <button class="cat-tab active" data-category="all" role="tab" aria-selected="true">All Numbers</button>
         <button class="cat-tab" data-category="silver" role="tab" aria-selected="false">Silver</button>
-        <button class="cat-tab" data-category="silver-plus" role="tab" aria-selected="false">UAE Nationals</button>
         <button class="cat-tab" data-category="gold" role="tab" aria-selected="false">Gold</button>
         <button class="cat-tab" data-category="platinum" role="tab" aria-selected="false">Platinum</button>
+        <button class="cat-tab" data-category="silver-plus" role="tab" aria-selected="false">UAE Nationals Only</button>
       </div>
 
       <!-- Popular pattern chips — order is data-driven (GA4 on-site search, 4.3k searches:
@@ -1778,7 +1778,7 @@ function shuffleInPlace(arr) {
 // "All Numbers" view shows a varied MIX of tiers — not one category block. Random per load,
 // and guarantees the top of the grid spans every tier. (Malik 2026-06-23)
 function interleaveByTier(arr) {
-  var order = ['Silver', 'Silver Plus', 'Gold', 'Platinum'];
+  var order = ['Silver', 'Gold', 'Platinum', 'Silver Plus'];
   var groups = {};
   for (var i = 0; i < arr.length; i++) {
     var c = arr[i].category || 'Silver';

@@ -59,7 +59,11 @@
       return { cls: 'PM', ch: 'FB', campaign: campaign, partner: partner };
     }
     if (q('gclid') || q('gbraid') || q('wbraid') || /^(google|adwords|gads)$/.test(utmSource)) {
-      return { cls: 'PM', ch: 'GOOG', campaign: campaign, partner: partner };
+      // 2026-07-02: keep the raw click ID (not just the classification) so sold sales can
+      // be fed back to Google Ads as offline conversions (beacon in buildRefCode).
+      var gnGc = q('gclid') || q('gbraid') || q('wbraid');
+      return { cls: 'PM', ch: 'GOOG', campaign: campaign, partner: partner, gclid: gnGc.slice(0, 150),
+               gct: q('gclid') ? 'gclid' : (q('gbraid') ? 'gbraid' : (gnGc ? 'wbraid' : '')) };
     }
     if (q('ttclid') || /^(tiktok|tt)$/.test(utmSource)) {
       return { cls: 'PM', ch: 'TIKTOK', campaign: campaign, partner: partner };
@@ -126,9 +130,25 @@
        parts = ref.split('-')  # always 7 items for GN1
        [version, cls, ch, campaign, partner, source, token] = parts
   */
+  // Fire-and-forget beacon: stores token→gclid in the CRM (/api/gads-click) at the moment
+  // a Google-paid visitor generates a WA-handoff ref. Lets sold sales be uploaded back to
+  // Google Ads as offline conversions. keepalive survives the wa.me navigation.
+  function beaconGadsClick(src, leadToken) {
+    try {
+      if (!(src && src.cls === 'PM' && src.ch === 'GOOG' && src.gclid)) return;
+      fetch('https://bilal-sales.mallikamiin.workers.dev/api/gads-click', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: leadToken, gclid: src.gclid, gct: src.gct || 'gclid', page: (typeof location !== 'undefined' ? location.pathname : '').slice(0, 80) }),
+        keepalive: true
+      }).catch(function () {});
+    } catch (e) {}
+  }
+
   function buildRefCode(source, leadToken) {
     var src = getTrafficSource();
     var cleanSrc = String(source || 'CTA').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 20) || 'CTA';
+    beaconGadsClick(src, leadToken);
     return [
       'GN1',
       src.cls || 'O',

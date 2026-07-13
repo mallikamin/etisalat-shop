@@ -37,8 +37,8 @@ except Exception:
 # Data source — same sheets both /choose-number/ pages consume
 # ---------------------------------------------------------------------------
 SHEETS = [
-    # 2026-06-17: migrated to the new consolidated master sheet (single source).
-    {"id": "1YVzDy7ZE5yQ8e46yiPciPYYMyIk2Dog6pUH8GRsABPA", "gid": "0"},
+    # 2026-07-13: master sheet re-issued (old 1YVz emptied). Single source.
+    {"id": "1CfIRlk55aGLI2nLBuUFH4pvRu5gT6qSo3aIzh2iDeAo", "gid": "0"},
 ]
 
 ACCEPTED_CATEGORIES = {"gold": "Gold", "silver": "Silver", "platinum": "Platinum"}

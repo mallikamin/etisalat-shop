@@ -33,9 +33,9 @@ from PIL import Image, ImageDraw, ImageFont
 # ---- Config ---------------------------------------------------------------
 
 # Inventory sheet — same source the /choose-number/ pages + generate_number_pages.py consume.
-# 2026-06-17: migrated to the new consolidated master sheet (single source).
+# 2026-07-13: master sheet re-issued (old 1YVz emptied). Single source.
 SHEETS = [
-    {"id": "1YVzDy7ZE5yQ8e46yiPciPYYMyIk2Dog6pUH8GRsABPA", "gid": "0"},
+    {"id": "1CfIRlk55aGLI2nLBuUFH4pvRu5gT6qSo3aIzh2iDeAo", "gid": "0"},
 ]
 SITE_URL = "https://goldennummbers.com"
 ROOT = Path(__file__).resolve().parent

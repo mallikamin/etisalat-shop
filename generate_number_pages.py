@@ -38,7 +38,7 @@ except Exception:
 # ---------------------------------------------------------------------------
 SHEETS = [
     # 2026-07-13: master sheet re-issued (old 1YVz emptied). Single source.
-    {"id": "1CfIRlk55aGLI2nLBuUFH4pvRu5gT6qSo3aIzh2iDeAo", "gid": "0"},
+    {"id": "1CoG5IYOxKdeTlOqCYuntfXxOUlOFWlSX9AiDB1ZBBQs", "gid": "0"},
 ]
 
 ACCEPTED_CATEGORIES = {"gold": "Gold", "silver": "Silver", "platinum": "Platinum"}

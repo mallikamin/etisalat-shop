@@ -1442,10 +1442,9 @@ a { color: inherit; }
   <div class="container">
     <a href="../" class="navbar-logo">goldennummbers.com</a>
     <ul class="navbar-links" id="navLinks">
-      <li><a href="../#plans">Plans</a></li>
+      <li><a href="/choose-number/">Postpaid Listings</a></li>
+      <li><a href="/home-wireless/">Wireless Internet</a></li>
       <li><a href="../#vip">VIP Numbers</a></li>
-      <li><a href="/prepaid-numbers-for-sale/">Prepaid Listings</a></li>
-      <li><a href="/sell-your-number/">Sell a Number</a></li>
       <li><a href="../emirati/">Emirati Plan</a></li>
       <li><a href="../#contact">Contact</a></li>
       <li><a href="../ar/">العربية</a></li>
@@ -1676,6 +1675,8 @@ a { color: inherit; }
       </a>
       <a href="../">Home</a>
       <a href="../#plans">Plans</a>
+      <a href="/prepaid-numbers-for-sale/">Prepaid Listings</a>
+      <a href="/sell-your-number/">Sell a Number</a>
       <a href="../#contact">Contact</a>
       <a href="../numbers/gold-numbers/">Etisalat Gold Numbers</a>
       <a href="../numbers/silver-numbers/">Etisalat Silver Numbers</a>
@@ -1697,7 +1698,7 @@ a { color: inherit; }
    sheets are merged and deduped by digits.
    ======================================== */
 var SHEETS = [
-  { id: '1CfIRlk55aGLI2nLBuUFH4pvRu5gT6qSo3aIzh2iDeAo', gid: '0' }
+  { id: '1CoG5IYOxKdeTlOqCYuntfXxOUlOFWlSX9AiDB1ZBBQs', gid: '0' }
 ];
 function buildCsvUrls(sheet) {
   var base = 'https://docs.google.com/spreadsheets/d/' + sheet.id;
@@ -2167,7 +2168,7 @@ function trackScanOnce(refCode) {
    - Cache key versioned (v2) — bump when parser/schema changes so old caches
      get invalidated automatically.
    ======================================== */
-var NUMBERS_CACHE_KEY = 'gn_numbers_cache_v9'; // v9 2026-07-13: 1CfIR master-sheet migration (old 1YVz sheet emptied); v8 was the Gold-Plus hide
+var NUMBERS_CACHE_KEY = 'gn_numbers_cache_v10'; // v10 2026-07-18: swap to public copy 1CoG5 (orig 1CfIRlk went private/401); v9 was 1CfIR migration; v8 was the Gold-Plus hide
 var NUMBERS_CACHE_TTL_MS = 60 * 60 * 1000;
 
 function readCachedNumbers() {

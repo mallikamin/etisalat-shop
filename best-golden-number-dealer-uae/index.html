@@ -276,7 +276,12 @@ footer a:hover{color:var(--gold)}
 <script>
 document.addEventListener('click', function(e) {
   var link = e.target.closest('a[href*="wa.me"]');
-  if (link && window.GN) window.GN.trackWhatsAppClick(link.textContent.trim().substring(0,50), location.pathname);
+  if (!link || !window.GN) return;
+  var ctx = link.getAttribute('data-cta') || link.textContent.trim().substring(0,40) || 'cta';
+  // Append Ref: GN1-<CLS>-<CH>-... to the WA text so the lead source (incl. AI channel:
+  // chatgpt/perplexity/claude) is carried into the CRM WhatsApp thread for attribution.
+  if (window.GN.rewriteWaHref) window.GN.rewriteWaHref(link, ctx);
+  window.GN.trackWhatsAppClick(ctx, location.pathname);
 });
 </script>
 </body>

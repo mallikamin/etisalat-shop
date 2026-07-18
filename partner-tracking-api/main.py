@@ -25,7 +25,7 @@ GENERATED_DIR = BASE_DIR / "generated"
 GENERATED_DIR.mkdir(parents=True, exist_ok=True)
 
 APP_SALT = os.getenv("APP_SALT", "change-this-salt")
-ADMIN_MOBILE = os.getenv("ADMIN_MOBILE", "971566999377")
+ADMIN_MOBILE = os.getenv("ADMIN_MOBILE", "971569028087")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "change-admin-password")
 CHOOSE_NUMBER_URL = os.getenv("CHOOSE_NUMBER_URL", "https://etisalat.shop/choose-number/")
 TOKEN_TTL_HOURS = int(os.getenv("TOKEN_TTL_HOURS", "24"))

@@ -316,14 +316,14 @@ def head_block(title, desc, keywords, slug, name, region, lat, lng, faqs, biz_de
     local_biz = json.dumps({
         "@context": "https://schema.org", "@type": "LocalBusiness",
         "name": f"Golden Numbers UAE — {name}", "description": biz_desc, "url": canonical,
-        "telephone": "+971566999377",
+        "telephone": "+971569028087",
         "address": {"@type": "PostalAddress", "addressCountry": "AE", "addressLocality": name},
         "geo": {"@type": "GeoCoordinates", "latitude": lat, "longitude": lng},
         "areaServed": {"@type": "City", "name": name}, "priceRange": price_range,
         "openingHoursSpecification": {"@type": "OpeningHoursSpecification",
             "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
             "opens": "09:00", "closes": "22:00"},
-        "contactPoint": {"@type": "ContactPoint", "telephone": "+971566999377",
+        "contactPoint": {"@type": "ContactPoint", "telephone": "+971569028087",
                          "contactType": "sales", "availableLanguage": ["English", "Arabic"]},
         "sameAs": ["https://www.facebook.com/share/17heRMZa83/", "https://www.instagram.com/consultant.ae",
                    "https://www.tiktok.com/@telecom.store.uae",
@@ -511,7 +511,7 @@ def build_numbers(loc):
     <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
       {hero_ctas}
     </div>
-    <div style="margin-top:1rem;color:var(--text-muted);font-size:0.85rem;">WhatsApp: +971 56 902 8087 &nbsp;&middot;&nbsp; Calls: +971 56 699 9377</div>
+    <div style="margin-top:1rem;color:var(--text-muted);font-size:0.85rem;">WhatsApp: +971 56 902 8087 &nbsp;&middot;&nbsp; Calls: +971 56 902 8087</div>
   </div>
 </section>"""
     head = head_block(title, desc, keywords, slug, name, loc["region"], loc["lat"], loc["lng"], faqs,
@@ -632,7 +632,7 @@ def build_internet(loc):
     <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
       {hero_ctas}
     </div>
-    <div style="margin-top:1rem;color:var(--text-muted);font-size:0.85rem;">WhatsApp: +971 56 902 8087 &nbsp;&middot;&nbsp; Calls: +971 56 699 9377</div>
+    <div style="margin-top:1rem;color:var(--text-muted);font-size:0.85rem;">WhatsApp: +971 56 902 8087 &nbsp;&middot;&nbsp; Calls: +971 56 902 8087</div>
   </div>
 </section>"""
     head = head_block(title, desc, keywords, slug, name, loc["region"], loc["lat"], loc["lng"], faqs,
@@ -735,7 +735,7 @@ def build_area(loc):
     <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
       {num_ctas}
     </div>
-    <div style="margin-top:1rem;color:var(--text-muted);font-size:0.85rem;">WhatsApp: +971 56 902 8087 &nbsp;&middot;&nbsp; Calls: +971 56 699 9377</div>
+    <div style="margin-top:1rem;color:var(--text-muted);font-size:0.85rem;">WhatsApp: +971 56 902 8087 &nbsp;&middot;&nbsp; Calls: +971 56 902 8087</div>
   </div>
 </section>"""
     head = head_block(title, desc, keywords, slug, name, loc["region"], loc["lat"], loc["lng"], faqs,

@@ -201,6 +201,17 @@
   }
 
   function rewriteWaHref(link, sourceCtx) {
+    // 2026-07-20 IDEMPOTENCY GUARD. A link may now be reached twice: once by the
+    // global auto-wire below, once by a page's own delegated handler (index.html
+    // has one). Without this the Ref: suffix is appended twice AND the TikTok
+    // AddToCart/InitiateCheckout/Contact trio fires twice per click. Whichever
+    // call lands first does the work; the second returns the same token so
+    // callers using it as a pixel dedup eventID stay consistent.
+    try {
+      var prior = link.getAttribute('data-gn-token');
+      if (prior) return prior;
+    } catch (e) {}
+
     var leadToken = createLeadTokenShort();
     var source = sourceCtx || link.getAttribute('data-cta') || (link.textContent || '').trim().slice(0, 30);
     try {
@@ -242,6 +253,7 @@
     forwardToTikTokCapi('InitiateCheckout', leadToken, source, { content_name: 'WhatsApp Conversation Initiated', value: PIXEL_VALUE, currency: CURRENCY });
     forwardToTikTokCapi('Contact', leadToken, source, { content_name: 'WhatsApp Click', value: PIXEL_VALUE, currency: CURRENCY });
 
+    try { link.setAttribute('data-gn-token', leadToken); } catch (e) {}
     return leadToken;
   }
 
@@ -436,5 +448,48 @@
     } else {
       document.addEventListener('DOMContentLoaded', fireViewContentCapi);
     }
+  }
+
+  // ---------------------------------------------------------------------------
+  // 2026-07-20 GLOBAL WA AUTO-WIRE.
+  // rewriteWaHref was only ever invoked explicitly, and only index.html did it.
+  // Every blog, question, area and /numbers/ page loaded this script and never
+  // called it, so their WhatsApp clicks reached the CRM with no Ref at all:
+  // all-time D1 shows O-SEO=1, O-AI=0, O-SOCIAL=2 against 3,274 ref-less leads.
+  // This binds the same delegated-click pattern index.html already proves works,
+  // for every page that loads tracking.js.
+  // Click-time, not load-time, on purpose: rewriteWaHref fires the TikTok
+  // AddToCart/InitiateCheckout/Contact trio, so wiring at load would emit one
+  // fake funnel event per wa.me link per pageview.
+  function autoWaSource(link) {
+    var explicit = link.getAttribute('data-cta');
+    if (explicit) return explicit;
+    var path = (typeof location !== 'undefined' && location.pathname) || '';
+    // /numbers/etisalat-0501528338/ -> CARD0501528338, so the MSISDN survives the
+    // WhatsApp handoff and the sale is traceable back to the exact number page.
+    var card = path.match(/\/numbers\/etisalat-(\d{10})/);
+    if (card) return 'CARD' + card[1];
+    var slug = path.replace(/^\/+|\/+$/g, '').split('/').pop() || 'HOME';
+    return slug.replace(/\.html?$/, '').slice(0, 20) || 'HOME';
+  }
+
+  function onWaClick(ev) {
+    var t = ev && ev.target;
+    if (!t || typeof t.closest !== 'function') return;
+    var link = t.closest('a[href*="wa.me"]');
+    if (!link) return;
+    // Synchronous: the href is rewritten before the browser follows the link
+    // (same pattern index.html already proves works). Fires only on a real
+    // click/auxclick, so no pixel inflation from cancelled presses.
+    try { rewriteWaHref(link, autoWaSource(link)); } catch (e) {}
+  }
+
+  if (typeof document !== 'undefined' && document.addEventListener) {
+    // click = left-click, keyboard activation, and mobile tap.
+    // auxclick = middle-click / open-in-new-tab.
+    // A page with its own handler (index.html) is harmless: the data-gn-token
+    // guard in rewriteWaHref makes the second call a no-op returning the same token.
+    document.addEventListener('click', onWaClick);
+    document.addEventListener('auxclick', onWaClick);
   }
 })();

@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-generate_local_pages.py — city + area local SEO pages for goldennummbers.com (2026-06-06)
+generate_local_pages.py, city + area local SEO pages for goldennummbers.com (2026-06-06)
 
 Generates 21 pages, three kinds:
   numbers  → 5 emirate pages missing from the /dubai/ /abu-dhabi/ /sharjah/ family
   internet → 8 home-internet city pages (5.5G Home Wireless, local angle)
-  area     → 8 Dubai-area DUAL pages (numbers + internet on one page — avoids 2x thin pages)
+  area     → 8 Dubai-area DUAL pages (numbers + internet on one page, avoids 2x thin pages)
 
 Single source of truth: edit LOCATIONS below, rerun. Each location carries UNIQUE
 intro copy, area/landmark lists and FAQ wording (anti-thin-page rule per the May
@@ -32,105 +32,105 @@ LOCATIONS = [
     # ---- numbers: missing emirates ----
     dict(kind="numbers", slug="ajman", name="Ajman", region="AE-AJ", lat="25.4052", lng="55.5136",
          areas=["Al Nuaimiya", "Al Rashidiya", "Ajman Corniche", "Al Jurf", "Al Mowaihat", "Emirates City", "Al Rawda", "Garden City", "Al Zahra", "Musherief"],
-         intro="Ajman's business community runs on referrals and repeat customers — and a memorable Etisalat number is the cheapest marketing asset a Nuaimiya shop or Al Jurf trader can own. We deliver VIP SIMs across Ajman the same day, free.",
+         intro="Ajman's business community runs on referrals and repeat customers, and a memorable Etisalat number is the cheapest marketing asset a Nuaimiya shop or Al Jurf trader can own. We deliver VIP SIMs across Ajman the same day, free.",
          hook="From Al Nuaimiya towers to the industrial areas of Al Jurf, delivery typically lands the same day you confirm on WhatsApp."),
     dict(kind="numbers", slug="al-ain", name="Al Ain", region="AE-AZ", lat="24.2075", lng="55.7447",
          areas=["Al Jimi", "Al Muwaiji", "Town Centre", "Al Yahar", "Hili", "Al Maqam", "Zakher", "Al Foah", "Al Khabisi", "Falaj Hazza"],
-         intro="The Garden City prefers numbers that last a lifetime — family numbers, majlis numbers, business numbers passed between generations. We bring Etisalat Gold, Silver and Platinum patterns to Al Ain with free delivery to your door.",
-         hook="We deliver across Al Ain — Al Jimi, Hili, Zakher, Al Yahar and the Town Centre — usually within the same day."),
+         intro="The Garden City prefers numbers that last a lifetime, family numbers, majlis numbers, business numbers passed between generations. We bring Etisalat Gold, Silver and Platinum patterns to Al Ain with free delivery to your door.",
+         hook="We deliver across Al Ain, Al Jimi, Hili, Zakher, Al Yahar and the Town Centre, usually within the same day."),
     dict(kind="numbers", slug="ras-al-khaimah", name="Ras Al Khaimah", region="AE-RK", lat="25.7895", lng="55.9432",
          areas=["Al Nakheel", "Al Hamra Village", "Mina Al Arab", "Al Dhait", "Khuzam", "Al Rams", "Julfar", "Al Qusaidat", "Seih Al Uraibi"],
          intro="From Al Hamra Village residences to Al Nakheel's trading streets, a golden Etisalat number gets your call answered in Ras Al Khaimah. Browse live Silver, Gold and Platinum inventory and have the SIM delivered free.",
-         hook="RAK deliveries cover Al Nakheel, Al Hamra, Mina Al Arab, Al Dhait and beyond — confirmed on WhatsApp before dispatch."),
+         hook="RAK deliveries cover Al Nakheel, Al Hamra, Mina Al Arab, Al Dhait and beyond, confirmed on WhatsApp before dispatch."),
     dict(kind="numbers", slug="fujairah", name="Fujairah", region="AE-FU", lat="25.1288", lng="56.3265",
          areas=["Fujairah City Centre", "Dibba Al-Fujairah", "Al Faseel", "Sakamkam", "Al Hala", "Mirbah", "Qidfa", "Al Aqah"],
-         intro="On the east coast, business moves through the port, the free zone and a phone number people remember. We deliver Etisalat VIP numbers across Fujairah — from the City Centre to Dibba — with the postpaid plan activated and ready.",
-         hook="East-coast delivery reaches Fujairah City, Al Faseel, Sakamkam, Dibba and Al Aqah — timing confirmed on WhatsApp."),
+         intro="On the east coast, business moves through the port, the free zone and a phone number people remember. We deliver Etisalat VIP numbers across Fujairah, from the City Centre to Dibba, with the postpaid plan activated and ready.",
+         hook="East-coast delivery reaches Fujairah City, Al Faseel, Sakamkam, Dibba and Al Aqah, timing confirmed on WhatsApp."),
     dict(kind="numbers", slug="umm-al-quwain", name="Umm Al Quwain", region="AE-UQ", lat="25.5647", lng="55.5534",
          areas=["Al Salamah", "Old Town", "Al Raas", "Al Haditha", "Emirates Modern Industrial Area", "Falaj Al Mualla", "Al Humrah"],
          intro="Umm Al Quwain keeps it simple: one good number, kept for years. Choose a Silver, Gold or Platinum Etisalat pattern from live inventory and we deliver the SIM free to Al Salamah, Old Town, Al Raas or anywhere in the emirate.",
-         hook="UAQ is fully covered — Al Salamah, Old Town, Al Raas, the industrial area and Falaj Al Mualla."),
+         hook="UAQ is fully covered, Al Salamah, Old Town, Al Raas, the industrial area and Falaj Al Mualla."),
 
     # ---- internet: 8 city pages ----
     dict(kind="internet", slug="home-internet-dubai", name="Dubai", region="AE-DU", lat="25.2048", lng="55.2708",
          areas=["Dubai Marina", "JBR", "Downtown Dubai", "Business Bay", "DIFC", "Palm Jumeirah", "JLT", "Deira", "Bur Dubai", "Al Barsha", "JVC", "Dubai Hills", "Silicon Oasis", "International City", "Mirdif", "Al Quoz"],
-         intro="New apartment in Marina? Villa in Dubai Hills still waiting on fiber? 5.5G Home Wireless gets any Dubai home online within 24 hours — the router is delivered free, you plug it in, and the WiFi is live. No technician booking, no cabling through a rented apartment.",
+         intro="New apartment in Marina? Villa in Dubai Hills still waiting on fiber? 5.5G Home Wireless gets any Dubai home online within 24 hours, the router is delivered free, you plug it in, and the WiFi is live. No technician booking, no cabling through a rented apartment.",
          hook="Dubai deliveries run daily across Marina, Downtown, Deira, Bur Dubai, JVC, Dubai Hills and every other district.",
          cross="dubai"),
     dict(kind="internet", slug="home-internet-abu-dhabi", name="Abu Dhabi", region="AE-AZ", lat="24.4539", lng="54.3773",
          areas=["Al Reem Island", "Khalifa City", "Al Khalidiyah", "Corniche", "Mussafah", "Yas Island", "Saadiyat Island", "Al Nahyan", "Mohammed Bin Zayed City", "Al Wahda", "Madinat Zayed", "Al Raha"],
-         intro="From Al Reem towers to Khalifa City villas, Abu Dhabi homes don't need to wait for an installation slot. 5.5G Home Wireless arrives at your door within 24 hours, free — plug the router in and your unlimited home WiFi is running the same evening.",
-         hook="We deliver across the island and the mainland — Reem, Khalidiyah, Mussafah, Khalifa City, MBZ City, Yas and Saadiyat.",
+         intro="From Al Reem towers to Khalifa City villas, Abu Dhabi homes don't need to wait for an installation slot. 5.5G Home Wireless arrives at your door within 24 hours, free, plug the router in and your unlimited home WiFi is running the same evening.",
+         hook="We deliver across the island and the mainland, Reem, Khalidiyah, Mussafah, Khalifa City, MBZ City, Yas and Saadiyat.",
          cross="abu-dhabi"),
     dict(kind="internet", slug="home-internet-sharjah", name="Sharjah", region="AE-SH", lat="25.3463", lng="55.4209",
          areas=["Al Nahda", "Al Majaz", "Al Khan", "Al Taawun", "Muwaileh", "Al Qasimia", "Abu Shagara", "Rolla", "Al Yarmook", "University City"],
-         intro="Sharjah families stream, study and work from home more than anywhere in the UAE — and share buildings where fiber appointments take days. 5.5G Home Wireless skips the queue: free router delivery to Al Nahda, Al Majaz or Muwaileh within 24 hours, unlimited data from day one.",
+         intro="Sharjah families stream, study and work from home more than anywhere in the UAE, and share buildings where fiber appointments take days. 5.5G Home Wireless skips the queue: free router delivery to Al Nahda, Al Majaz or Muwaileh within 24 hours, unlimited data from day one.",
          hook="Al Nahda, Al Majaz, Al Khan, Al Taawun, Muwaileh, Rolla and University City are all on the daily delivery routes.",
          cross="sharjah"),
     dict(kind="internet", slug="home-internet-ajman", name="Ajman", region="AE-AJ", lat="25.4052", lng="55.5136",
          areas=["Al Nuaimiya", "Al Rashidiya", "Ajman Corniche", "Al Jurf", "Emirates City", "Al Mowaihat", "Garden City", "Al Rawda"],
-         intro="Ajman rents are the best value in the UAE — your internet should be too. 5.5G Home Wireless gives Nuaimiya and Corniche apartments unlimited home WiFi at AED 206/month with no upfront payment and a free router delivered within 24 hours.",
+         intro="Ajman rents are the best value in the UAE, your internet should be too. 5.5G Home Wireless gives Nuaimiya and Corniche apartments unlimited home WiFi at AED 206/month with no upfront payment and a free router delivered within 24 hours.",
          hook="Nuaimiya, Rashidiya, the Corniche towers, Al Jurf and Emirates City all get free 24-hour delivery.",
          cross="ajman"),
     dict(kind="internet", slug="home-internet-al-ain", name="Al Ain", region="AE-AZ", lat="24.2075", lng="55.7447",
          areas=["Al Jimi", "Al Muwaiji", "Town Centre", "Hili", "Al Yahar", "Al Maqam", "Zakher", "Falaj Hazza"],
-         intro="Al Ain's villas and farms sit exactly where fixed-line rollout is slowest — and where wireless internet makes the most sense. The 5.5G router works the moment it's plugged in, anywhere the Etisalat network reaches, with unlimited local data.",
-         hook="Villas in Zakher, Al Yahar, Hili and Al Jimi are exactly the homes 5.5G was made for — no trenching, no cabling.",
+         intro="Al Ain's villas and farms sit exactly where fixed-line rollout is slowest, and where wireless internet makes the most sense. The 5.5G router works the moment it's plugged in, anywhere the Etisalat network reaches, with unlimited local data.",
+         hook="Villas in Zakher, Al Yahar, Hili and Al Jimi are exactly the homes 5.5G was made for, no trenching, no cabling.",
          cross="al-ain"),
     dict(kind="internet", slug="home-internet-ras-al-khaimah", name="Ras Al Khaimah", region="AE-RK", lat="25.7895", lng="55.9432",
          areas=["Al Nakheel", "Al Hamra Village", "Mina Al Arab", "Al Dhait", "Khuzam", "Al Rams", "Julfar"],
-         intro="Whether it's an Al Hamra holiday home or a family villa in Al Dhait, RAK homes get online faster on 5.5G than on any installation appointment. Free router, free 24-hour delivery, unlimited data — and the router moves with you if you relocate.",
+         intro="Whether it's an Al Hamra holiday home or a family villa in Al Dhait, RAK homes get online faster on 5.5G than on any installation appointment. Free router, free 24-hour delivery, unlimited data, and the router moves with you if you relocate.",
          hook="Al Hamra Village, Mina Al Arab, Al Nakheel and Al Dhait are covered by free 24-hour delivery.",
          cross="ras-al-khaimah"),
     dict(kind="internet", slug="home-internet-fujairah", name="Fujairah", region="AE-FU", lat="25.1288", lng="56.3265",
          areas=["Fujairah City Centre", "Dibba Al-Fujairah", "Al Faseel", "Sakamkam", "Mirbah", "Al Aqah"],
-         intro="East-coast buildings wait longest for fixed-line internet — Fujairah is where plug-and-play 5.5G earns its keep. The router is delivered free from the City Centre to Dibba, and your unlimited home WiFi is live the same day it arrives.",
+         intro="East-coast buildings wait longest for fixed-line internet, Fujairah is where plug-and-play 5.5G earns its keep. The router is delivered free from the City Centre to Dibba, and your unlimited home WiFi is live the same day it arrives.",
          hook="Fujairah City, Al Faseel, Sakamkam, Mirbah, Al Aqah and Dibba are all reachable within the 24-hour window.",
          cross="fujairah"),
     dict(kind="internet", slug="home-internet-umm-al-quwain", name="Umm Al Quwain", region="AE-UQ", lat="25.5647", lng="55.5534",
          areas=["Al Salamah", "Old Town", "Al Raas", "Al Haditha", "Falaj Al Mualla"],
-         intro="UAQ homes shouldn't pay Dubai prices for internet — or wait Dubai queues for installation. 5.5G Home Wireless brings unlimited home WiFi to Al Salamah and Old Town at AED 206/month, with the router delivered free within 24 hours.",
-         hook="Al Salamah, Old Town, Al Raas and Falaj Al Mualla — all covered, no installation visit needed.",
+         intro="UAQ homes shouldn't pay Dubai prices for internet, or wait Dubai queues for installation. 5.5G Home Wireless brings unlimited home WiFi to Al Salamah and Old Town at AED 206/month, with the router delivered free within 24 hours.",
+         hook="Al Salamah, Old Town, Al Raas and Falaj Al Mualla, all covered, no installation visit needed.",
          cross="umm-al-quwain"),
 
     # ---- area: 8 Dubai dual-product pages ----
     dict(kind="area", slug="dubai-marina", name="Dubai Marina", region="AE-DU", lat="25.0805", lng="55.1403",
          areas=["Marina Walk", "Marina Promenade", "Marina Gate", "Damac Heights", "Princess Tower", "Marina Mall area", "Al Sufouh edge"],
-         intro="Marina moves fast: new tenants every season, businesses run from tower apartments, and nobody waits a week for an installation appointment. We deliver both — VIP Etisalat numbers for the personal brand, and 5.5G home internet for the apartment — to any Marina tower, free.",
+         intro="Marina moves fast: new tenants every season, businesses run from tower apartments, and nobody waits a week for an installation appointment. We deliver both, VIP Etisalat numbers for the personal brand, and 5.5G home internet for the apartment, to any Marina tower, free.",
          hook="Tower deliveries across Marina Walk, Marina Gate, Princess Tower and the Promenade usually land the same day."),
     dict(kind="area", slug="deira", name="Deira", region="AE-DU", lat="25.2716", lng="55.3082",
          areas=["Gold Souk", "Al Rigga", "Naif", "Port Saeed", "Al Muraqqabat", "Abu Hail", "Hor Al Anz", "Al Baraha"],
-         intro="Deira is where UAE trading started — and where a golden number still closes deals. From Gold Souk wholesalers to Al Rigga offices, we deliver memorable Etisalat numbers and plug-and-play 5.5G home internet across Deira, same day, free.",
-         hook="Gold Souk, Naif, Al Rigga, Al Muraqqabat and Hor Al Anz are our home turf — many of our partner shops are here."),
+         intro="Deira is where UAE trading started, and where a golden number still closes deals. From Gold Souk wholesalers to Al Rigga offices, we deliver memorable Etisalat numbers and plug-and-play 5.5G home internet across Deira, same day, free.",
+         hook="Gold Souk, Naif, Al Rigga, Al Muraqqabat and Hor Al Anz are our home turf, many of our partner shops are here."),
     dict(kind="area", slug="business-bay", name="Business Bay", region="AE-DU", lat="25.1850", lng="55.2650",
          areas=["Bay Square", "Executive Towers", "Marasi Drive", "Churchill Towers", "Al Abraj Street", "Canal-side towers"],
-         intro="In Business Bay the phone number on your card is part of the pitch. Pair a Gold or Platinum Etisalat number with your company line, and put 5.5G wireless internet in the office or apartment — both delivered free to any Bay tower.",
-         hook="Bay Square, Executive Towers and the Marasi Drive towers get same-day delivery — order before evening on WhatsApp."),
+         intro="In Business Bay the phone number on your card is part of the pitch. Pair a Gold or Platinum Etisalat number with your company line, and put 5.5G wireless internet in the office or apartment, both delivered free to any Bay tower.",
+         hook="Bay Square, Executive Towers and the Marasi Drive towers get same-day delivery, order before evening on WhatsApp."),
     dict(kind="area", slug="jbr", name="JBR", region="AE-DU", lat="25.0750", lng="55.1330",
          areas=["The Walk", "The Beach", "Bahar", "Rimal", "Murjan", "Shams", "Amwaj", "Sadaf"],
-         intro="JBR apartments turn over fast — holiday lets, new leases, short stays. 5.5G home internet is made for that: plug in, online, and it moves out with you. Add a memorable Etisalat number and you're fully set up the day you get the keys.",
-         hook="All six JBR clusters — Bahar, Rimal, Murjan, Shams, Amwaj, Sadaf — plus The Walk and The Beach are covered daily."),
+         intro="JBR apartments turn over fast, holiday lets, new leases, short stays. 5.5G home internet is made for that: plug in, online, and it moves out with you. Add a memorable Etisalat number and you're fully set up the day you get the keys.",
+         hook="All six JBR clusters, Bahar, Rimal, Murjan, Shams, Amwaj, Sadaf, plus The Walk and The Beach are covered daily."),
     dict(kind="area", slug="downtown-dubai", name="Downtown Dubai", region="AE-DU", lat="25.1972", lng="55.2744",
          areas=["Burj Khalifa district", "Dubai Mall area", "Old Town", "Opera District", "Boulevard Central", "South Ridge", "The Residences"],
-         intro="A Downtown address deserves a number that matches. Platinum and Gold Etisalat patterns suit the Burj Khalifa business card — and 5.5G wireless internet has your Boulevard apartment online the day you move in, no installation visit through concierge.",
+         intro="A Downtown address deserves a number that matches. Platinum and Gold Etisalat patterns suit the Burj Khalifa business card, and 5.5G wireless internet has your Boulevard apartment online the day you move in, no installation visit through concierge.",
          hook="Boulevard, Old Town, Opera District and South Ridge deliveries clear building security with a simple WhatsApp confirmation."),
     dict(kind="area", slug="bur-dubai", name="Bur Dubai", region="AE-DU", lat="25.2532", lng="55.2972",
          areas=["Meena Bazaar", "Al Fahidi", "Al Mankhool", "Golden Sands", "Oud Metha", "Al Raffa", "Al Hamriya"],
-         intro="Bur Dubai's trading families have kept the same numbers for decades — that's the power of a memorable pattern. We stock Silver, Gold and Platinum Etisalat numbers and deliver them (plus 5.5G home internet) across Meena Bazaar, Mankhool and Golden Sands, free.",
-         hook="Meena Bazaar, Al Fahidi, Mankhool, Golden Sands and Oud Metha — same-day delivery on WhatsApp confirmation."),
+         intro="Bur Dubai's trading families have kept the same numbers for decades, that's the power of a memorable pattern. We stock Silver, Gold and Platinum Etisalat numbers and deliver them (plus 5.5G home internet) across Meena Bazaar, Mankhool and Golden Sands, free.",
+         hook="Meena Bazaar, Al Fahidi, Mankhool, Golden Sands and Oud Metha, same-day delivery on WhatsApp confirmation."),
     dict(kind="area", slug="al-barsha", name="Al Barsha", region="AE-DU", lat="25.1107", lng="55.2030",
          areas=["Al Barsha 1", "Al Barsha 2", "Al Barsha 3", "Barsha Heights", "Mall of the Emirates area", "Al Barsha South"],
-         intro="Between Mall of the Emirates traffic and Barsha Heights offices, this is one of Dubai's busiest residential-business mixes. We deliver VIP Etisalat numbers for the business and 5.5G wireless internet for the villa or apartment — free, within 24 hours.",
+         intro="Between Mall of the Emirates traffic and Barsha Heights offices, this is one of Dubai's busiest residential-business mixes. We deliver VIP Etisalat numbers for the business and 5.5G wireless internet for the villa or apartment, free, within 24 hours.",
          hook="Barsha 1-3, Barsha South and Barsha Heights (Tecom) are on daily routes; villas and towers both covered."),
     dict(kind="area", slug="jlt", name="JLT", region="AE-DU", lat="25.0700", lng="55.1400",
          areas=["Cluster A-Z towers", "JLT Park area", "DMCC Free Zone", "Almas Tower area", "Lake Level shops"],
-         intro="JLT runs on small business — DMCC licences, tower offices, founders running companies from Cluster D. A Gold Etisalat number makes the company feel established; 5.5G wireless internet gets the office (or apartment) online without waiting on building management for cabling.",
-         hook="All JLT clusters and DMCC towers covered — delivery to tower reception or your door, free, within 24 hours."),
+         intro="JLT runs on small business, DMCC licences, tower offices, founders running companies from Cluster D. A Gold Etisalat number makes the company feel established; 5.5G wireless internet gets the office (or apartment) online without waiting on building management for cabling.",
+         hook="All JLT clusters and DMCC towers covered, delivery to tower reception or your door, free, within 24 hours."),
 ]
 
 # ---------- shared page chrome ----------
 
-HEAD_TRACKING = """<!-- Google tag (gtag.js) — GA4 -->
+HEAD_TRACKING = """<!-- Google tag (gtag.js), GA4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-G34631QW03"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -315,7 +315,7 @@ def head_block(title, desc, keywords, slug, name, region, lat, lng, faqs, biz_de
     canonical = f"{BASE}/{slug}/"
     local_biz = json.dumps({
         "@context": "https://schema.org", "@type": "LocalBusiness",
-        "name": f"Golden Numbers UAE — {name}", "description": biz_desc, "url": canonical,
+        "name": f"Golden Numbers UAE, {name}", "description": biz_desc, "url": canonical,
         "telephone": "+971569028087",
         "address": {"@type": "PostalAddress", "addressCountry": "AE", "addressLocality": name},
         "geo": {"@type": "GeoCoordinates", "latitude": lat, "longitude": lng},
@@ -423,8 +423,8 @@ document.addEventListener('click', function(e) {{
 
 def build_numbers(loc):
     name, slug = loc["name"], loc["slug"]
-    title = f"VIP Numbers {name} | Etisalat Gold, Silver &amp; Platinum — Golden Numbers UAE"
-    desc = (f"Buy Etisalat VIP mobile numbers in {name} — Gold, Silver & Platinum patterns with postpaid plans "
+    title = f"VIP Numbers {name} | Etisalat Gold, Silver &amp; Platinum, Golden Numbers UAE"
+    desc = (f"Buy Etisalat VIP mobile numbers in {name}, Gold, Silver & Platinum patterns with postpaid plans "
             f"from AED 188/mo. Authorized Etisalat dealer, free SIM delivery across {name}. WhatsApp +971 56 902 8087.")
     keywords = (f"VIP numbers {name}, Etisalat VIP number {name}, gold number {name}, buy VIP number {name}, "
                 f"premium mobile numbers {name}, fancy numbers {name}, Etisalat postpaid {name}")
@@ -432,25 +432,25 @@ def build_numbers(loc):
     faqs = [
         (f"Where can I buy an Etisalat VIP number in {name}?",
          f"Order online at goldennummbers.com/choose-number/ or WhatsApp our live specialist at +971 56 902 8087. "
-         f"We are an authorized Etisalat dealer with free SIM delivery across {name} — including {a0}, {a1} and {a2}."),
+         f"We are an authorized Etisalat dealer with free SIM delivery across {name}, including {a0}, {a1} and {a2}."),
         (f"Do you deliver Etisalat SIMs to {a0}?",
-         f"Yes. {loc['hook']} Delivery is free and there is no store visit — Emirates ID is the only document needed."),
+         f"Yes. {loc['hook']} Delivery is free and there is no store visit, Emirates ID is the only document needed."),
         (f"How much does a golden number cost in {name}?",
-         f"There is no one-time purchase price — the number is free with an Etisalat postpaid plan: Silver from AED 188/month "
+         f"There is no one-time purchase price, the number is free with an Etisalat postpaid plan: Silver from AED 188/month "
          f"(unlimited data + 1,000 minutes), Gold AED 500/month (unlimited data + 3,000 minutes), Platinum AED 1,000/month "
          f"(unlimited data + unlimited calls). Prices exclude 5% VAT."),
         (f"Can I see available numbers before ordering in {name}?",
-         f"Yes — browse 2,500+ live Etisalat numbers at goldennummbers.com/choose-number/, search by pattern "
+         f"Yes, browse 2,500+ live Etisalat numbers at goldennummbers.com/choose-number/, search by pattern "
          f"(777, 786, 1234…) and reserve online in two minutes. No payment is taken online."),
         (f"Can I port my du number to Etisalat in {name}?",
-         f"Yes — Mobile Number Portability works everywhere in UAE including {name}. The switch takes 2-3 business days "
+         f"Yes, Mobile Number Portability works everywhere in UAE including {name}. The switch takes 2-3 business days "
          f"and we handle the paperwork. Message us on WhatsApp to start."),
     ]
     hero_ctas = (wa_btn(WA_NUM, "Talk to a LIVE Etisalat Specialist Agent Now")
                  + '\n      <a href="/choose-number/" class="btn btn-outline">Browse Numbers</a>')
     body = f"""<section class="hero">
   <div class="container">
-    <div style="display:inline-block;background:rgba(201,169,98,0.12);border:1px solid rgba(201,169,98,0.3);padding:0.35rem 1rem;border-radius:20px;font-size:0.8rem;color:var(--gold);margin-bottom:1.25rem;font-weight:600;">Authorized Etisalat Dealer &mdash; {name}</div>
+    <div style="display:inline-block;background:rgba(201,169,98,0.12);border:1px solid rgba(201,169,98,0.3);padding:0.35rem 1rem;border-radius:20px;font-size:0.8rem;color:var(--gold);margin-bottom:1.25rem;font-weight:600;">Authorized Etisalat Dealer, {name}</div>
     <h1>Etisalat VIP Numbers in <span>{name}</span></h1>
     <p>{loc['intro']}</p>
     <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
@@ -465,13 +465,13 @@ def build_numbers(loc):
   <div class="container">
     <div class="section-heading">
       <h2>Silver, Gold &amp; Platinum Numbers in {name}</h2>
-      <p>Every number comes free with an Etisalat <strong>postpaid</strong> plan (monthly billing — no one-time number fee). +5% VAT.</p>
+      <p>Every number comes free with an Etisalat <strong>postpaid</strong> plan (monthly billing, no one-time number fee). +5% VAT.</p>
     </div>
     <div class="tier-grid">
       <div class="tier-card">
         <h3 style="color:silver;">Silver</h3>
         <div class="tc-price">AED 188<small>/month</small></div>
-        <p>Unlimited data + 1,000 minutes. Memorable repeating patterns — free with the plan.</p>
+        <p>Unlimited data + 1,000 minutes. Memorable repeating patterns, free with the plan.</p>
         <a href="/choose-number/" class="btn btn-outline" style="font-size:0.85rem;padding:0.6rem 1.2rem;">Browse Silver Numbers</a>
       </div>
       <div class="tier-card" style="border-color:var(--gold);">
@@ -483,20 +483,20 @@ def build_numbers(loc):
       <div class="tier-card">
         <h3 style="color:#E5E4E2;">Platinum</h3>
         <div class="tc-price">AED 1,000<small>/month</small></div>
-        <p>Unlimited data + unlimited calls. Hand-picked elite patterns — triple and quad repeats.</p>
+        <p>Unlimited data + unlimited calls. Hand-picked elite patterns, triple and quad repeats.</p>
         <a href="/choose-number/" class="btn btn-outline" style="font-size:0.85rem;padding:0.6rem 1.2rem;">Browse Platinum Numbers</a>
       </div>
     </div>
   </div>
 </section>
 
-{areas_section(name, loc['areas'], f"Free SIM delivery to every neighborhood — no store visit needed. {loc['hook']}")}
+{areas_section(name, loc['areas'], f"Free SIM delivery to every neighborhood, no store visit needed. {loc['hook']}")}
 
 <section style="background:var(--surface);border-top:1px solid var(--surface-border);border-bottom:1px solid var(--surface-border);">
   <div class="container" style="text-align:center;">
     <div class="section-heading">
       <h2>Need Home Internet in {name} Too?</h2>
-      <p>5.5G Wireless Home Internet — unlimited data, FREE AED 800 router, no upfront payment, delivered free within 24 hours.</p>
+      <p>5.5G Wireless Home Internet, unlimited data, FREE AED 800 router, no upfront payment, delivered free within 24 hours.</p>
     </div>
     <a href="/home-internet-{slug}/" class="btn btn-gold">Home Internet in {name} &rarr;</a>
   </div>
@@ -523,15 +523,15 @@ def build_numbers(loc):
 
 def build_internet(loc):
     name, slug = loc["name"], loc["slug"]
-    title = f"Home Internet {name} | 5.5G Wireless WiFi — No Landline, Free 24h Delivery"
-    desc = (f"5.5G wireless home internet in {name} — unlimited data from AED 206/mo, no landline, no installation. "
+    title = f"Home Internet {name} | 5.5G Wireless WiFi, No Landline, Free 24h Delivery"
+    desc = (f"5.5G wireless home internet in {name}, unlimited data from AED 206/mo, no landline, no installation. "
             f"FREE AED 800 router, no upfront payment, free delivery within 24 hours across {name}. WhatsApp +971 56 902 8087.")
     keywords = (f"home internet {name}, wifi connection {name}, internet without landline {name}, 5G home internet {name}, "
                 f"5.5G internet {name}, Etisalat home wireless {name}, internet plans {name}")
     a0, a1, a2 = loc["areas"][0], loc["areas"][1], loc["areas"][2]
     faqs = [
         (f"How do I get home internet in {name} without a landline?",
-         f"Order Etisalat 5.5G Home Wireless — no landline, no fiber cabling, no technician. The router is delivered free "
+         f"Order Etisalat 5.5G Home Wireless, no landline, no fiber cabling, no technician. The router is delivered free "
          f"within 24 hours anywhere in {name} (including {a0}, {a1} and {a2}); plug it into power and your WiFi is live. "
          f"Reserve at goldennummbers.com/home-wireless/ or WhatsApp +971 56 902 8087."),
         (f"How much does home internet cost in {name}?",
@@ -539,13 +539,13 @@ def build_internet(loc):
          f"(full-speed unlimited + FREE StarzPlay) at AED 269/month promotional with a 24-month commitment. Both have "
          f"unlimited local data and exclude 5% VAT. No upfront payment, and the AED 800 router is free."),
         (f"How fast can I get connected in {name}?",
-         f"Typically within 24 hours of ordering. {loc['hook']} There is no installation appointment — setup is plugging "
+         f"Typically within 24 hours of ordering. {loc['hook']} There is no installation appointment, setup is plugging "
          f"the router into a power socket."),
         (f"Is the data really unlimited?",
-         f"Yes — both plans include unlimited local data for home use, with no monthly cap. Premium adds a free StarzPlay "
+         f"Yes, both plans include unlimited local data for home use, with no monthly cap. Premium adds a free StarzPlay "
          f"subscription for movies and entertainment."),
         (f"Can I move my router to a new home in {name}?",
-         f"Yes — the router is not tied to an installed address. Take it with you when you move and plug it in at the new "
+         f"Yes, the router is not tied to an installed address. Take it with you when you move and plug it in at the new "
          f"home. Confirm coverage at the new address with our specialist on WhatsApp first."),
     ]
     hero_ctas = (wa_btn(WA_HW, "Talk to a LIVE Etisalat Specialist Agent Now")
@@ -555,7 +555,7 @@ def build_internet(loc):
   <div class="container" style="text-align:center;">
     <div class="section-heading">
       <h2>Need a VIP Mobile Number in {name} Too?</h2>
-      <p>Silver, Gold &amp; Platinum Etisalat numbers — free with postpaid plans from AED 188/month. One delivery, one specialist.</p>
+      <p>Silver, Gold &amp; Platinum Etisalat numbers, free with postpaid plans from AED 188/month. One delivery, one specialist.</p>
     </div>
     <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
       <a href="/{cross}/" class="btn btn-gold">VIP Numbers in {name} &rarr;</a>
@@ -565,8 +565,8 @@ def build_internet(loc):
 </section>""" if cross else ""
     body = f"""<section class="hero">
   <div class="container">
-    <div style="display:inline-block;background:rgba(201,169,98,0.12);border:1px solid rgba(201,169,98,0.3);padding:0.35rem 1rem;border-radius:20px;font-size:0.8rem;color:var(--gold);margin-bottom:1.25rem;font-weight:600;">Authorized Etisalat Dealer &mdash; {name}</div>
-    <h1>5.5G Home Internet in <span>{name}</span> &mdash; No Landline Needed</h1>
+    <div style="display:inline-block;background:rgba(201,169,98,0.12);border:1px solid rgba(201,169,98,0.3);padding:0.35rem 1rem;border-radius:20px;font-size:0.8rem;color:var(--gold);margin-bottom:1.25rem;font-weight:600;">Authorized Etisalat Dealer, {name}</div>
+    <h1>5.5G Home Internet in <span>{name}</span>, No Landline Needed</h1>
     <p>{loc['intro']}</p>
     <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
       {hero_ctas}
@@ -574,13 +574,13 @@ def build_internet(loc):
   </div>
 </section>
 
-{trust_strip([("wifi", "Unlimited Local Data"), ("truck", f"Free 24h Delivery in {name}"), ("clock", "Plug & Play — No Installation"), ("shield", "No Upfront Payment")])}
+{trust_strip([("wifi", "Unlimited Local Data"), ("truck", f"Free 24h Delivery in {name}"), ("clock", "Plug & Play, No Installation"), ("shield", "No Upfront Payment")])}
 
 <section>
   <div class="container">
     <div class="section-heading">
       <h2>💎 Choose Your Plan in {name}</h2>
-      <p>Prices exclude 5% VAT. Promotional pricing as listed by Etisalat — full details &amp; online reservation on the <a href="/home-wireless/" style="color:var(--gold);">Home Wireless page</a>.</p>
+      <p>Prices exclude 5% VAT. Promotional pricing as listed by Etisalat, full details &amp; online reservation on the <a href="/home-wireless/" style="color:var(--gold);">Home Wireless page</a>.</p>
     </div>
     <div class="tier-grid" style="max-width:820px;">
       <div class="tier-card">
@@ -619,7 +619,7 @@ def build_internet(loc):
   </div>
 </section>
 
-{areas_section(name, loc['areas'], f"Free router delivery within 24 hours — no installation visit. {loc['hook']}")}
+{areas_section(name, loc['areas'], f"Free router delivery within 24 hours, no installation visit. {loc['hook']}")}
 
 {cross_section}
 
@@ -636,7 +636,7 @@ def build_internet(loc):
   </div>
 </section>"""
     head = head_block(title, desc, keywords, slug, name, loc["region"], loc["lat"], loc["lng"], faqs,
-                      f"Authorized Etisalat dealer — 5.5G wireless home internet in {name} with unlimited data, free router and free 24-hour delivery.",
+                      f"Authorized Etisalat dealer, 5.5G wireless home internet in {name} with unlimited data, free router and free 24-hour delivery.",
                       "AED 206 - AED 269")
     return (f"<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n{head}\n</head>\n<body>\n{EC_BAR}\n{nav_html()}\n\n{body}\n\n"
             + page_end(WA_HW, "/home-wireless/", "Explore Internet Plans", f"{name} Internet Page", slug))
@@ -644,25 +644,25 @@ def build_internet(loc):
 
 def build_area(loc):
     name, slug = loc["name"], loc["slug"]
-    title = f"Etisalat VIP Numbers &amp; Home Internet in {name} | Same-Day Delivery — Golden Numbers UAE"
-    desc = (f"Etisalat services in {name}, Dubai — VIP Gold/Silver/Platinum numbers from AED 188/mo and 5.5G wireless "
+    title = f"Etisalat VIP Numbers &amp; Home Internet in {name} | Same-Day Delivery, Golden Numbers UAE"
+    desc = (f"Etisalat services in {name}, Dubai, VIP Gold/Silver/Platinum numbers from AED 188/mo and 5.5G wireless "
             f"home internet from AED 206/mo. Free same-day delivery to {name}. Authorized dealer. WhatsApp +971 56 902 8087.")
     keywords = (f"Etisalat {name}, VIP number {name}, golden number {name}, home internet {name}, wifi {name}, "
                 f"Etisalat SIM delivery {name}, Etisalat dealer {name}")
     a0, a1 = loc["areas"][0], loc["areas"][1]
     faqs = [
         (f"Does goldennummbers.com deliver to {name}?",
-         f"Yes — free delivery across {name} including {a0} and {a1}. {loc['hook']}"),
+         f"Yes, free delivery across {name} including {a0} and {a1}. {loc['hook']}"),
         (f"How do I get an Etisalat VIP number in {name}?",
          f"Browse 2,500+ live numbers at goldennummbers.com/choose-number/ and reserve online, or WhatsApp our live "
          f"specialist at +971 56 902 8087. The number is free with an Etisalat postpaid plan from AED 188/month; "
          f"the SIM is delivered free to your address in {name}."),
         (f"Can I get home internet in {name} without installation?",
-         f"Yes — Etisalat 5.5G Home Wireless needs no landline, no cabling and no technician. The router (worth AED 800, "
+         f"Yes, Etisalat 5.5G Home Wireless needs no landline, no cabling and no technician. The router (worth AED 800, "
          f"free with the plan) is delivered to {name} within 24 hours; plug it in and your unlimited WiFi is live. "
          f"Plans from AED 206/month at goldennummbers.com/home-wireless/."),
         (f"What documents do I need for delivery in {name}?",
-         f"Emirates ID only — for both VIP numbers and home internet. No store visit, no paperwork hassle; "
+         f"Emirates ID only, for both VIP numbers and home internet. No store visit, no paperwork hassle; "
          f"the Etisalat verification department calls you to confirm."),
         (f"How fast is delivery to {name}?",
          f"SIM deliveries are typically same-day; home internet routers arrive within 24 hours. "
@@ -674,7 +674,7 @@ def build_area(loc):
                + '\n      <a href="/home-wireless/" class="btn btn-outline">Explore Home Internet Plans</a>')
     body = f"""<section class="hero">
   <div class="container">
-    <div style="display:inline-block;background:rgba(201,169,98,0.12);border:1px solid rgba(201,169,98,0.3);padding:0.35rem 1rem;border-radius:20px;font-size:0.8rem;color:var(--gold);margin-bottom:1.25rem;font-weight:600;">Authorized Etisalat Dealer &mdash; {name}, Dubai</div>
+    <div style="display:inline-block;background:rgba(201,169,98,0.12);border:1px solid rgba(201,169,98,0.3);padding:0.35rem 1rem;border-radius:20px;font-size:0.8rem;color:var(--gold);margin-bottom:1.25rem;font-weight:600;">Authorized Etisalat Dealer, {name}, Dubai</div>
     <h1>Etisalat VIP Numbers &amp; Home Internet in <span>{name}</span></h1>
     <p>{loc['intro']}</p>
     <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
@@ -689,7 +689,7 @@ def build_area(loc):
   <div class="container">
     <div class="section-heading">
       <h2>VIP Golden Numbers in {name}</h2>
-      <p>Silver from AED 188/mo &middot; Gold AED 500/mo &middot; Platinum AED 1,000/mo — the number is free with the Etisalat <strong>postpaid</strong> plan. +5% VAT.</p>
+      <p>Silver from AED 188/mo &middot; Gold AED 500/mo &middot; Platinum AED 1,000/mo, the number is free with the Etisalat <strong>postpaid</strong> plan. +5% VAT.</p>
     </div>
     <div style="display:flex;gap:0.6rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.75rem;">
       <span class="area-tag">050 XXX 7777</span>
@@ -708,14 +708,14 @@ def build_area(loc):
   <div class="container" style="text-align:center;">
     <div class="section-heading">
       <h2>5.5G Wireless Home Internet in {name}</h2>
-      <p>🚀 Advance — Super-Fast Internet, <strong>AED 206/mo</strong> &nbsp;|&nbsp; 👑 Premium — Full-Speed Unlimited + 🎬 FREE StarzPlay, <strong>AED 269/mo</strong></p>
+      <p>🚀 Advance, Super-Fast Internet, <strong>AED 206/mo</strong> &nbsp;|&nbsp; 👑 Premium, Full-Speed Unlimited + 🎬 FREE StarzPlay, <strong>AED 269/mo</strong></p>
     </div>
     <div class="check-grid">
       <div>✅ No Upfront Payment</div>
       <div>✅ FREE AED 800 Router</div>
       <div>✅ FREE Delivery Within 24 Hours</div>
       <div>✅ 14-Day Free Grace Period</div>
-      <div>✅ Plug &amp; Play — No Installation</div>
+      <div>✅ Plug &amp; Play, No Installation</div>
       <div>✅ Unlimited Local Data</div>
     </div>
     <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
@@ -724,14 +724,14 @@ def build_area(loc):
   </div>
 </section>
 
-{areas_section(name, loc['areas'], f"Free delivery across {name} — no store visit needed. {loc['hook']}")}
+{areas_section(name, loc['areas'], f"Free delivery across {name}, no store visit needed. {loc['hook']}")}
 
 {faq_section(faqs)}
 
 <section class="cta-section">
   <div class="container">
     <h2 style="font-family:var(--font-heading);font-size:1.9rem;margin-bottom:0.75rem;">Set Up in {name} Today</h2>
-    <p style="color:var(--text-muted);margin-bottom:2rem;">VIP number, home internet, or both — one specialist, free delivery, Emirates ID only.</p>
+    <p style="color:var(--text-muted);margin-bottom:2rem;">VIP number, home internet, or both, one specialist, free delivery, Emirates ID only.</p>
     <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
       {num_ctas}
     </div>
@@ -739,7 +739,7 @@ def build_area(loc):
   </div>
 </section>"""
     head = head_block(title, desc, keywords, slug, name, loc["region"], loc["lat"], loc["lng"], faqs,
-                      f"Authorized Etisalat dealer serving {name}, Dubai — VIP numbers and 5.5G home internet with free same-day delivery.",
+                      f"Authorized Etisalat dealer serving {name}, Dubai, VIP numbers and 5.5G home internet with free same-day delivery.",
                       "AED 188 - AED 1,000")
     return (f"<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n{head}\n</head>\n<body>\n{EC_BAR}\n{nav_html()}\n\n{body}\n\n"
             + page_end(WA_NUM, "/choose-number/", "Browse Numbers", f"{name} Area Page", slug))

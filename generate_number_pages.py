@@ -34,7 +34,7 @@ except Exception:
     pass
 
 # ---------------------------------------------------------------------------
-# Data source — same sheets both /choose-number/ pages consume
+# Data source, same sheets both /choose-number/ pages consume
 # ---------------------------------------------------------------------------
 SHEETS = [
     # 2026-07-13: master sheet re-issued (old 1YVz emptied). Single source.
@@ -51,10 +51,10 @@ TIER_PRICE = {
 
 # Etisalat-assigned prefix families. Used for the "Number breakdown" SEO copy.
 PREFIX_INFO = {
-    "050": "Etisalat's original mobile prefix, introduced in 1994 — the most recognised series across the UAE and a status marker for long-standing residents.",
-    "054": "An Etisalat secondary series launched to support Dubai and Abu Dhabi growth — widely used by business customers in the UAE.",
-    "056": "Etisalat's modern prefix block — heavily allocated for postpaid plans and VIP numbers in Dubai, Sharjah and the Northern Emirates.",
-    "058": "A newer Etisalat block with fresh ranges still available — popular for businesses choosing their first UAE number.",
+    "050": "Etisalat's original mobile prefix, introduced in 1994, the most recognised series across the UAE and a status marker for long-standing residents.",
+    "054": "An Etisalat secondary series launched to support Dubai and Abu Dhabi growth, widely used by business customers in the UAE.",
+    "056": "Etisalat's modern prefix block, heavily allocated for postpaid plans and VIP numbers in Dubai, Sharjah and the Northern Emirates.",
+    "058": "A newer Etisalat block with fresh ranges still available, popular for businesses choosing their first UAE number.",
 }
 
 # ---------------------------------------------------------------------------
@@ -73,7 +73,7 @@ SITES = {
         "ga4": "G-G34631QW03",
         "fb_pixel": "1456083435966506",
         "support_email": "support@etisalat.shop",
-        "tagline": "Authorized Etisalat Dealer — VIP Mobile Numbers UAE",
+        "tagline": "Authorized Etisalat Dealer, VIP Mobile Numbers UAE",
         # Midnight Gold theme
         "theme_color": "#0D1117",
         "css_vars": {
@@ -104,7 +104,7 @@ SITES = {
         "ga4": "__GA4_PLACEHOLDER__",
         "fb_pixel": "__FB_PIXEL_PLACEHOLDER__",
         "support_email": "support@uaepremiumnumbers.com",
-        "tagline": "Authorized Etisalat Dealer — Premium Mobile Numbers UAE",
+        "tagline": "Authorized Etisalat Dealer, Premium Mobile Numbers UAE",
         # Etisalat Red on White
         "theme_color": "#ED1C24",
         "css_vars": {
@@ -266,7 +266,7 @@ def analyze(digits):
         else:
             break
     if z >= 3:
-        patterns.append(f"ends in {z} consecutive zeros — a classic round-number signature")
+        patterns.append(f"ends in {z} consecutive zeros, a classic round-number signature")
         score += z * 4
 
     # Ascending / descending in last 4
@@ -357,13 +357,13 @@ def reserve_link(num):
 
 
 def _variant(digits, n):
-    """Deterministic 0..n-1 per number — varies page structure/wording without
+    """Deterministic 0..n-1 per number, varies page structure/wording without
     randomness, so re-runs are stable and pages aren't identical scaffolding."""
     return sum(int(c) for c in digits if c.isdigit()) % n
 
 
 def seo_intro(num, info):
-    """Factual, feature-driven intro — no numerology/hype (no AI bluff). States only
+    """Factual, feature-driven intro, no numerology/hype (no AI bluff). States only
     what is literally true: tier, prefix, and the concrete digit pattern detected.
     Three framings chosen per-number so pages don't share identical copy scaffolding."""
     fmt = num["formatted"]
@@ -389,7 +389,7 @@ def seo_intro(num, info):
             parts.append(f"That series is {prefix_meta}")
     else:
         if prefix_meta:
-            parts.append(f"<strong>{fmt}</strong> sits on the {prefix} prefix — {prefix_meta}")
+            parts.append(f"<strong>{fmt}</strong> sits on the {prefix} prefix, {prefix_meta}")
         else:
             parts.append(f"<strong>{fmt}</strong> is an available Etisalat {cat} VIP number.")
         if pat:
@@ -401,15 +401,15 @@ def tier_block(num, site):
     cat = num["category"]
     tier = TIER_PRICE[cat]
     if cat == "Silver":
-        copy = ("Silver numbers are issued on Etisalat's entry postpaid plan from AED 188/month — "
+        copy = ("Silver numbers are issued on Etisalat's entry postpaid plan from AED 188/month, "
                 "unlimited UAE data and 1,000 local minutes, with the number included. The SIM is "
                 "delivered the same day across Dubai, Abu Dhabi and Sharjah, or activated on eSIM where supported.")
     elif cat == "Gold":
-        copy = ("Gold numbers are issued on Etisalat's Gold postpaid plan from AED 500/month — "
+        copy = ("Gold numbers are issued on Etisalat's Gold postpaid plan from AED 500/month, "
                 "unlimited UAE data and 3,000 local minutes. The number is registered against your "
                 "Emirates ID at the point of sale.")
     else:
-        copy = ("Platinum numbers are issued on Etisalat's top postpaid plan at AED 1,000/month — "
+        copy = ("Platinum numbers are issued on Etisalat's top postpaid plan at AED 1,000/month, "
                 "unlimited UAE data and unlimited local calls. The number is registered against your "
                 "Emirates ID at the point of sale.")
     return tier, copy
@@ -420,34 +420,34 @@ def faq_for(num, info):
     qs = []
     qs.append((
         f"Is the Etisalat number {num['formatted']} still available?",
-        (f"Yes — at the time this page was last refreshed the number {num['formatted']} was listed as Available "
+        (f"Yes, at the time this page was last refreshed the number {num['formatted']} was listed as Available "
          f"in the Etisalat VIP catalogue. Inventory moves quickly, so we recommend confirming on WhatsApp before reserving."),
     ))
     if num["category"] == "Platinum":
         qs.append((
             f"What plan comes with Platinum number {num['formatted']}?",
-            ("This number is issued on Etisalat's top postpaid plan at AED 1,000/month — unlimited UAE data and "
+            ("This number is issued on Etisalat's top postpaid plan at AED 1,000/month, unlimited UAE data and "
              "unlimited local calls. It is a monthly postpaid plan, not a prepaid SIM or a one-time fee. "
              "Message us on WhatsApp for the live quote on this specific number."),
         ))
     elif num["category"] == "Gold":
         qs.append((
             f"What plan comes with Gold number {num['formatted']}?",
-            ("This number is issued on Etisalat's Gold postpaid plan at AED 500/month — unlimited UAE data and "
+            ("This number is issued on Etisalat's Gold postpaid plan at AED 500/month, unlimited UAE data and "
              "3,000 local minutes. It is a monthly postpaid plan, and the number is held under your Emirates ID."),
         ))
     else:
         qs.append((
             f"What plan comes with Silver number {num['formatted']}?",
-            ("This number is issued on Etisalat's entry postpaid plan from AED 188/month — unlimited UAE data and "
+            ("This number is issued on Etisalat's entry postpaid plan from AED 188/month, unlimited UAE data and "
              "1,000 local minutes. It is a monthly postpaid plan, and the SIM is delivered the same day."),
         ))
 
-    # Eligibility FAQ — honest framing of Etisalat's credit/visa policy (cuts wasted
+    # Eligibility FAQ, honest framing of Etisalat's credit/visa policy (cuts wasted
     # inquiries from buyers who can't be approved; aligns with the site-wide framing).
     qs.append((
         f"Who can get the Etisalat number {num['formatted']}?",
-        ("Etisalat postpaid plans are subject to Etisalat's own eligibility policy — a valid Emirates ID plus "
+        ("Etisalat postpaid plans are subject to Etisalat's own eligibility policy, a valid Emirates ID plus "
          "residency and salary criteria. Our specialist confirms your approval before the SIM is delivered, so "
          "it suits residents and businesses who can be activated on a postpaid line."),
     ))
@@ -456,7 +456,7 @@ def faq_for(num, info):
         if _variant(num["digits"], 2) == 0:
             qs.append((
                 f"What makes {num['formatted']} a VIP number?",
-                (f"It {info['patterns'][0]} — a pattern that is easy to remember and read out, which is why it sits in "
+                (f"It {info['patterns'][0]}, a pattern that is easy to remember and read out, which is why it sits in "
                  "the VIP pool rather than the standard range."),
             ))
         else:
@@ -612,7 +612,7 @@ def page_html(site, num, all_numbers):
 
     # ---- structured data --------------------------------------------------
     intro_text_plain = (
-        f"Etisalat {num['formatted']} — {num['category']} VIP number from {site['brand']}, "
+        f"Etisalat {num['formatted']}, {num['category']} VIP number from {site['brand']}, "
         f"authorized Etisalat dealer in the UAE."
     )
 
@@ -683,7 +683,7 @@ def page_html(site, num, all_numbers):
     title = (f"Etisalat {num['formatted']} | {num['category']} VIP Number UAE | "
              f"{tier['display']} | {site['brand']}")
     description = (
-        f"Buy Etisalat number {num['formatted']} — {num['category']} VIP from {tier['display']}{tier['unit']}. "
+        f"Buy Etisalat number {num['formatted']}, {num['category']} VIP from {tier['display']}{tier['unit']}. "
         f"Authorized Etisalat dealer in UAE with same-day SIM delivery in Dubai, Abu Dhabi & Sharjah. "
         f"Order on WhatsApp."
     )
@@ -827,7 +827,7 @@ def page_html(site, num, all_numbers):
         Ask on WhatsApp
       </a>
     </div>
-    <p class="eligibility">Issued on an Etisalat postpaid plan — approval follows Etisalat's eligibility policy (valid Emirates ID, residency &amp; salary criteria), confirmed by our specialist before delivery.</p>
+    <p class="eligibility">Issued on an Etisalat postpaid plan, approval follows Etisalat's eligibility policy (valid Emirates ID, residency &amp; salary criteria), confirmed by our specialist before delivery.</p>
   </header>
 
   {facts_html}
@@ -841,15 +841,15 @@ def page_html(site, num, all_numbers):
   <section class="section">
     <h2>What you get with the {num['category']} tier</h2>
     <p>{tier_copy}</p>
-    <p>The price shown above is the entry point for this tier — final pricing for an individual VIP number depends on pattern scarcity. Confirm the live quote for {html.escape(num['formatted'])} on WhatsApp before reserving.</p>
+    <p>The price shown above is the entry point for this tier, final pricing for an individual VIP number depends on pattern scarcity. Confirm the live quote for {html.escape(num['formatted'])} on WhatsApp before reserving.</p>
   </section>
 
   <section class="section">
     <h2>How to buy {html.escape(num['formatted'])}</h2>
     <ol class="steps">
-      <li><strong>Tap “Reserve {html.escape(num['formatted'])}”</strong> — the reservation form opens with this exact number already filled in.</li>
-      <li><strong>Share your Emirates ID</strong> — our specialist confirms Etisalat eligibility and reserves the number in your name, usually the same day.</li>
-      <li><strong>Same-day delivery</strong> — your SIM is hand-delivered across Dubai, Abu Dhabi and Sharjah, or activated on eSIM where supported.</li>
+      <li><strong>Tap “Reserve {html.escape(num['formatted'])}”</strong>, the reservation form opens with this exact number already filled in.</li>
+      <li><strong>Share your Emirates ID</strong>, our specialist confirms Etisalat eligibility and reserves the number in your name, usually the same day.</li>
+      <li><strong>Same-day delivery</strong>, your SIM is hand-delivered across Dubai, Abu Dhabi and Sharjah, or activated on eSIM where supported.</li>
     </ol>
     <div class="cta-row" style="margin-top:1rem">
       <a class="btn-reserve" href="{res_href}" data-cta="midpage_reserve">Reserve {html.escape(num['formatted'])}</a>
@@ -874,7 +874,7 @@ def page_html(site, num, all_numbers):
 
   <section class="section">
     <h2>Reserve {html.escape(num['formatted'])} now</h2>
-    <p>Inventory is shared with the live Etisalat dealer system — VIP numbers can be reserved by another buyer at any time. The fastest way to lock in {html.escape(num['formatted'])} is to reserve it online; our specialist then confirms eligibility and delivery.</p>
+    <p>Inventory is shared with the live Etisalat dealer system, VIP numbers can be reserved by another buyer at any time. The fastest way to lock in {html.escape(num['formatted'])} is to reserve it online; our specialist then confirms eligibility and delivery.</p>
     <div class="cta-row">
       <a class="btn-reserve" href="{res_href}" data-cta="footer_reserve">Reserve {html.escape(num['formatted'])}</a>
       <a class="btn-secondary" href="{wa_href}" target="_blank" rel="noopener noreferrer" data-cta="footer_wa">Ask on WhatsApp</a>
@@ -885,7 +885,7 @@ def page_html(site, num, all_numbers):
 
 <footer>
   <div class="container">
-    <p>&copy; {site['brand']} — Authorized Etisalat dealer in the UAE.<br>
+    <p>&copy; {site['brand']}, Authorized Etisalat dealer in the UAE.<br>
     <a href="/">Home</a> · <a href="/numbers/">All Numbers</a> · <a href="/choose-number/">Choose Number</a> · <a href="mailto:{site['support_email']}">{site['support_email']}</a></p>
   </div>
 </footer>
@@ -900,7 +900,7 @@ def page_html(site, num, all_numbers):
 
 
 # ===========================================================================
-# 4b. CATEGORY HUBS (/numbers/<slug>/) — quality-over-quantity indexing.
+# 4b. CATEGORY HUBS (/numbers/<slug>/), quality-over-quantity indexing.
 # Google declined to index 3k+ near-identical per-number pages (only ~100
 # indexed). The play: ~13 genuinely differentiated, rankable category pages
 # (tier / prefix / pattern), each targeting a real search query ("etisalat
@@ -921,13 +921,13 @@ def _hub_membership_defs():
     defs = [
         {"slug": "gold-numbers", "label": "Gold numbers",
          "h1": "Etisalat Gold Numbers UAE",
-         "intro": "Gold VIP numbers — strong patterns like repeating pairs, AABB blocks and round tails, free with the AED 500/month Etisalat postpaid plan. The most-searched VIP tier in the UAE."},
+         "intro": "Gold VIP numbers, strong patterns like repeating pairs, AABB blocks and round tails, free with the AED 500/month Etisalat postpaid plan. The most-searched VIP tier in the UAE."},
         {"slug": "silver-numbers", "label": "Silver numbers",
          "h1": "Etisalat Silver VIP Numbers UAE",
-         "intro": "Entry VIP tier — memorable Etisalat numbers free with the AED 188/month postpaid plan. The fastest-moving tier in our live inventory."},
+         "intro": "Entry VIP tier, memorable Etisalat numbers free with the AED 188/month postpaid plan. The fastest-moving tier in our live inventory."},
         {"slug": "platinum-numbers", "label": "Platinum numbers",
          "h1": "Etisalat Platinum Numbers UAE",
-         "intro": "Ultra-VIP Etisalat numbers — five- and six-identical-digit tails and signature patterns. AED 1,000 one-time with a postpaid plan; the status tier for business owners."},
+         "intro": "Ultra-VIP Etisalat numbers, five- and six-identical-digit tails and signature patterns. AED 1,000 one-time with a postpaid plan; the status tier for business owners."},
     ]
     tier_by_slug = {"gold-numbers": "Gold", "silver-numbers": "Silver", "platinum-numbers": "Platinum"}
     for d in defs:
@@ -942,23 +942,23 @@ def _hub_membership_defs():
     defs += [
         {"slug": "repeating-digit-numbers", "label": "Repeating digits",
          "h1": "Repeating-Digit Etisalat Numbers UAE",
-         "intro": "Numbers ending in 3–6 identical digits (777, 8888, 99999) — the most recognisable VIP pattern in the UAE.",
+         "intro": "Numbers ending in 3–6 identical digits (777, 8888, 99999), the most recognisable VIP pattern in the UAE.",
          "pred": lambda n, f: has(f, "identical", "repeating", "occurrences")},
         {"slug": "mirror-numbers", "label": "Mirror numbers",
          "h1": "Mirror & Palindrome Etisalat Numbers UAE",
-         "intro": "Numbers whose tails read the same forwards and backwards (52125, 7227) — subtle, memorable and rare.",
+         "intro": "Numbers whose tails read the same forwards and backwards (52125, 7227), subtle, memorable and rare.",
          "pred": lambda n, f: has(f, "palindrome")},
         {"slug": "round-numbers", "label": "Round numbers",
          "h1": "Round Etisalat Numbers Ending in 000",
-         "intro": "Numbers ending in consecutive zeros — the classic business signature (x000, x0000).",
+         "intro": "Numbers ending in consecutive zeros, the classic business signature (x000, x0000).",
          "pred": lambda n, f: f.get("trailing_zeros", 0) >= 3},
         {"slug": "sequence-numbers", "label": "Sequential numbers",
          "h1": "Sequential Etisalat Numbers (1234 / 4321)",
-         "intro": "Ascending and descending tails like 1234, 5678 and 4321 — clean, ordered, instantly memorable.",
+         "intro": "Ascending and descending tails like 1234, 5678 and 4321, clean, ordered, instantly memorable.",
          "pred": lambda n, f: has(f, "ascending", "descending")},
         {"slug": "786-numbers", "label": "786 numbers",
-         "h1": "786 Numbers UAE — Lucky Etisalat Numbers",
-         "intro": "Etisalat numbers containing 786 — the most requested lucky pattern in the UAE, available in Silver, Gold and Platinum tiers.",
+         "h1": "786 Numbers UAE, Lucky Etisalat Numbers",
+         "intro": "Etisalat numbers containing 786, the most requested lucky pattern in the UAE, available in Silver, Gold and Platinum tiers.",
          "pred": lambda n, f: "786" in n["digits"]},
     ]
     return defs
@@ -966,7 +966,7 @@ def _hub_membership_defs():
 
 def build_hubs(numbers):
     """Compute hubs + members (sorted best-pattern-first). Hubs with <3 members
-    are dropped — a near-empty category page is worse than none."""
+    are dropped, a near-empty category page is worse than none."""
     feats = {n["digits"]: analyze(n["digits"]) for n in numbers}
     hubs = []
     for d in _hub_membership_defs():
@@ -1032,9 +1032,9 @@ def hub_page_html(site, hub, hubs):
     shown = members[:HUB_MAX_CARDS]
     more = len(members) - len(shown)
     hub_url = f"{site['base_url']}/numbers/{hub['slug']}/"
-    title = f"{hub['h1']} — {len(members)} Available | {site['brand']}"
+    title = f"{hub['h1']}, {len(members)} Available | {site['brand']}"
     description = (f"{hub['intro']} {len(members)} available now from {site['brand']}, "
-                   f"authorized Etisalat dealer — same-day SIM delivery across the UAE.")
+                   f"authorized Etisalat dealer, same-day SIM delivery across the UAE.")
 
     cards = "".join(
         f'<a class="rcard" href="/numbers/{slug_for(n)}/">'
@@ -1043,7 +1043,7 @@ def hub_page_html(site, hub, hubs):
         f'</a>'
         for n in shown
     )
-    more_html = (f'<p style="margin-top:1rem;color:var(--muted)">+ {more} more in live inventory — '
+    more_html = (f'<p style="margin-top:1rem;color:var(--muted)">+ {more} more in live inventory, '
                  f'<a href="/choose-number/">browse the full picker</a>.</p>') if more > 0 else ""
 
     item_list = ",".join(
@@ -1105,7 +1105,7 @@ def hub_page_html(site, hub, hubs):
 
 <footer>
   <div class="container">
-    <p>&copy; {site['brand']} — Authorized Etisalat dealer in the UAE.<br>
+    <p>&copy; {site['brand']}, Authorized Etisalat dealer in the UAE.<br>
     <a href="/">Home</a> · <a href="/numbers/">All Numbers</a> · <a href="/choose-number/">Choose Number</a></p>
   </div>
 </footer>
@@ -1143,12 +1143,12 @@ def hub_index_html(site, numbers, hubs=None):
 
     title = f"All Etisalat VIP Numbers UAE | {len(numbers)} Available | {site['brand']}"
     description = (
-        f"Browse all {len(numbers)} available Etisalat VIP numbers in the UAE — "
+        f"Browse all {len(numbers)} available Etisalat VIP numbers in the UAE, "
         f"Silver, Gold and Platinum tiers from {site['brand']}, authorized Etisalat dealer. "
         f"Same-day SIM delivery in Dubai, Abu Dhabi and Sharjah."
     )
 
-    # NOTE: was `""" % css_vars` — a no-op with a dict and no %()s placeholders,
+    # NOTE: was `""" % css_vars`, a no-op with a dict and no %()s placeholders,
     # which shipped literal __bg__ vars to production. _hub_css does the replace.
     css = _hub_css(css_vars)
 
@@ -1197,7 +1197,7 @@ def hub_index_html(site, numbers, hubs=None):
 
 <header class="container hero">
   <h1>All Etisalat VIP Numbers</h1>
-  <p class="sub">Live inventory of every available Etisalat VIP number from {site['brand']} — sorted by tier. Each number has its own page with pattern detail, pricing and an instant WhatsApp inquiry button.</p>
+  <p class="sub">Live inventory of every available Etisalat VIP number from {site['brand']}, sorted by tier. Each number has its own page with pattern detail, pricing and an instant WhatsApp inquiry button.</p>
 </header>
 
 <main class="container">
@@ -1207,7 +1207,7 @@ def hub_index_html(site, numbers, hubs=None):
 
 <footer>
   <div class="container">
-    <p>&copy; {site['brand']} — Authorized Etisalat dealer in the UAE.<br>
+    <p>&copy; {site['brand']}, Authorized Etisalat dealer in the UAE.<br>
     <a href="/">Home</a> · <a href="/choose-number/">Choose Number</a></p>
   </div>
 </footer>
@@ -1240,7 +1240,7 @@ def write_sitemap_numbers(site, numbers, hubs=None):
         f.write(out)
     print(f"  wrote {path}  ({len(numbers)+1} URLs)")
 
-    # sitemap-index.xml — points to existing sitemap.xml AND sitemap-numbers.xml
+    # sitemap-index.xml, points to existing sitemap.xml AND sitemap-numbers.xml
     idx_lines = ['<?xml version="1.0" encoding="UTF-8"?>',
                  '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
                  f'  <sitemap><loc>{base}/sitemap.xml</loc></sitemap>',
@@ -1267,7 +1267,7 @@ def generate_for_site(site, numbers, additive=False, dry=False):
     CURRENT_HUBS = hubs
 
     # Per-number pages. In ADDITIVE mode we only write pages for NEW numbers
-    # (no existing /numbers/<slug>/ dir) — existing pages are never overwritten.
+    # (no existing /numbers/<slug>/ dir), existing pages are never overwritten.
     written = skipped = 0
     for num in numbers:
         slug = slug_for(num)
@@ -1321,13 +1321,13 @@ def main():
     for k, v in by_cat.most_common():
         print(f"     {k}: {v}")
     if not numbers:
-        print("No numbers fetched — aborting.")
+        print("No numbers fetched, aborting.")
         return 1
 
     for key in targets:
         site = SITES.get(key)
         if not site:
-            print(f"Unknown site key '{key}'  — valid: {list(SITES)}")
+            print(f"Unknown site key '{key}', valid: {list(SITES)}")
             continue
         generate_for_site(site, numbers, additive=additive, dry=dry)
     return 0

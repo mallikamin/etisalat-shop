@@ -325,7 +325,7 @@
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script>
 /* ========================================
-   CONFIG — Update SCRIPT_URL after deploying Apps Script
+   CONFIG, Update SCRIPT_URL after deploying Apps Script
    ======================================== */
 var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyH1KBC63S7yB3wSpHw-s5bZHH1Rwqta4Fsd6hIz8NCe0GqiaZZx13VdOsDALenWbqW/exec';
 var BASE_URL = 'https://goldennummbers.com/choose-number/?ref=';
@@ -425,7 +425,7 @@ function handleSubmit(e) {
     }
   })
   .catch(function(err) {
-    showError('Network error — check your connection');
+    showError('Network error, check your connection');
     resetButton();
   });
 
@@ -591,7 +591,7 @@ function escapeHtml(str) {
 }
 
 /* ========================================
-   PRINT BANNER — opens print-batch with this partner pre-selected
+   PRINT BANNER, opens print-batch with this partner pre-selected
    ======================================== */
 function printBanner() {
   var refCode = document.getElementById('qrRefBadge').textContent;

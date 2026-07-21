@@ -332,7 +332,7 @@ function renderPreview(partners) {
     status.innerHTML = 'No partners found for this filter';
     return;
   }
-  status.innerHTML = '<span class="count">' + partners.length + '</span> partner' + (partners.length > 1 ? 's' : '') + ' — select which to print';
+  status.innerHTML = '<span class="count">' + partners.length + '</span> partner' + (partners.length > 1 ? 's' : '') + ', select which to print';
 
   partners.forEach(function(p, idx) {
     var card = document.createElement('div');
@@ -344,7 +344,7 @@ function renderPreview(partners) {
     card.innerHTML =
       '<div class="p-company">' + escapeHtml(p.company_name || p.name) + '</div>' +
       '<div class="p-owner">' + escapeHtml(p.owner_name || '') + '</div>' +
-      '<div class="p-area">' + escapeHtml(p.area || '') + (p.address ? ' — ' + escapeHtml(p.address) : '') + '</div>' +
+      '<div class="p-area">' + escapeHtml(p.area || '') + (p.address ? ', ' + escapeHtml(p.address) : '') + '</div>' +
       '<div class="p-qr" id="' + qrId + '"></div>' +
       '<div class="p-ref">' + escapeHtml(p.ref_code) + '</div>' +
       '<div class="p-date">' + escapeHtml(p.date || '') + '</div>' +

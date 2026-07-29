@@ -1219,26 +1219,36 @@ def hub_index_html(site, numbers, hubs=None):
 # ===========================================================================
 # 6. SITEMAP
 # ===========================================================================
+TOP_N_SITEMAP = 100  # 2026-05-30 decision: only the top-scoring per-number pages
+# earn a sitemap slot. The full listing (thousands of near-dupe thin pages,
+# only 109/3,410 ever indexed) starves crawl budget on the money pages. This
+# cap lives in the generator itself (not a one-off script) because the first
+# prune was silently reverted twice by later runs of this same function.
+
+
 def write_sitemap_numbers(site, numbers, hubs=None):
-    """Write /sitemap-numbers.xml with one entry per number page + the hub
-    + the category hubs. Then write /sitemap-index.xml that points to both the
-    original sitemap.xml and sitemap-numbers.xml, so GSC sees a single
-    submission point."""
+    """Write /sitemap-numbers.xml with the hub + category hubs + only the
+    TOP_N_SITEMAP strongest-pattern number pages (not every deployed page).
+    Then write /sitemap-index.xml that points to both the original
+    sitemap.xml and sitemap-numbers.xml, so GSC sees a single submission
+    point."""
     proj = site["project_dir"]
     base = site["base_url"]
+    ranked = sorted(numbers, key=lambda n: -analyze(n["digits"]).get("score", 0))
+    top = ranked[:TOP_N_SITEMAP]
     lines = ['<?xml version="1.0" encoding="UTF-8"?>',
              '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     lines.append(f'  <url><loc>{base}/numbers/</loc><changefreq>daily</changefreq><priority>0.9</priority></url>')
     for h in (hubs or []):
         lines.append(f'  <url><loc>{base}/numbers/{h["slug"]}/</loc><changefreq>daily</changefreq><priority>0.85</priority></url>')
-    for n in numbers:
+    for n in top:
         lines.append(f'  <url><loc>{base}/numbers/{slug_for(n)}/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>')
     lines.append('</urlset>')
     out = "\n".join(lines)
     path = os.path.join(proj, "sitemap-numbers.xml")
     with open(path, "w", encoding="utf-8") as f:
         f.write(out)
-    print(f"  wrote {path}  ({len(numbers)+1} URLs)")
+    print(f"  wrote {path}  ({len(top)+1} URLs, capped from {len(numbers)} deployed)")
 
     # sitemap-index.xml, points to existing sitemap.xml AND sitemap-numbers.xml
     idx_lines = ['<?xml version="1.0" encoding="UTF-8"?>',

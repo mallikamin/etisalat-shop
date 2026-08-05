@@ -758,7 +758,7 @@ def page_html(site, num, all_numbers):
 <meta name="description" content="{html.escape(description)}">
 <meta name="keywords" content="{html.escape(keywords)}">
 <meta name="theme-color" content="{site['theme_color']}">
-<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta name="robots" content="noindex, follow">
 <meta name="author" content="{site['domain']}">
 <link rel="canonical" href="{page_url}">
 
@@ -1219,11 +1219,22 @@ def hub_index_html(site, numbers, hubs=None):
 # ===========================================================================
 # 6. SITEMAP
 # ===========================================================================
-TOP_N_SITEMAP = 100  # 2026-05-30 decision: only the top-scoring per-number pages
-# earn a sitemap slot. The full listing (thousands of near-dupe thin pages,
-# only 109/3,410 ever indexed) starves crawl budget on the money pages. This
-# cap lives in the generator itself (not a one-off script) because the first
-# prune was silently reverted twice by later runs of this same function.
+TOP_N_SITEMAP = 0  # 2026-08-05: was 100 (05-30 decision), now ZERO. Individual
+# number pages are noindexed as of 2026-08-05 (see page_html), and a noindexed
+# URL must never sit in a permanent sitemap — that is a contradictory signal.
+# Only /numbers/ + the category hubs earn a sitemap slot now.
+#
+# HISTORY, so nobody reverts this a third time:
+#   05-30  capped to 100 (of 3,410 deployed, only 109 were ever indexed)
+#   06-04  silently reverted to 3,066 by a later run of this same function
+#   06-17  grew to 3,691
+#   06-06..06-16  Google flipped ~4.2K thin pages from not-indexed to INDEXED
+#   07-20  sitewide organic de-serving began (impressions -95%, position intact)
+#   07-30  cap re-applied at 100, inside this function so runs cannot revert it
+#   08-05  cap set to 0 + pages noindexed; the thin corpus is being withdrawn
+#          from the index entirely. Temporary sitemap-numbers-removal.xml exists
+#          only to make Google recrawl them and SEE the noindex; delete it once
+#          GSC Page Indexing "Indexed" falls from 4.22K to ~90-190.
 
 
 def write_sitemap_numbers(site, numbers, hubs=None):

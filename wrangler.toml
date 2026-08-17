@@ -9,6 +9,13 @@ directory = "./"
 binding = "ASSETS"
 not_found_handling = "404-page"
 
+# Run worker.js BEFORE serving static assets. Without this, Cloudflare answers
+# "/" and every real page straight from the assets layer and the worker never
+# runs — so worker.js gates (the 2026-08-17 MAINTENANCE 503) had no effect at
+# all. Same reason postpaidplans.com sets it. Safe because worker.js ends in
+# `return env.ASSETS.fetch(request)`, so normal traffic is served identically.
+run_worker_first = true
+
 # TIKTOK_EVENTS_API_TOKEN and TIKTOK_PIXEL_ID are configured in the
 # Cloudflare dashboard under Settings -> Variables and Secrets, NOT here
 # (never commit secrets).

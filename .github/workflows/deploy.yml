@@ -23,3 +23,11 @@ jobs:
       - uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          # Pinned 2026-08-17. wrangler-action@v3 defaults to wrangler 3.90.0,
+          # which does NOT understand [assets] run_worker_first — it logs
+          # "Unexpected fields found in assets field" and SILENTLY IGNORES it,
+          # so worker.js never runs for real pages and any worker-level gate
+          # (e.g. MAINTENANCE mode) has no effect. Proven live: the 13:46 run
+          # deployed successfully while the site kept serving assets with 200.
+          # Keep this at 4.x so wrangler.toml is honoured as written.
+          wranglerVersion: "4.93.0"

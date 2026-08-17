@@ -500,8 +500,59 @@ async function handlePinterestOAuthCallback(request, env) {
   }});
 }
 
+// ── MAINTENANCE MODE ───────────────────────────────────────────────────────
+// Paused 2026-08-17 on the owner's instruction while the brands are reworked.
+// TO BRING THE SITE BACK: set MAINTENANCE = false and push to main — that runs
+// .github/workflows/deploy.yml, which deploys this Worker to Cloudflare.
+//
+// 503 + Retry-After is Google's documented signal for planned downtime: the
+// URLs stay indexed and crawling is retried later. A 404/410 would instead
+// tell Google the pages are gone. Deliberately NO "x-robots-tag: noindex"
+// here — that would de-index the very pages the 503 is protecting. The
+// response is uncacheable so the site returns the instant this flips back.
+const MAINTENANCE = true;
+const MAINTENANCE_RETRY_AFTER = 86400; // seconds (24h)
+
+function maintenanceResponse() {
+  const html = [
+    '<!doctype html><html lang="en"><head><meta charset="utf-8">',
+    '<meta name="viewport" content="width=device-width,initial-scale=1">',
+    '<title>Golden Numbers UAE — back shortly</title>',
+    '<style>',
+    ':root{color-scheme:light dark}',
+    '*{box-sizing:border-box}',
+    'body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;',
+    'font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;',
+    'background:#0d1117;color:#e6edf3}',
+    '.card{max-width:520px;text-align:center}',
+    'h1{font-size:clamp(22px,4vw,30px);margin:0 0 12px;letter-spacing:-.01em}',
+    'p{margin:0 0 20px;color:#9aa7b4}',
+    '.wa{display:inline-block;padding:12px 22px;border-radius:999px;background:#25d366;',
+    'color:#04150a;font-weight:600;text-decoration:none}',
+    '.wa:hover{filter:brightness(1.08)}',
+    '.sub{margin-top:26px;font-size:13px;color:#6b7683}',
+    '</style></head><body><div class="card">',
+    '<h1>We&rsquo;re temporarily offline for updates</h1>',
+    '<p>Golden Numbers UAE is being updated and will be back shortly.',
+    ' Premium Etisalat numbers are still available &mdash; message us directly.</p>',
+    '<a class="wa" href="https://wa.me/971569028087">WhatsApp +971 56 902 8087</a>',
+    '<div class="sub">Thank you for your patience.</div>',
+    '</div></body></html>',
+  ].join("");
+  return new Response(html, {
+    status: 503,
+    headers: {
+      "content-type": "text/html; charset=utf-8",
+      "retry-after": String(MAINTENANCE_RETRY_AFTER),
+      "cache-control": "no-store",
+    },
+  });
+}
+
 export default {
   async fetch(request, env) {
+    if (MAINTENANCE) return maintenanceResponse();
+
     const url = new URL(request.url);
 
     if (url.pathname === "/api/tiktok-event") {

@@ -19,7 +19,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          # 22, not 20: wrangler 4.x requires Node >= 22 and hard-fails on 20
+          # ("Wrangler requires at least Node.js v22.0.0"). Bumped 2026-08-17
+          # together with the wranglerVersion pin below.
+          node-version: '22'
       - uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}

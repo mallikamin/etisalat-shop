@@ -502,7 +502,9 @@ async function handlePinterestOAuthCallback(request, env) {
 
 // ── MAINTENANCE MODE ───────────────────────────────────────────────────────
 // Paused 2026-08-17 on the owner's instruction while the brands are reworked.
-// TO BRING THE SITE BACK: set MAINTENANCE = false and push to main — that runs
+// UNPAUSED 2026-08-30 on the owner's instruction — inventory is back on a new
+// master sheet (1duUVd…), so the site is live again.
+// TO PAUSE AGAIN: set MAINTENANCE = true and push to main — that runs
 // .github/workflows/deploy.yml, which deploys this Worker to Cloudflare.
 //
 // 503 + Retry-After is Google's documented signal for planned downtime: the
@@ -510,7 +512,7 @@ async function handlePinterestOAuthCallback(request, env) {
 // tell Google the pages are gone. Deliberately NO "x-robots-tag: noindex"
 // here — that would de-index the very pages the 503 is protecting. The
 // response is uncacheable so the site returns the instant this flips back.
-const MAINTENANCE = true;
+const MAINTENANCE = false;
 const MAINTENANCE_RETRY_AFTER = 86400; // seconds (24h)
 
 function maintenanceResponse() {

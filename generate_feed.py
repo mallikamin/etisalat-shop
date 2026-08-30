@@ -33,9 +33,9 @@ from PIL import Image, ImageDraw, ImageFont
 # ---- Config ---------------------------------------------------------------
 
 # Inventory sheet — same source the /choose-number/ pages + generate_number_pages.py consume.
-# 2026-07-13: master sheet re-issued (old 1YVz emptied). Single source.
+# 2026-08-30: master sheet re-issued again (1CoG5 IMPORTRANGE mirror died #REF!). Single source.
 SHEETS = [
-    {"id": "1CoG5IYOxKdeTlOqCYuntfXxOUlOFWlSX9AiDB1ZBBQs", "gid": "0"},
+    {"id": "1duUVd4qPiKOqAoeNQ6uNB3-zLm7DaeBFAGkeVLeGgtA", "gid": "0"},
 ]
 SITE_URL = "https://goldennummbers.com"
 ROOT = Path(__file__).resolve().parent
@@ -73,7 +73,8 @@ def fetch_sheet() -> list[dict]:
         with urllib.request.urlopen(req, timeout=30) as r:
             data = r.read().decode("utf-8-sig")
         for row in csv.DictReader(io.StringIO(data)):
-            msisdn = (row.get("MSISDN") or "").strip()
+            # 2026-08-30 sheet labels the column "MSDN".
+            msisdn = (row.get("MSISDN") or row.get("MSDN") or "").strip()
             if not msisdn:
                 # 2026-06-07: MSISDN column went mostly blank in the sheet (632 of
                 # 3,518 filled) which silently shrank the feed 3,293 -> 617. Derive

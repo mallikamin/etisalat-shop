@@ -37,8 +37,8 @@ except Exception:
 # Data source, same sheets both /choose-number/ pages consume
 # ---------------------------------------------------------------------------
 SHEETS = [
-    # 2026-07-13: master sheet re-issued (old 1YVz emptied). Single source.
-    {"id": "1CoG5IYOxKdeTlOqCYuntfXxOUlOFWlSX9AiDB1ZBBQs", "gid": "0"},
+    # 2026-08-30: master sheet re-issued again (1CoG5 IMPORTRANGE mirror died #REF!). Single source.
+    {"id": "1duUVd4qPiKOqAoeNQ6uNB3-zLm7DaeBFAGkeVLeGgtA", "gid": "0"},
 ]
 
 ACCEPTED_CATEGORIES = {"gold": "Gold", "silver": "Silver", "platinum": "Platinum"}
@@ -154,13 +154,19 @@ def parse_csv(text):
         return []
     header = [h.strip().lower() for h in rows[0]]
 
-    def idx(name, default):
-        return header.index(name) if name in header else default
+    def idx(names, default):
+        if isinstance(names, str):
+            names = [names]
+        for n in names:
+            if n in header:
+                return header.index(n)
+        return default
 
     i_cat   = idx("category", 1)
-    i_msi   = idx("msisdn", 2)
+    # 2026-08-30 sheet labels these "MSDN" / "Without 971".
+    i_msi   = idx(["msisdn", "msdn"], 2)
     i_with  = idx("with zero", 3)
-    i_no    = idx("without zero", 4)
+    i_no    = idx(["without zero", "without 971"], 4)
     i_stat  = idx("status", 5)
 
     out = []

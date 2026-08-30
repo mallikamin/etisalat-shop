@@ -490,7 +490,7 @@ a{color:inherit;text-decoration:none}
 
 /* ---- Inventory config (mirrors choose-number/index.html) ---- */
 var SHEETS=[
-  {id:'1CoG5IYOxKdeTlOqCYuntfXxOUlOFWlSX9AiDB1ZBBQs',gid:'0'}
+  {id:'1duUVd4qPiKOqAoeNQ6uNB3-zLm7DaeBFAGkeVLeGgtA',gid:'0'}
 ];
 function buildCsvUrls(sheet){
   var base='https://docs.google.com/spreadsheets/d/'+sheet.id;
@@ -500,7 +500,7 @@ function buildCsvUrls(sheet){
     base+'/gviz/tq?tqx=out:csv&headers=1'
   ];
 }
-var CACHE_KEY='gn_numbers_cache_v10'; // shared with choose-number (same schema; v10 2026-07-18: swap to public copy 1CoG5, orig 1CfIRlk went private/401)
+var CACHE_KEY='gn_numbers_cache_v11'; // shared with choose-number (same schema; v11 2026-08-30: new master sheet 1duUVd, the 1CoG5 mirror died #REF!)
 var CACHE_TTL=60*60*1000;
 var WA_NUMBER='971569028087';
 
@@ -515,8 +515,9 @@ function parseCSV(csv){
   var lines=csv.replace(/\r\n/g,'\n').replace(/\r/g,'\n').split('\n'),nums=[];
   if(lines.length<2)return nums;
   var header=parseCSVLine(lines[0]).map(function(h){return String(h||'').trim().toLowerCase();});
-  function col(n,f){var i=header.indexOf(n);return i!==-1?i:f;}
-  var iCat=col('category',1),iMs=col('msisdn',2),iWz=col('with zero',3),iWoz=col('without zero',4),iSt=col('status',5);
+  // Alias-aware, matches choose-number (2026-08-30 sheet labels them "MSDN" / "Without 971").
+  function col(n,f){if(typeof n==='string')n=[n];for(var k=0;k<n.length;k++){var i=header.indexOf(n[k]);if(i!==-1)return i;}return f;}
+  var iCat=col('category',1),iMs=col(['msisdn','msdn'],2),iWz=col('with zero',3),iWoz=col(['without zero','without 971'],4),iSt=col('status',5);
   for(var i=1;i<lines.length;i++){
     var line=lines[i].trim();if(!line)continue;
     var c=parseCSVLine(line);if(c.length<4)continue;

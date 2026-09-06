@@ -33,8 +33,12 @@
 > card → chat prefill with the right number, second card replaces the first seed, generated number pages,
 > full checkout (reserve → form → confirm, order summary intact with line breaks), both contact forms, Ref
 > generation, GA4 `generate_lead` + Meta `Contact` firing, one bubble per page, bubble clear of the sticky
-> bar, zero JS errors. Test kept at `_files/2026-09-06/verify_chat.py`; run with `GN_BASE` to point it at
-> local or live. Chrome extension still would not connect; Playwright is the working path on this machine.
+> bar, zero JS errors. **Stable: three consecutive prod runs, 30/30 each.** Test kept at
+> `_files/2026-09-06/verify_chat.py`; run with `GN_BASE` to point it at local or live. It stubs the
+> bilal-sales route (no test lead reaches the CRM) and Turnstile, and waits on `domcontentloaded` — against
+> prod `networkidle` never settles (GA/Meta/TikTok/Tawk hold sockets) and fails with a misleading `Page.goto`
+> timeout. Chrome extension still would not connect; **Playwright is the working path on this machine.**
+> **Resume detail: `_files/2026-09-06/RESUME_CHAT_MIGRATION.md`.**
 > **⚠ OPEN:**
 > (a) **Body copy and meta descriptions on the 4,259 `/numbers/` pages still say "Order on WhatsApp"** and
 > "your WhatsApp opens with this exact number" — Malik deferred this. The generator's prose is already

@@ -19,5 +19,6 @@ Thumbs.db
 # Project hygiene (per memory/project-context-folder-scaffold.md + memory/project-files-hygiene-archive.md)
 _context/CREDENTIALS.md
 _context/*.env
+_context/GOOGLE_ADS_RUNBOOK.md
 _files/
 _archive/

@@ -190,6 +190,33 @@
   // the pixel reports all 6 funnel steps TikTok optimizer expects. Same event_id
   // is used for the server-side CAPI call so TikTok dedupes the pair.
   // Returns the lead token so the caller can use it as eventID for pixel dedup.
+  //
+  // 2026-09-06: the same function now serves the in-site chat CTAs. Every WhatsApp
+  // link became <a href="#chat" data-gn-chat>, and this file matched only wa.me, so
+  // after that migration NOT ONE lead event fired anywhere on the site. The two
+  // differences for a chat CTA: the message lives in data-gn-msg rather than in a
+  // ?text= query string, and the Ref must NOT be appended to it (the visitor would
+  // see a machine code sitting in their own chat input). The Ref instead travels in
+  // the /api/chat/send payload, which chat.js reads back through GN.currentRef().
+  // The Ref code for whatever the visitor last acted on. chat.js reads this through
+  // GN.currentRef() when it opens a session, so a chat lead lands in the CRM with the
+  // same attribution a WhatsApp lead used to carry in its message text.
+  var _lastRefCode = '';
+
+  // Called by chat.js. If the visitor opened the chat bubble directly rather than
+  // through a CTA, there is no click to attribute, so build a page-level Ref on the
+  // spot — a lead with a page-level Ref beats the ref-less rows that already dominate D1.
+  // For scripted handoffs (a form submit that opens the chat itself, rather than a CTA click).
+  function setRef(code) { if (code) _lastRefCode = String(code); }
+
+  function currentRef() {
+    if (!_lastRefCode) {
+      try { _lastRefCode = buildRefCode(autoWaSource(null), createLeadTokenShort()); }
+      catch (e) { _lastRefCode = ''; }
+    }
+    return _lastRefCode;
+  }
+
   function deepLinkNumber() {
     try {
       var n = (new URLSearchParams(location.search).get('n') || '').replace(/[^0-9]/g, '');
@@ -214,22 +241,29 @@
 
     var leadToken = createLeadTokenShort();
     var source = sourceCtx || link.getAttribute('data-cta') || (link.textContent || '').trim().slice(0, 30);
+    _lastRefCode = buildRefCode(source, leadToken);
     try {
       var href = link.getAttribute('href') || '';
       var qIdx = href.indexOf('?text=');
+      var isWa = href.indexOf('wa.me') !== -1 || href.indexOf('api.whatsapp.com') !== -1;
       var base = qIdx >= 0 ? href.substring(0, qIdx) : href;
       var existing = qIdx >= 0
         ? decodeURIComponent(href.substring(qIdx + 6))
-        : 'Hi, I\'m interested in an Etisalat VIP number from goldennummbers.com';
+        : (link.getAttribute('data-gn-msg')
+           || 'Hi, I\'m interested in an Etisalat VIP number from goldennummbers.com');
       // 2026-06-08 fix: if the visitor came in on a specific number (?n= deep link) and this
-      // is a NON-card CTA, embed the number so it isn't lost on the WhatsApp handoff. Card
-      // CTAs already carry it in SOURCE=CARD<digits>. Skip if already present in the text.
+      // is a NON-card CTA, embed the number so it isn't lost on the handoff. Card CTAs already
+      // carry it in SOURCE=CARD<digits>. Skip if already present in the text.
       var pageNum = deepLinkNumber();
       if (pageNum && String(source || '').toUpperCase().indexOf('CARD') === -1 && existing.replace(/[^0-9]/g, '').indexOf(pageNum) === -1) {
         existing += '\n\nNumber: ' + formatUaeNum(pageNum);
       }
-      var tracked = existing + '\n\nRef: ' + buildRefCode(source, leadToken);
-      link.setAttribute('href', base + '?text=' + encodeURIComponent(tracked));
+      if (isWa) {
+        link.setAttribute('href', base + '?text=' + encodeURIComponent(existing + '\n\nRef: ' + _lastRefCode));
+      } else {
+        // Chat CTA: the visitor sees only the human sentence. The Ref rides in the API call.
+        link.setAttribute('data-gn-msg', existing);
+      }
     } catch (e) {}
 
     var valueProps = {
@@ -421,6 +455,8 @@
     setUserIdentity: setUserIdentity,
     getTrafficSource: getTrafficSource,
     buildRefCode: buildRefCode,
+    currentRef: currentRef,
+    setRef: setRef,
     rewriteWaHref: rewriteWaHref,
     forwardToTikTokCapi: forwardToTikTokCapi,
     VALUE: PIXEL_VALUE,
@@ -462,7 +498,7 @@
   // AddToCart/InitiateCheckout/Contact trio, so wiring at load would emit one
   // fake funnel event per wa.me link per pageview.
   function autoWaSource(link) {
-    var explicit = link.getAttribute('data-cta');
+    var explicit = link && link.getAttribute('data-cta');
     if (explicit) return explicit;
     var path = (typeof location !== 'undefined' && location.pathname) || '';
     // /numbers/etisalat-0501528338/ -> CARD0501528338, so the MSISDN survives the
@@ -476,7 +512,7 @@
   function onWaClick(ev) {
     var t = ev && ev.target;
     if (!t || typeof t.closest !== 'function') return;
-    var link = t.closest('a[href*="wa.me"]');
+    var link = t.closest('a[href*="wa.me"], a[href*="api.whatsapp.com"], a[data-gn-chat]');
     if (!link) return;
     // Synchronous: the href is rewritten before the browser follows the link
     // (same pattern index.html already proves works). Fires only on a real
@@ -489,7 +525,11 @@
     // auxclick = middle-click / open-in-new-tab.
     // A page with its own handler (index.html) is harmless: the data-gn-token
     // guard in rewriteWaHref makes the second call a no-op returning the same token.
-    document.addEventListener('click', onWaClick);
-    document.addEventListener('auxclick', onWaClick);
+    //
+    // CAPTURE phase, and registered before chat.js loads its own capture listener, so
+    // the Ref exists by the time the chat widget reads it — and so a future
+    // stopPropagation in any handler downstream cannot silently delete attribution.
+    document.addEventListener('click', onWaClick, true);
+    document.addEventListener('auxclick', onWaClick, true);
   }
 })();

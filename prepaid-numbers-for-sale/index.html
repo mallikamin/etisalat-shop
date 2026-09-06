@@ -234,7 +234,7 @@ footer a{color:var(--text-muted)}footer a:hover{color:var(--gold)}
       <a href="/sell-your-number/">Sell a Number</a>
       <a href="/blog/">Blog</a>
     </div>
-    <p>&copy; 2026 goldennummbers.com, Authorized Etisalat by e& dealer in UAE. WhatsApp <a href="https://wa.me/971569028087">+971 56 902 8087</a></p>
+    <p>&copy; 2026 goldennummbers.com, Authorized Etisalat by e& dealer in UAE. WhatsApp <a href="#chat" data-gn-chat>+971 56 902 8087</a></p>
   </div>
 </footer>
 
@@ -304,7 +304,7 @@ footer a{color:var(--text-muted)}footer a:hover{color:var(--gold)}
     countEl.textContent=ALL.length?(list.length+' of '+ALL.length+' shown'):'';
   }
   function renderListings(list){
-    if(!ALL.length){grid.innerHTML='<div class="gallery-state">No numbers listed yet, <a href="/sell-your-number/#sell-form">list yours</a>, or <a href="https://wa.me/'+WA_NUMBER+'?text=Hi%2C%20I%27m%20looking%20to%20buy%20a%20prepaid%20number." target="_blank" rel="noopener">tell us what you want on WhatsApp</a>. Verified listings appear here.</div>';return;}
+    if(!ALL.length){grid.innerHTML='<div class="gallery-state">No numbers listed yet, <a href="/sell-your-number/#sell-form">list yours</a>, or <a href="#chat" data-gn-chat>tell us what you want in chat</a>. Verified listings appear here.</div>';return;}
     if(!list.length){grid.innerHTML='<div class="gallery-state">No listings match this filter. <a href="#" id="clearFilters">Clear filters</a>.</div>';var c=document.getElementById('clearFilters');if(c)c.addEventListener('click',function(e){e.preventDefault();FILT={operator:'',prefix:'',sort:FILT.sort};document.getElementById('fOperator').value='';document.querySelectorAll('.prefix-chip').forEach(function(x){x.classList.toggle('active',x.dataset.p==='');});applyFilters();});return;}
     grid.innerHTML=list.map(function(r){
       var price=(r.asking_price!=null)?('AED '+r.asking_price):'Best offer';
@@ -314,7 +314,7 @@ footer a{color:var(--text-muted)}footer a:hover{color:var(--gold)}
         +'<button class="btn btn-gold buy-btn" data-id="'+esc(r.id)+'" data-num="'+esc(r.number||r.masked_number||'')+'" data-op="'+esc(r.operator||'')+'" data-price="'+(r.asking_price!=null?esc(r.asking_price):'')+'">I\'m interested</button></div>';
     }).join('');
   }
-  function loadListings(){fetch(CRM_API+'/api/prepaid-listings').then(function(r){return r.json();}).then(function(d){ALL=(d&&d.listings)||[];applyFilters();}).catch(function(){grid.innerHTML='<div class="gallery-state">Couldn\'t load listings right now. <a href="https://wa.me/'+WA_NUMBER+'?text=Hi%2C%20I%27m%20looking%20to%20buy%20a%20prepaid%20number." target="_blank" rel="noopener">Message us on WhatsApp</a>.</div>';});}
+  function loadListings(){fetch(CRM_API+'/api/prepaid-listings').then(function(r){return r.json();}).then(function(d){ALL=(d&&d.listings)||[];applyFilters();}).catch(function(){grid.innerHTML='<div class="gallery-state">Couldn\'t load listings right now. <a href="#chat" data-gn-chat>Chat with us</a>.</div>';});}
   loadListings();
 
   document.getElementById('fOperator').addEventListener('change',function(){FILT.operator=this.value;applyFilters();});
@@ -360,5 +360,6 @@ footer a{color:var(--text-muted)}footer a:hover{color:var(--gold)}
 })();
 </script>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoad" async defer></script>
+<script defer src="/assets/chat.js"></script>
 </body>
 </html>

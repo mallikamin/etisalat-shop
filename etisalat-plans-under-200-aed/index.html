@@ -157,7 +157,7 @@ footer a:hover{color:var(--gold)}
     <h1><span>Etisalat Plans Under AED 200</span> per Month (UAE 2026)</h1>
     <p class="lead">Etisalat postpaid plans under AED 200/month: Freedom Plan 250 Local (AED 188), Freedom Plan 250 Flexi (AED 188), New Freedom Plan 260 Flexi (AED 195). All include unlimited 3Mbps data, 1,000-1,200 minutes, free Silver VIP number. Compare features and pick.</p>
     <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
-      <a href="https://wa.me/971569028087?text=Hi%2C%20I%20want%20to%20reserve%20a%20number%20from%20goldennummbers.com" class="btn btn-gold" target="_blank" rel="noopener noreferrer">WhatsApp Us</a>
+      <a class="btn btn-gold" href="#chat" data-gn-chat>Chat with us</a>
       <a href="/#plans" class="btn btn-outline">Browse All Plans</a>
     </div>
   </div>
@@ -275,7 +275,7 @@ footer a:hover{color:var(--gold)}
     <h2>Ready to order?</h2>
     <p>Free same-day SIM delivery across Dubai, Abu Dhabi, Sharjah. WhatsApp support 9 AM - 9 PM.</p>
     <br>
-    <a href="https://wa.me/971569028087?text=Hi%2C%20I%20want%20to%20reserve%20a%20number%20from%20goldennummbers.com" class="btn btn-gold" target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a>
+    <a class="btn btn-gold" href="#chat" data-gn-chat>Chat with us</a>
   </div>
 </section>
 
@@ -291,7 +291,7 @@ footer a:hover{color:var(--gold)}
       <a href="/sharjah/">Sharjah</a>
       <a href="/privacy/">Privacy</a>
     </div>
-    <p>&copy; 2026 goldennummbers.com, Authorized Etisalat by e& dealer in UAE. WhatsApp <a href="https://wa.me/971569028087?text=Hi%2C%20I%20want%20to%20reserve%20a%20number%20from%20goldennummbers.com">+971 56 902 8087</a></p>
+    <p>&copy; 2026 goldennummbers.com, Authorized Etisalat by e& dealer in UAE. WhatsApp <a href="#chat" data-gn-chat>+971 56 902 8087</a></p>
   </div>
 </footer>
 
@@ -302,5 +302,6 @@ document.addEventListener('click', function(e) {
   if (link && window.GN) window.GN.trackWhatsAppClick(link.textContent.trim().substring(0,50), location.pathname);
 });
 </script>
+<script defer src="/assets/chat.js"></script>
 </body>
 </html>

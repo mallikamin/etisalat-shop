@@ -427,14 +427,14 @@ def faq_for(num, info):
     qs.append((
         f"Is the Etisalat number {num['formatted']} still available?",
         (f"Yes, at the time this page was last refreshed the number {num['formatted']} was listed as Available "
-         f"in the Etisalat VIP catalogue. Inventory moves quickly, so we recommend confirming on WhatsApp before reserving."),
+         f"in the Etisalat VIP catalogue. Inventory moves quickly, so we recommend confirming with us on chat before reserving."),
     ))
     if num["category"] == "Platinum":
         qs.append((
             f"What plan comes with Platinum number {num['formatted']}?",
             ("This number is issued on Etisalat's top postpaid plan at AED 1,000/month, unlimited UAE data and "
              "unlimited local calls. It is a monthly postpaid plan, not a prepaid SIM or a one-time fee. "
-             "Message us on WhatsApp for the live quote on this specific number."),
+             "Message us on chat for the live quote on this specific number."),
         ))
     elif num["category"] == "Gold":
         qs.append((
@@ -601,6 +601,9 @@ def page_html(site, num, all_numbers):
   .sticky-cta .meta strong{color:var(--gold);font-family:'Playfair Display',serif;font-size:1.05rem;
                             font-variant-numeric:tabular-nums;letter-spacing:0.04em;display:block}
   .sticky-cta .btn-primary{padding:0.7rem 1.1rem;font-size:0.95rem}
+  /* The chat widget reads --gnc-bottom to place its bubble. Without this it overlaps
+     the sticky contact bar above, which is fixed at bottom:0 across the full width. */
+  :root{--gnc-bottom:80px}
 
   /* footer */
   footer{padding:2.5rem 0 4.5rem;border-top:1px solid var(--border);margin-top:2rem;color:var(--muted);font-size:0.9rem;text-align:center}
@@ -811,7 +814,7 @@ def page_html(site, num, all_numbers):
     <div class="nav-links">
       <a href="/numbers/">All Numbers</a>
       <a href="/choose-number/">Browse</a>
-      <a class="btn-contact" href="{wa_href}" target="_blank" rel="noopener">Contact Now</a>
+      <a class="btn-contact" href="#chat" data-gn-chat data-cta="nav_chat" data-gn-msg="{html.escape(wa_msg)}">Chat with us</a>
     </div>
   </div>
 </nav>
@@ -828,9 +831,9 @@ def page_html(site, num, all_numbers):
     <div class="price">{tier['display']}<small>{tier['unit']}</small></div>
     <div class="cta-row">
       <a class="btn-reserve" href="{res_href}" data-cta="hero_reserve">Reserve {html.escape(num['formatted'])}</a>
-      <a class="btn-primary" href="{wa_href}" target="_blank" rel="noopener noreferrer" data-cta="hero_wa">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        Ask on WhatsApp
+      <a class="btn-primary" href="#chat" data-gn-chat data-cta="hero_chat" data-gn-msg="{html.escape(wa_msg)}">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4a2 2 0 00-2 2v18l4-4h14a2 2 0 002-2V4a2 2 0 00-2-2zm-3 11H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+        Chat with us
       </a>
     </div>
     <p class="eligibility">Issued on an Etisalat postpaid plan, approval follows Etisalat's eligibility policy (valid Emirates ID, residency &amp; salary criteria), confirmed by our specialist before delivery.</p>
@@ -847,7 +850,7 @@ def page_html(site, num, all_numbers):
   <section class="section">
     <h2>What you get with the {num['category']} tier</h2>
     <p>{tier_copy}</p>
-    <p>The price shown above is the entry point for this tier, final pricing for an individual VIP number depends on pattern scarcity. Confirm the live quote for {html.escape(num['formatted'])} on WhatsApp before reserving.</p>
+    <p>The price shown above is the entry point for this tier, final pricing for an individual VIP number depends on pattern scarcity. Confirm the live quote for {html.escape(num['formatted'])} on chat before reserving.</p>
   </section>
 
   <section class="section">
@@ -859,7 +862,7 @@ def page_html(site, num, all_numbers):
     </ol>
     <div class="cta-row" style="margin-top:1rem">
       <a class="btn-reserve" href="{res_href}" data-cta="midpage_reserve">Reserve {html.escape(num['formatted'])}</a>
-      <a class="btn-secondary" href="{wa_href}" target="_blank" rel="noopener noreferrer" data-cta="midpage_wa">Ask on WhatsApp</a>
+      <a class="btn-secondary" href="#chat" data-gn-chat data-cta="midpage_chat" data-gn-msg="{html.escape(wa_msg)}">Chat with us</a>
     </div>
   </section>
 
@@ -883,7 +886,7 @@ def page_html(site, num, all_numbers):
     <p>Inventory is shared with the live Etisalat dealer system, VIP numbers can be reserved by another buyer at any time. The fastest way to lock in {html.escape(num['formatted'])} is to reserve it online; our specialist then confirms eligibility and delivery.</p>
     <div class="cta-row">
       <a class="btn-reserve" href="{res_href}" data-cta="footer_reserve">Reserve {html.escape(num['formatted'])}</a>
-      <a class="btn-secondary" href="{wa_href}" target="_blank" rel="noopener noreferrer" data-cta="footer_wa">Ask on WhatsApp</a>
+      <a class="btn-secondary" href="#chat" data-gn-chat data-cta="footer_chat" data-gn-msg="{html.escape(wa_msg)}">Chat with us</a>
       <a class="btn-secondary" href="/choose-number/">Browse more numbers</a>
     </div>
   </section>
@@ -901,6 +904,7 @@ def page_html(site, num, all_numbers):
   <a class="btn-reserve" href="{res_href}" data-cta="sticky_reserve">Reserve</a>
 </div>
 
+<script defer src="/assets/chat.js"></script>
 </body>
 </html>"""
 
@@ -1091,7 +1095,7 @@ def hub_page_html(site, hub, hubs):
     <div class="nav-links">
       <a href="/numbers/">All Numbers</a>
       <a href="/choose-number/">Browse</a>
-      <a class="btn-contact" href="{wa_href}" target="_blank" rel="noopener">Contact Now</a>
+      <a class="btn-contact" href="#chat" data-gn-chat data-cta="nav_chat" data-gn-msg="{html.escape(wa_msg)}">Chat with us</a>
     </div>
   </div>
 </nav>
@@ -1116,6 +1120,7 @@ def hub_page_html(site, hub, hubs):
   </div>
 </footer>
 
+<script defer src="/assets/chat.js"></script>
 </body>
 </html>"""
 
@@ -1196,14 +1201,14 @@ def hub_index_html(site, numbers, hubs=None):
     <a class="logo" href="/">{site['brand']}</a>
     <div class="nav-links">
       <a href="/choose-number/">Browse</a>
-      <a class="btn-contact" href="{wa_href}" target="_blank" rel="noopener">Contact Now</a>
+      <a class="btn-contact" href="#chat" data-gn-chat data-cta="nav_chat" data-gn-msg="{html.escape(wa_msg)}">Chat with us</a>
     </div>
   </div>
 </nav>
 
 <header class="container hero">
   <h1>All Etisalat VIP Numbers</h1>
-  <p class="sub">Live inventory of every available Etisalat VIP number from {site['brand']}, sorted by tier. Each number has its own page with pattern detail, pricing and an instant WhatsApp inquiry button.</p>
+  <p class="sub">Live inventory of every available Etisalat VIP number from {site['brand']}, sorted by tier. Each number has its own page with pattern detail, pricing and an instant chat inquiry button.</p>
 </header>
 
 <main class="container">
@@ -1218,6 +1223,7 @@ def hub_index_html(site, numbers, hubs=None):
   </div>
 </footer>
 
+<script defer src="/assets/chat.js"></script>
 </body>
 </html>"""
 

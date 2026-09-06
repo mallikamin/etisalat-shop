@@ -132,7 +132,7 @@ footer a:hover{color:var(--gold)}
     <h1>Premium <span>eSIM Numbers</span></h1>
     <p class="lead">Get a premium VIP Etisalat number, Silver, Gold or Platinum, delivered as an eSIM with no plastic SIM. Choose a memorable pattern, pair it with a plan, and activate it in the e& UAE app.</p>
     <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
-      <a href="https://wa.me/971569028087?text=Hi%2C%20I%20want%20a%20premium%20VIP%20Etisalat%20number%20as%20an%20eSIM.%20My%20phone%20is%3A%20" class="btn btn-gold" target="_blank" rel="noopener noreferrer">Talk to a LIVE Etisalat Specialist NOW</a>
+      <a class="btn btn-gold" href="#chat" data-gn-chat>Talk to a LIVE Etisalat Specialist NOW</a>
       <a href="/choose-number/" class="btn btn-outline">Browse VIP Numbers</a>
     </div>
   </div>
@@ -177,7 +177,7 @@ footer a:hover{color:var(--gold)}
     <h2>Get your Etisalat eSIM today</h2>
     <p>Free same-day SIM and eSIM setup across Dubai, Abu Dhabi and Sharjah. WhatsApp support 9 AM to 9 PM.</p>
     <br>
-    <a href="https://wa.me/971569028087?text=Hi%2C%20I%20want%20a%20premium%20VIP%20Etisalat%20number%20as%20an%20eSIM.%20My%20phone%20is%3A%20" class="btn btn-gold" target="_blank" rel="noopener noreferrer">Talk to a LIVE Etisalat Specialist NOW</a>
+    <a class="btn btn-gold" href="#chat" data-gn-chat>Talk to a LIVE Etisalat Specialist NOW</a>
   </div>
 </section>
 
@@ -193,7 +193,7 @@ footer a:hover{color:var(--gold)}
       <a href="/sharjah/">Sharjah</a>
       <a href="/privacy/">Privacy</a>
     </div>
-    <p>&copy; 2026 goldennummbers.com, Authorized Etisalat by e& dealer in UAE. WhatsApp <a href="https://wa.me/971569028087">+971 56 902 8087</a></p>
+    <p>&copy; 2026 goldennummbers.com, Authorized Etisalat by e& dealer in UAE. WhatsApp <a href="#chat" data-gn-chat>+971 56 902 8087</a></p>
   </div>
 </footer>
 
@@ -204,5 +204,6 @@ document.addEventListener('click', function(e) {
   if (link && window.GN) window.GN.trackWhatsAppClick(link.textContent.trim().substring(0,50), location.pathname);
 });
 </script>
+<script defer src="/assets/chat.js"></script>
 </body>
 </html>

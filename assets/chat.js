@@ -10,9 +10,17 @@
  *      and a missed one would silently keep sending customers to WhatsApp. Behaviour is correct
  *      the moment this script loads, even where the button still says "WhatsApp".
  *
+ * THE GATE (2026-09-07): name + UAE mobile are collected BEFORE the first message. Measured on
+ * production, the two days before this shipped produced 6 chats, 0 phone numbers and 0 CRM leads —
+ * one of them a 51-message conversation. Contact details were previously asked for only by the
+ * callback form below, which was never shown up front, whose 3-minute timer died with the tab, and
+ * which ANY agent reply switched off for good (`answered`). Answering the customer was the thing
+ * that stopped us asking for their number. The gate is enforced server-side too: /api/chat/send
+ * returns 428 for a message with no session, and only /api/chat/start makes one.
+ *
  * D1 DISCIPLINE (the worker's budget depends on this file behaving):
- *   - No network call on page load. None. The greeting is local; a session row is only created
- *     when the visitor actually sends a message.
+ *   - No network call on page load. None. The greeting is local; the session row and the CRM lead
+ *     are created by the gate submit, which is a deliberate visitor action.
  *   - Polling runs ONLY while the panel is open AND the tab is visible.
  *   - Cadence backs off 4s -> 15s -> 60s as the chat goes quiet, and STOPS after 15 minutes.
  *     A tab left open overnight costs nothing.
@@ -29,6 +37,7 @@
   var LS_TOKEN = 'gn_chat_token';
   var LS_SEEN = 'gn_chat_seen_id';
   var LS_LOG = 'gn_chat_log';
+  var LS_ME = 'gn_chat_me';        // {name, phone} — so a returning visitor never fills the gate twice
 
   // Poll cadence. Index into these by how long the chat has been quiet.
   var FAST_MS = 4000, MED_MS = 15000, SLOW_MS = 60000, CLOSED_MS = 20000;
@@ -45,7 +54,10 @@
     cbPhone: 'رقمك (الإمارات)', cbTime: 'أفضل وقت للاتصال', cbSend: 'اطلب مكالمة',
     cbDone: '✅ شكراً لك. سيتصل بك المختص في الوقت المحدد.',
     slots: { now: '📞 اتصلوا بي الآن', '9am-1pm': '٩ ص – ١ م', '1pm-5pm': '١ م – ٥ م', '5pm-9pm': '٥ م – ٩ م' },
-    err: 'تعذر الإرسال. حاول مرة أخرى.', offline: 'اترك رقمك وسنتصل بك.'
+    err: 'تعذر الإرسال. حاول مرة أخرى.', offline: 'اترك رقمك وسنتصل بك.',
+    gTitle: 'قبل أن نبدأ', gLead: 'اسمك ورقمك حتى يتمكن المختص من متابعتك إذا انقطع الاتصال.',
+    gName: 'اسمك', gPhone: 'رقمك (الإمارات)', gGo: 'ابدأ المحادثة',
+    gOff: '✅ شكراً لك. سيتصل بك المختص قريباً.'
   } : {
     title: 'Live support', sub: 'We reply right here',
     greet: 'Hi 👋 Ask about any number or plan — we answer you right here.',
@@ -54,23 +66,38 @@
     cbPhone: 'Your UAE mobile number', cbTime: 'Best time to call', cbSend: 'Request a call',
     cbDone: '✅ Thank you. Our specialist will call you at your chosen time.',
     slots: { now: '📞 Call me now', '9am-1pm': '9 AM – 1 PM', '1pm-5pm': '1 PM – 5 PM', '5pm-9pm': '5 PM – 9 PM' },
-    err: 'Could not send. Please try again.', offline: 'Leave your number and we will call you.'
+    err: 'Could not send. Please try again.', offline: 'Leave your number and we will call you.',
+    gTitle: 'Before we start', gLead: 'Your name and number, so our specialist can follow up if we get cut off.',
+    gName: 'Your name', gPhone: 'Your UAE mobile number', gGo: 'Start chat',
+    gOff: '✅ Thank you. Our specialist will call you shortly.'
   };
 
   var token = null, lastId = 0, open = false, timer = null, log = [], unread = 0;
   var firstSentAt = 0, lastActivityAt = Date.now(), answered = false, cbShown = false, cbDone = false;
   var lastSeed = '';   // the last CTA-supplied prefill, so a newer CTA may replace it
+  var me = null;       // {name, phone} once the gate is done — also fills the callback form
+  var gateEl = null, starting = false;
+  var pendingSend = '';   // a message the gate interrupted; sent as soon as the gate is answered
 
   try { token = localStorage.getItem(LS_TOKEN) || null; } catch (e) {}
   try { lastId = parseInt(localStorage.getItem(LS_SEEN) || '0', 10) || 0; } catch (e) {}
   try { log = JSON.parse(localStorage.getItem(LS_LOG) || '[]') || []; } catch (e) { log = []; }
+  try { me = JSON.parse(localStorage.getItem(LS_ME) || 'null'); } catch (e) { me = null; }
 
   function save() {
     try {
       if (token) localStorage.setItem(LS_TOKEN, token);
       localStorage.setItem(LS_SEEN, String(lastId));
       localStorage.setItem(LS_LOG, JSON.stringify(log.slice(-40)));
+      if (me) localStorage.setItem(LS_ME, JSON.stringify(me));
     } catch (e) {}
+  }
+
+  // The one phone rule, matching the worker's chatUaePhone(). Kept identical on purpose: a number
+  // the widget accepts and the server rejects would show the visitor a dead button.
+  function uaeDigits(v) {
+    var d = (v || '').replace(/\D/g, '');
+    return /^(?:00971|971|0)?5\d{8}$/.test(d) ? d : null;
   }
 
   // The GN attribution token that assets/tracking.js builds, when that script is present.
@@ -130,7 +157,7 @@
   var styleEl = document.createElement('style');
   styleEl.textContent = css;
 
-  var btn, wrap, bodyEl, inputEl, cbEl;
+  var btn, wrap, bodyEl, inputEl, cbEl, ftEl;
 
   function el(tag, cls, html) {
     var d = document.createElement(tag);
@@ -181,6 +208,7 @@
     sb.addEventListener('click', send);
     ft.appendChild(inputEl);
     ft.appendChild(sb);
+    ftEl = ft;
 
     wrap.appendChild(hd);
     wrap.appendChild(bodyEl);
@@ -190,6 +218,92 @@
 
     if (!log.length) push('them', T.greet, true);
     else log.forEach(function (m) { render(m.role, m.body); });
+
+    // The composer is not shown until we know who we are talking to. `me` is written ONLY by a
+    // completed gate, so "has a session but no me" is exactly the visitor who was already chatting
+    // when the gate shipped — they get asked too, instead of staying anonymous forever. The server
+    // enforces the same rule (`contact required`), so this is convenience, not the guard.
+    if (!token || !me) showGate();
+  }
+
+  // ---- the gate -----------------------------------------------------------
+  // Name + UAE mobile, before the composer exists. See the note at the top of this file for why.
+  function showGate() {
+    // Idempotency ONLY. This guard used to also return when a token existed, which silently made
+    // the gate unreachable for exactly the people it was added for: someone already holding a
+    // session but with no details on file. Whether to ask is the caller's decision — build() asks
+    // when details are missing, and the send path asks when the server says `contact required`.
+    if (gateEl) return;
+    if (ftEl) ftEl.style.display = 'none';
+    gateEl = el('div', 'gnc-cb');
+    gateEl.appendChild(el('b', null, T.gTitle));
+    gateEl.appendChild(el('p', null, T.gLead));
+
+    var nm = document.createElement('input');
+    nm.type = 'text'; nm.placeholder = T.gName; nm.setAttribute('aria-label', T.gName);
+    nm.autocomplete = 'name';
+    var ph = document.createElement('input');
+    ph.type = 'tel'; ph.placeholder = T.gPhone; ph.setAttribute('aria-label', T.gPhone);
+    ph.autocomplete = 'tel';
+    if (me) { nm.value = me.name || ''; ph.value = me.phone || ''; }
+    var go = el('button', null, T.gGo);
+    go.type = 'button';
+
+    function submit() {
+      var name = (nm.value || '').trim();
+      var digits = uaeDigits(ph.value);
+      nm.style.borderColor = name.length >= 2 ? '#d7dade' : '#c00';
+      ph.style.borderColor = digits ? '#d7dade' : '#c00';
+      if (name.length < 2) { nm.focus(); return; }
+      if (!digits) { ph.focus(); return; }
+      if (starting) return;
+      starting = true;
+      go.disabled = true;
+      post('/api/chat/start', {
+        // Send the token we already hold, if any. The server attaches the details to THAT
+        // conversation instead of opening a second one, so an in-flight chat keeps its history.
+        token: token, name: name, phone: digits, ref: ref(),
+        page_url: location.pathname.slice(0, 300), company: '',
+      }).then(function (r) {
+        starting = false;
+        if (r.status === 200 && r.json && r.json.token) {
+          me = { name: name, phone: digits };
+          token = r.json.token;
+          save();
+          hideGate();
+          schedule();
+          // A message they had already typed and pressed Send on, before we interrupted to ask.
+          // It is already on screen, so post it without echoing it a second time.
+          if (pendingSend) { var q = pendingSend; pendingSend = ''; postMessage(q); }
+        } else if (r.status === 200 && r.json && r.json.chat_off) {
+          // Captured, but there is nobody to talk to. The lead is already in the CRM.
+          me = { name: name, phone: digits };
+          save();
+          hideGate(true);
+          push('system', T.gOff);
+        } else {
+          go.disabled = false;
+          showOffline();
+        }
+      }).catch(function () { starting = false; go.disabled = false; showOffline(); });
+    }
+    ph.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); submit(); } });
+    nm.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); ph.focus(); } });
+    go.addEventListener('click', submit);
+
+    gateEl.appendChild(nm);
+    gateEl.appendChild(ph);
+    gateEl.appendChild(go);
+    wrap.appendChild(gateEl);
+    if (open) (me && me.name ? ph : nm).focus();
+  }
+
+  function hideGate(keepComposerHidden) {
+    if (gateEl && gateEl.parentNode) gateEl.parentNode.removeChild(gateEl);
+    gateEl = null;
+    if (keepComposerHidden) return;
+    if (ftEl) ftEl.style.display = '';
+    if (inputEl) { autoGrow(); inputEl.focus(); }
   }
 
   function render(role, body) {
@@ -209,7 +323,11 @@
     open = !!on;
     wrap.classList.toggle('gnc-open', open);
     btn.style.display = open ? 'none' : '';
-    if (open) { unread = 0; paintBadge(); lastActivityAt = Date.now(); schedule(); inputEl.focus(); }
+    if (open) {
+      unread = 0; paintBadge(); lastActivityAt = Date.now(); schedule();
+      if (gateEl) { var f = gateEl.querySelector('input'); if (f) f.focus(); }
+      else inputEl.focus();
+    }
     else schedule();   // NOT stop(): keep watching quietly so the badge can appear (see below)
   }
 
@@ -241,12 +359,22 @@
   function send() {
     var text = (inputEl.value || '').trim();
     if (!text) return;
+    // Belt and braces. The composer is hidden until the gate is done, so this should be
+    // unreachable — but the server refuses a message with no contact details, and showing the form
+    // is a better answer than a message that silently disappears.
+    if (!token) { showGate(); return; }
     inputEl.value = '';
     lastSeed = '';
     autoGrow();
-    push('me', text);
+    push('me', text);          // optimistic echo — postMessage() never repeats it
     lastActivityAt = Date.now();
     if (!firstSentAt) firstSentAt = Date.now();
+    postMessage(text);
+  }
+
+  // The wire half of send(), split out so the gate can retry a message it interrupted without
+  // drawing the visitor's own words on screen twice.
+  function postMessage(text) {
     post('/api/chat/send', {
       token: token, body: text, ref: ref(),
       page_url: location.pathname.slice(0, 300), company: '',
@@ -256,6 +384,18 @@
         if (r.json.id) lastId = Math.max(lastId, r.json.id);
         save();
         schedule();
+      } else if (r.json && r.json.error === 'contact required') {
+        // An older conversation, started before the gate existed. KEEP the token — the gate will
+        // attach the details to this same chat rather than opening a second one — and hold the
+        // message so it goes out the moment they answer.
+        pendingSend = text;
+        showGate();
+      } else if (r.status === 428 || (r.json && r.json.error === 'start required')) {
+        // The session is gone server-side, or this tab holds a stale token. Start fresh.
+        token = null;
+        try { localStorage.removeItem(LS_TOKEN); } catch (e) {}
+        pendingSend = text;
+        showGate();
       } else if (r.status === 503 || (r.json && r.json.error === 'chat off')) {
         showCallback(true);
       } else if (r.status !== 200) {
@@ -329,7 +469,11 @@
   // Nobody is guaranteed to be at the CRM. If no reply arrives, ask for the same two things the
   // WhatsApp form asks for, so the lead is never lost to an unattended chat.
   function maybeOfferCallbackLater() {
-    setTimeout(function () { if (!answered && !cbDone) showCallback(false); }, UNANSWERED_MS);
+    // `!gateEl`: a send that was bounced with `contact required` still armed this timer, and
+    // without the guard a second form would stack on top of the gate three minutes later.
+    setTimeout(function () {
+      if (!answered && !cbDone && !gateEl) showCallback(false);
+    }, UNANSWERED_MS);
   }
 
   // Hard fallback for when the backend cannot answer AT ALL (2026-09-05: D1's daily read cap was
@@ -360,9 +504,13 @@
     cbShown = true;
     cbEl = el('div', 'gnc-cb');
     cbEl.appendChild(el('b', null, T.cbTitle));
-    cbEl.appendChild(el('p', null, T.cbLead));
+    // Since the gate, we already have the number. Asking for it a second time reads as a form that
+    // was not listening, so this becomes a one-field question: just the best time to call.
+    var known = me && me.phone ? me.phone : null;
+    cbEl.appendChild(el('p', null, known ? T.cbTime : T.cbLead));
     var ph = document.createElement('input');
     ph.type = 'tel'; ph.placeholder = T.cbPhone; ph.setAttribute('aria-label', T.cbPhone);
+    if (known) ph.style.display = 'none';
     var sel = document.createElement('select');
     sel.setAttribute('aria-label', T.cbTime);
     ['now', '9am-1pm', '1pm-5pm', '5pm-9pm'].forEach(function (k) {
@@ -373,10 +521,13 @@
     var go = el('button', null, T.cbSend);
     go.type = 'button';
     go.addEventListener('click', function () {
-      var digits = (ph.value || '').replace(/\D/g, '');
-      if (!/^(?:00971|971|0)?5\d{8}$/.test(digits)) { ph.style.borderColor = '#c00'; return; }
+      var digits = known || uaeDigits(ph.value);
+      if (!digits) { ph.style.borderColor = '#c00'; return; }
       go.disabled = true;
-      post('/api/chat/callback', { token: token, phone: digits, slot: sel.value, company: '' })
+      post('/api/chat/callback', {
+        token: token, phone: digits, slot: sel.value,
+        name: (me && me.name) || '', company: '',
+      })
         .then(function (r) {
           if (r.status === 200) {
             cbDone = true;
@@ -438,6 +589,10 @@
     if (inputEl.value && inputEl.value !== lastSeed) return;
     lastSeed = String(prefill).slice(0, 400);
     inputEl.value = lastSeed;
+    // While the gate is up the composer is hidden, so the seed just waits there — hideGate()
+    // reveals it already filled in, and the visitor still only has to press Send. Focus stays on
+    // the gate's own first field (see toggle), which is what iOS needs to raise the keyboard.
+    if (gateEl) return;
     autoGrow();
     inputEl.focus();
   }

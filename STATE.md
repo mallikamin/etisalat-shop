@@ -1,5 +1,109 @@
 # etisalat-shop — STATE (current truth)
 
+> **⭐⭐⭐ 2026-09-10 — WEB CHAT DEAD AGAIN ("Chat is temporarily unavailable" after the first message), THIRD
+> TIME. Malik: "tired of running the same issues again and again". ROOT CAUSE FOUND AND CLOSED THIS TIME.**
+> **Symptom** (Malik's screenshot): no name/phone gate, composer visible, "Test Message" echoes, then the
+> call-us fallback. Identical to 09-09. `verify_web_chat_live.py --asset`: live `/assets/chat.js` = 22,593
+> bytes (the 09-05 pre-gate build), local = 30,991 with the gate. 0/4.
+> **Root cause: the gate was NEVER COMMITTED.** `assets/chat.js` had been sitting modified-but-uncommitted
+> since 09-07. `.github/workflows/deploy.yml` redeploys the site from git HEAD on EVERY push to `main`, and
+> the `ccbw` card automation pushed **12 commits between 09-06 and 09-10 04:41 UTC** (ccbw-0127 → 0135 +
+> weekly feed refresh). Each one re-uploaded HEAD's old chat.js. So the 09-07 and 09-09 hand deploys were
+> both genuinely live when verified, and both were reverted by the next ccbw push within hours. The
+> "wrangler flake" explanation from 09-09 was real but was not the cause of the recurrence.
+> **Fix:** rebased onto origin (12 ccbw commits), committed the gate as **`5c9adcc8`**, pushed → CI run
+> `34466888686` success. **VERIFIED `python verify_web_chat_live.py` full run: live asset = the committed
+> blob (30,991 bytes, sha1 0fdab9152720) on apex + www; real Chrome 12/12 (gate renders, composer hidden,
+> landline refused, token issued, message sends, NO offline fallback, 0 JS errors); D1 session 22 + CRM
+> lead 3968 written, probe rows removed.** The script's byte-compare now normalises CRLF (core.autocrlf
+> checks the file out as CRLF, git/CI serve LF — it false-failed on that alone after the correct deploy).
+> **RULE (now CLAUDE.md "Deploying this site" rule 0): a hand `wrangler deploy` of an uncommitted file is
+> live only until the next push. Commit + push in the same session; the CI run is the deploy that counts.**
+> **Still open from 09-09's rules: the scheduled yield check (`SELECT MAX(created_at) FROM web_chat_sessions`)
+> is not on a cron — the two silent outages were both found by a human screenshot.**
+
+> **⭐⭐ 2026-09-09 — MALIK'S SERP "vip golden number uae": probizsms.com/golden-numbers/ AT #3, OUR DOMAIN
+> ABSENT. Read as "we downgraded + a days-old competitor outranks us". Screenshot
+> `_context/screenshots/2026-09-09_serp-vip-golden-number-uae-probizsms.png`. VERDICT, checked this session:**
+> **(1) NOT A NEW DOWNGRADE.** We were never top-3 for the "vip" variants: GSC 3-mo export of 07-22 (pre-collapse
+> data) has "vip golden numbers" pos 40, "vip number uae" pos 33, "vip numbers uae" 5.8; our positions 1-3 were on
+> "golden number(s) uae" (3.4 / 1.1). And since the 07-20 sitewide de-serving the domain has been absent from its
+> OWN brand query (08-07 screenshot, xplate #1). Today's SERP is the same floor with a new name in slot 3.
+> **(2) probizsms.com IS NOT AN EXTERNAL COMPETITOR** — Probiz's own site (memory `project-probizsms-same-entity`,
+> verified 06-12: same Office 1904 Al Zarooni, same inventory, Bilal = Probiz DMM). The page was rebuilt since June
+> (`/premium-numbers/` → `/golden-numbers/`, live curl this session): title "Golden Numbers — Probiz | Etisalat by
+> e&", H1 "Golden Numbers Crafted for Prestige", "Authorized e& Channel Partner". **Still no robots.txt (404 HTML),
+> no sitemap.xml (404), 0 JSON-LD, no canonical, no GA/Pixel, JS-only listings.** It ranks #3 with none of that,
+> on a 25-yr-old company domain — i.e. this query is decided by domain trust, not on-page work. **CTAs route to
+> landline +971 4 4181234 / info@probizsms.com, NOT 8087, and it does not link to goldennummbers.com** — the
+> channel-conflict risk from 06-12 is now live on page 1.
+> **(3) THE UNMEASURED EVENT: no GSC pull since 08-08 (a month), and in that gap the site served 503 on EVERY URL
+> 08-17 → 08-30 (13 days, see 08-30 block). Whether we are on the 08-07 floor or below it is UNKNOWN until GSC
+> Performance 28d + Page Indexing are re-pulled. Also unconfirmed: the noindex drain (4.23K → ~90-190).**
+> **(4) On-page gap for the query itself (parked until GSC shows recovery): `/vip-numbers/` = 404; the "VIP" title
+> lives on `/premium-numbers-uae/`; `/buy-vip-number/` exists. Not the lever while de-served.**
+> **⭐ SAME-DAY — MALIK DELIVERED THE GSC PULL (4 screenshots `_context/screenshots/2026-09-09_gsc-*.png`). READ:**
+> **(i) PERFORMANCE: still on the 07-20 floor.** 3-mo 398 clicks; 0-3/day from 7/20 straight through 9/5. No lift
+> after the 8/5 noindex, none after the site came back 8/30. Neither better nor worse than 08-07 — flat.
+> **(ii) PAGE INDEXING, Last update 9/4: Indexed 1.51K (from 4.23K on 8/5) · Not indexed 3.19K.** The noindex drain
+> IS working (first confirmed read; target ~90-190, not there yet). But the biggest not-indexed reason is **Server
+> error (5xx) = 1,524 pages** — the 08-17→08-30 outage, visible as the grey jump ~8/17 on the chart. Noindex = 1,213,
+> alternate-canonical 324, 404 11, redirect 10, Discovered 77, Crawled-not-indexed 28, Duplicate 2. All validation
+> "Not Started". **OPEN: whether any MONEY pages (home, /choose-number/, city pages) sit in the 5xx bucket** — if so
+> they were dropped by the outage and need a recrawl, not just the number pages.
+> **(iii) SITEMAPS: all Success, sitemap.xml (79) read Sep 9, the other two Sep 8 → Google is crawling again.**
+> **5xx EXAMPLES (screenshot `2026-09-09_gsc-5xx-examples-numbers-only.png`): top 8 = all `/numbers/etisalat-*`, last
+> crawled Aug 30 (the day the 503 lifted). Consistent with the outage bucket being the noindexed corpus — but 8 of
+> 1,524 seen; the CSV export is the decisive check.**
+> **5xx CSV EXPORT (`_context/refs/2026-09-09_gsc-5xx-drilldown.zip`, unzipped alongside): 1,000 rows (GSC cap; bucket
+> is 1,524, so 524 oldest-crawled rows are UNSEEN). 996 = `/numbers/etisalat-*`. **4 non-number pages inside the 5xx
+> bucket: `/home-wireless/` (crawled 8/28), `/blog/etisalat-vs-du-postpaid-plans-uae` (8/28),
+> `/golden-number-price-uae/` (8/27), `/blog/etisalat-home-wireless-plans-2026.html` (8/27, .html dupe of the
+> sitemap URL).** All four return 200 now (python probe w/ retries — curl from this box is flaky today, 000s);
+> the first three are in sitemap.xml (read Sep 9) so Google will recrawl unprompted, Request-indexing just speeds
+> it. Last-crawled spread in the export: 8/26 112 · 8/27 132 · 8/28 286 · 8/29 112 · 8/30 358. Chart: 5xx bucket
+> 1,132 from ~8/24 → 1,524 from 8/29, flat through 9/4 (no recrawl credited yet).
+> **UNKNOWN: whether home / `/choose-number/` / city pages sit among the 524 unexported rows (last crawl ≤ 8/26).**
+> **URL INSPECTION 09-09: `/` and `/choose-number/` = "URL is on Google / Page is indexed"** (screenshots
+> `2026-09-09_gsc-urlinspect-*.png`). Money pages survived the outage; the 5xx damage is the number corpus + 4 pages.
+> **09-09 DONE (Malik, GSC URL Inspection): Request indexing submitted for `/home-wireless/`,
+> `/golden-number-price-uae/`, `/blog/etisalat-vs-du-postpaid-plans-uae` (Malik-reported "done" ×3, no screenshots).**
+> **09-09 DONE: 5xx VALIDATE FIX clicked — "Validation started 9/9/26" (screenshot
+> `2026-09-09_gsc-5xx-validation-started.png`). GSC side of the post-outage cleanup is complete for today.**
+> **WATCH (not before ~09-16): Page Indexing "Last update" past 9/9 → 5xx bucket should fall toward 0 and Indexed
+> 1.51K should keep dropping toward ~90-190; Performance 7d floor watch. Still open from 08-07: delete
+> `sitemap-numbers-removal.xml` once Indexed ≈ 90-190.**
+> **⚠ 09-09 CORRECTION FROM MALIK: probizsms.com is ANOTHER SALES TEAM — "we compete with them, we need to outrank
+> them". The (b) "Bilal links/routes the Probiz page to 8087" idea below is RETIRED; do not raise it again.**
+> **BACKLINK QUEUE STATUS RE-CHECKED 09-09 (`BACKLINK_EXECUTION_QUEUE.md` log + `_files/2026-06-28/OUTREACH_BACKLINKS.md`):
+> Bing ✅ · Trustpilot ✅ (the 20 links) · 2GIS submitted · GetListedUAE ✅ ·Apple Business ❌ rejected 07-01 (ID
+> mismatch) · Yellow Pages = paid funnel · uaeautomotive = $50 paid, declined · thearabposts pending since 06-30 ·
+> **uaeedge.com (the one soft-yes) — target page now 404, lead DEAD.** Queue's canonical NAP phone corrected
+> 9377 → 8087. Net: free directory/citation walk is exhausted; UAE editorial is pay-to-play. Authority gap vs
+> probizsms/xplate/autotraders is UNMEASURED (Ahrefs last pulled 05-25: DR 0, 141 RDs, ~1% dofollow).**
+> **⭐ AHREFS 09-09 — probizsms.com = DR 0 · 418 backlinks (26% dofollow) · 357 linking websites (18% dofollow ≈ 64
+> dofollow domains)** (screenshot `2026-09-09_ahrefs-probizsms-dr0-357rd.png`). **They outrank us at DR 0.** So the
+> "25-yr domain trust" explanation from earlier today is overstated — at DR 0 vs DR 0 the decisive difference is
+> that WE are de-served since 07-20 and they are not; before 07-20 we held pos 1-3 on "golden number(s) uae" with
+> the link profile we still have. **Binding constraint = the de-serving (fix in progress, drain 4.23K → 1.51K),
+> not links.** Their ~64 dofollow domains vs our ~1-2 is a secondary gap to close after recovery.
+> **⭐ AHREFS 09-09 — goldennummbers.com = DR 0 · 878 backlinks (11% dofollow) · 421 linking websites (10% dofollow
+> ≈ 42 dofollow domains)** (screenshot `2026-09-09_ahrefs-goldennummbers-dr0-421rd.png`). Up from 141 RDs on
+> 05-25. **We have MORE linking sites than probizsms (421 vs 357) and roughly comparable dofollow (≈42 vs ≈64).
+> VERDICT: link parity. Backlinks are NOT the reason they outrank us; the 07-20 de-serving is. "Outrank probiz"
+> therefore = "get un-de-served" = let the noindex drain finish. No backlink sprint, no new pages, no on-site
+> changes for this. (c) backlink queue is DEPRIORITISED to post-recovery.**
+> **ONE DATED NEXT ACTION: ~2026-09-16 — Malik pulls GSC Page Indexing (Last update > 9/9: 5xx bucket → 0? Indexed
+> 1.51K → lower?) + Performance 7d. If Indexed reaches ~90-190 and impressions still flat after 4 more weeks, the
+> thin-content hypothesis fails (pre-registered falsifier from 08-07) and the next lever is a Google Search Central
+> post + reconsideration of site architecture.**
+> **NEXT (organic, in order): (a) DONE; (b) RETIRED; (b2) DONE — measured the gap — Ahrefs free checker on probizsms.com
+> vs goldennummbers.com (DR + referring domains) → decides whether links or the de-serving is the binding
+> constraint; (b) Bilal conversation: probizsms page → route CTAs to 8087 and/or
+> add a dofollow "authorized dealer" link to goldennummbers.com (a 25-yr domain link = the best backlink we could
+> get; also ends the lead leak); (c) `BACKLINK_EXECUTION_QUEUE.md` — cleared to run 08-08, still not run,
+> 23 external links / 20 Trustpilot is the real gap vs xplate/autotraders/probiz. No site changes for this.**
+
 > **⭐⭐⭐ 2026-09-06 — IN-SITE CHAT IS LIVE. EVERY WhatsApp CTA ON goldennummbers.com IS NOW "Chat with us".**
 > **What was wrong:** Malik screenshotted `/choose-number/` still showing "Inquire on WhatsApp" buttons and a
 > green WhatsApp FAB. Cause: **the chat migration built on 2026-09-05 was never committed or deployed.**
